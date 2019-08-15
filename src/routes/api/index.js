@@ -1,5 +1,6 @@
-const router = require("express").Router();
+import express from 'express'
 
+let router = express.Router();
 router.use("/", require("./users"));
 
 router.use(function(err, req, res, next) {

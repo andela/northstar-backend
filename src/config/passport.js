@@ -1,9 +1,7 @@
 import passport from 'passport'
 import passportLocal from "passport-local";
-import mongoose from "mongoose";
 
 let LocalStrategy = passportLocal.Strategy;
-const User = mongoose.model("User");
 
 passport.use(
     new LocalStrategy(
