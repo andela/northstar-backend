@@ -6,7 +6,9 @@
   "scripts": {
     "build": "babel src -d dist",
     "start": "node ./dist/index.js",
-    "dev": "nodemon  --exec babel-node src/index.js"
+    "dev": "nodemon  --exec babel-node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./src --fix"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -31,6 +33,9 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "babel-register": "^6.26.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }
