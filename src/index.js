@@ -10,7 +10,7 @@ app.use(cors());
 
 // App index
 app.get('/', (req, res) => {
- res.status(200).json({ Message: 'Welcome! This is the NorthStar Barefoot Nomad homepage.' });
+    res.status(200).json({ Message: 'Welcome! This is the NorthStar Barefoot Nomad homepage.' });
 });
 
 // catch 404 and forward to error handler
