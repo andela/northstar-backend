@@ -5,8 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "db:migrate": "sequelize db:migrate",
-        "undo:migrate": "sequelize db:migrate:undo:all"
+        "db:migrate": "./node_modules/.bin/sequelize db:migrate",
+        "undo:migrate": "./node_modules/.bin/sequelize db:migrate:undo:all"
     },
     "author": "Andela Simulations Programme",
     "license": "MIT",
@@ -30,6 +30,7 @@
         "pg-hstore": "^2.3.3",
         "request": "^2.87.0",
         "sequelize": "^5.15.0",
+        "sequelize-cli": "^5.5.0",
         "underscore": "^1.9.1"
     }
 }
