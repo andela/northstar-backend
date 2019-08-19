@@ -1,7 +1,7 @@
 {
   "name": "express-authorshaven",
   "version": "1.0.0",
-  "description": "A Social platform for the creative at heart",
+  "description": "Make company global travel and accommodation easy and convenient",
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
@@ -9,8 +9,12 @@
     "start:dev": "NODE_ENV=development nodemon --exec babel-node src/index.js",
     "start:staging": "NODE_ENV=staging node dist/index.js",
     "start:prod": "NODE_ENV=production node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./src --fix"
+    "docker:on": "docker-compose up -d",
+    "docker:off": "docker-compose down",
+    "docker:rebuild": "docker-compose up --rebuild",
+    "docker:destroy": "docker-compose down -v",
+    "lint": "eslint ./src --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",

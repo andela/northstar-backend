@@ -80,6 +80,7 @@ typings/
 .nuxt
 
 # vuepress build output
+# babel build output
 dist
 
 # Serverless directories
