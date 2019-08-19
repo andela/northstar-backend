@@ -1,9 +1,9 @@
-import passport from 'passport'
-import passportLocal from "passport-local";
+import passport from 'passport';
+import passportLocal from 'passport-local';
 
-let LocalStrategy = passportLocal.Strategy;
+const LocalStrategy = passportLocal.Strategy;
 
 passport.use(
-    new LocalStrategy(
-    )
+  new LocalStrategy(
+  )
 );
