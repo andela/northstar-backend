@@ -69,7 +69,6 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -81,7 +80,7 @@ typings/
 .nuxt
 
 # vuepress build output
-.vuepress/dist
+dist
 
 # Serverless directories
 .serverless/
@@ -91,5 +90,8 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Webstorm consolidation
+.idea/
 
 # End of https://www.gitignore.io/api/node

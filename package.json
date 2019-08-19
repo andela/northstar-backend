@@ -1,31 +1,45 @@
 {
-  "name": "express-authorshaven",
-  "version": "1.0.0",
-  "description": "A Social platform for the creative at heart",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Andela Simulations Programme",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.4",
-    "dotenv": "^6.0.0",
-    "ejs": "^2.6.1",
-    "errorhandler": "^1.5.0",
-    "express": "^4.16.3",
-    "express-jwt": "^5.3.1",
-    "express-session": "^1.15.6",
-    "jsonwebtoken": "^8.3.0",
-    "method-override": "^2.3.10",
-    "methods": "^1.1.2",
-    "mongoose": "^5.2.2",
-    "mongoose-unique-validator": "^2.0.1",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "pg": "^7.12.1",
-    "request": "^2.87.0",
-    "underscore": "^1.9.1"
-  }
+    "name": "express-authorshaven",
+    "version": "1.0.0",
+    "description": "A Social platform for the creative at heart",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rm -rf dist && mkdir dist",
+        "build": "babel src -d dist --copy-files",
+        "start:dev": "NODE_ENV=development nodemon --exec babel-node src/index.js",
+        "start:staging": "NODE_ENV=staging node dist/index.js",
+        "start:prod": "NODE_ENV=production node dist/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint ./src --fix"
+    },
+    "author": "Andela Simulations Programme",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "cors": "^2.8.4",
+        "dotenv": "^6.0.0",
+        "ejs": "^2.6.1",
+        "express": "^4.16.3",
+        "express-jwt": "^5.3.1",
+        "express-session": "^1.15.6",
+        "jsonwebtoken": "^8.3.0",
+        "morgan": "^1.9.1",
+        "passport": "^0.4.0",
+        "passport-local": "^1.0.0",
+        "pg": "^7.12.1",
+        "request": "^2.87.0",
+        "underscore": "^1.9.1"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.5.5",
+        "@babel/node": "^7.5.5",
+        "@babel/polyfill": "^7.4.4",
+        "@babel/preset-env": "^7.5.5",
+        "babel-register": "^6.26.0",
+        "nodemon": "^1.19.1",
+        "eslint": "^6.1.0",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-plugin-import": "^2.18.2"
+    }
 }
