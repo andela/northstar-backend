@@ -9,10 +9,122 @@
   "schemes": [
     "https"
   ],
+  "host": "",
+  "basePath": "/api/v1",
+  "securityDefinitions": {
+    "Bearer": {
+      "description": "Standard Authorization header using the bearer scheme. Example: \"bearer {token}\"",
+      "type": "apiKey",
+      "name": "x-access-token",
+      "in": "header"
+    }
+  },
   "consumes": [
     "application/json"
   ],
-  "produces": [
-    "application/json"
-  ]
+  "tag": [
+    {
+      "name": "Auth",
+      "description": "Endpoint for Authentication"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "description": "User Sign Up",
+        "summary": "Registers a user with all required information",
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user  basic information",
+            "schema": {
+              "$ref": "#/requestBody/signUpRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "requestBody": {
+    "signUpRequest": {
+      "title": "Signup Request",
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "email of the user",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "First name of the user",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last name of the user",
+          "type": "string"
+        },
+        "password": {
+          "description": "The Password of the user",
+          "type": "string"
+        },
+        "gender": {
+          "description": "Gender of the user",
+          "type": "string"
+        },
+        "birth_date": {
+          "description": "Birth Date is Admin: true or false",
+          "type": "varchar"
+        },
+        "preferred_language": {
+          "description": "User's preferred_language",
+          "type": "string"
+        },
+        "preferred_currency": {
+          "description": "User' preferred_currency",
+          "type": "string"
+        },
+        "location": {
+          "description": "Location of user",
+          "type": "string"
+        },
+        "role": {
+          "description": "User's role",
+          "type": "string"
+        },
+        "isVerified": {
+          "description": "User's verification status",
+          "type": "string"
+        }
+      },
+      "example": {
+        "email": "chioma@gmail.com",
+        "first_name": "Ejike",
+        "last_name": "Chiemerie",
+        "password": "secret123",
+        "gender": "female",
+        "birth_date":"16/06/1994",
+        "preferred_language":"english",
+        "preferred_currency":"USD",
+        "location":"Lagos",
+        "role":"manager",
+        "isVerified": "false"
+      }
+    }
+  }
 }
