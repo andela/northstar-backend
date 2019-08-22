@@ -9,7 +9,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import logger from './logs/winston';
 import swaggerDocument from '../swagger.json';
-import v1Router from './routes/api';
+import v1Router from './routes';
 
 const app = express();
 
@@ -20,7 +20,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -28,8 +27,8 @@ app.use(cookieParser());
 app.use(morgan(':remote-addr - [:date] ":method :url" :status', { stream: logger.stream }));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.get('/', (req, res) => res.status(200).json({ Message: 'Welcome! This is the NorthStar Barefoot Nomad homepage.' }));
 app.use('/api/v1', v1Router);
+app.use('/', v1Router);
 
 app.use((req, res, next) => {
   const err = new Error('No endpoint found');

@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "v10.15.3"
+  - 10.15.3
 
 cache:
   directories:
@@ -16,8 +16,10 @@ services:
 before_script:
   - psql -c "CREATE DATABASE barefootNomad_test;" -U postgres
   - psql -c "ALTER ROLE postgres PASSWORD 'postgres';" -U postgres
+  - touch src/logs/app.log
 
 script:
+  - npm run db:migrate
   - npm test
 
 after_success:

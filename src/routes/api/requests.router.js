@@ -1,8 +1,9 @@
 import express from 'express';
 import auth from '../../middlewares/auth';
-import RequestsController from '../../controllers/requests.controller';
+import RequestController from '../../controllers/request.controller';
 import requestChecks from '../../middlewares/requests.middleware';
 import validateRequests from '../../validation/request.validation';
+import Auth from '../../middlewares/auth.middleware';
 
 const router = express.Router();
 
@@ -12,6 +13,8 @@ router.patch('/request/:id',
   auth.verifyManager,
   validateRequests.validateRequestsID,
   requestChecks.validateRequests,
-  RequestsController.rejectRequest);
+  RequestController.rejectRequest);
+
+router.get('/requests', Auth.verifyToken, RequestController.findAll);
 
 export default router;
