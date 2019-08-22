@@ -1,4 +1,3 @@
-
 module.exports = {
   up: (queryInterface) => queryInterface.bulkInsert('feedbacks', [{
     user_id: 1,
