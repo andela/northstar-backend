@@ -21,12 +21,13 @@
   },
   "nyc": {
     "exclude": [
-    "src/index.js"
+      "src/index.js"
     ]
-    }, 
+  },
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
