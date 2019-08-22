@@ -14,19 +14,20 @@
     "docker:rebuild": "docker-compose up --rebuild",
     "docker:destroy": "docker-compose down -v",
     "lint": "eslint ./src --fix",
-    "test": "nyc mocha -r esm --cache false  --exit",
+    "test": "npm run undo:migration && npm run db:migrate && nyc mocha -r esm --cache false  --exit",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "undo:migration": "./node_modules/.bin/sequelize db:migrate:undo:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {
     "exclude": [
-    "src/index.js"
+      "src/index.js"
     ]
-    }, 
+  },
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",

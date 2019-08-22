@@ -95,7 +95,7 @@ dist
 # Webstorm consolidation
 .idea/
 
-
+.DS_Store
 .vscode
 
 # End of https://www.gitignore.io/api/node
