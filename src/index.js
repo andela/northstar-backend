@@ -2,20 +2,28 @@ import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
+import Route from './routes/api/users';
 
 // Create global app object
 const app = express();
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// App routers here
+Route(app);
 // App index
 app.get('/', (req, res) => {
   res.status(200).json({ Message: 'Welcome! This is the NorthStar Barefoot Nomad homepage.' });
 });
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
 app.get('*', (req, res) => {
@@ -27,4 +35,4 @@ const server = app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${server.address().port}`);
 });
 
-export default app;
+export default server;
