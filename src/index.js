@@ -2,10 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
-import router from './routes';
+import router from './routes/api';
 
 // Create global app object
 const app = express();
+
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
