@@ -15,6 +15,10 @@ services:
 
 before_script:
   - psql -c "CREATE DATABASE testing_db;" -U postgres
+  - psql -c "ALTER ROLE postgres PASSWORD 'postgres';" -U postgres
 
 script:
   - npm test
+after_success: 
+  - npm run coverage 
+  - npm run undo:migration
