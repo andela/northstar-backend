@@ -14,7 +14,7 @@
     "docker:rebuild": "docker-compose up --rebuild",
     "docker:destroy": "docker-compose down -v",
     "lint": "eslint ./src --fix",
-    "test": "npm run undo:migration && npm run db:migrate && nyc mocha -r esm --cache false  --exit",
+    "test": "npm run undo:migration && npm run db:migrate && nyc mocha -r esm --cache false --timeout 30000 --exit",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "undo:migration": "./node_modules/.bin/sequelize db:migrate:undo:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -27,6 +27,7 @@
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
@@ -45,6 +46,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
+    "pug": "^2.0.4",
     "request": "^2.87.0",
     "sequelize": "^5.15.1",
     "sequelize-cli": "^5.5.0",
@@ -57,7 +59,6 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.5.5",
-    "babel-register": "^6.26.0",
     "coveralls": "^3.0.6",
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^14.0.0",

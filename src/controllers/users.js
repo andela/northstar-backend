@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import models from '../db/models';
-import auth from '../middlewares/auth';
+import token from '../services/tokenGenerator';
+import sender from '../services/email';
+import userSignupData from '../utils/user';
 
 /**
  * This class creates the user controller
@@ -13,34 +15,25 @@ export default class UserController {
  */
   static async signup(req, res) {
     try {
-      const hash = bcrypt.hashSync(req.body.password, 10);
+      const hash = await bcrypt.hash(req.body.password, 10);
+      const userData = userSignupData(req.body);
       const user = await models.User.create({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        password: hash,
-        gender: req.body.gender,
-        birth_date: req.body.birth_date,
-        preferred_language: req.body.preferred_language,
-        preferred_currency: req.body.preferred_currency,
-        location: req.body.location
-      });
+        ...userData,
+        password: hash
+      }, { returning: true });
 
-      const userToken = auth.generateToken(user);
+      // parameter(s) to be passed to the sendgrid email template
+      const payload = { user };
+      await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
+
+      const userToken = token.generateToken(user);
       return res.status(201).json({
         status: 'success',
         data: {
           id: user.id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
+          ...userData,
           role: user.role,
-          gender: user.gender,
-          birth_date: user.birth_date,
-          preferred_language: user.preferred_language,
-          preferred_currency: user.preferred_currency,
-          location: user.location,
-          isVerified: user.isVerified,
+          is_verified: user.is_verified,
           token: userToken
         }
       });

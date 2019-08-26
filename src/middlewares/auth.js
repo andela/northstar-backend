@@ -1,14 +1,6 @@
-/* eslint-disable prefer-destructuring */
 import jwt from 'jsonwebtoken';
 
 const auth = {
-  generateToken(user) {
-    return jwt.sign({
-      id: user.id,
-      role: user.role,
-    }, process.env.SECRET, { expiresIn: '7d' });
-  },
-
   verifyToken(token) {
     let decoded = {};
     try {
@@ -24,7 +16,7 @@ const auth = {
       let token;
 
       if (req.headers.authorization) {
-        token = req.headers.authorization.split(' ')[1];
+        [, token] = req.headers.authorization.split(' ');
       } else if (req.headers['x-access-token']) {
         token = req.headers['x-access-token'];
       } else if (req.headers.token) {

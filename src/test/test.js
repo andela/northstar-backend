@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 chai.should();
 
 const user = {
-  email: 'chioma@godtryere.com',
+  email: 'chiomadans@gmail.com',
   first_name: 'Ejike',
   last_name: 'Chiemerie',
   password: 'secret123',
