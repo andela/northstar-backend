@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     accommodation_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'bookings',
         key: 'id',
@@ -51,8 +51,10 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'trips',
     underscored: true
   });
-  Trip.associate = () => {
+  Trip.associate = (models) => {
     // associations can be defined here
+    const { Booking } = models
+    Trip.hasMany(Booking, {foriegnKey: 'trip_id' });
   };
   return Trip;
 };
