@@ -31,7 +31,7 @@ app.get('*', (req, res) => {
   res.status(404).json({ Message: 'Endpoint Not Found' });
 });
 
-// finally, let’s start our server...
+// Finally, let’s start our server...
 const server = app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${server.address().port}`);
 });
