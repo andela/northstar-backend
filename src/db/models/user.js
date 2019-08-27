@@ -33,13 +33,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     role: {
-      type: DataTypes.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
+      type: DataTypes.ENUM('super_admin', 'travel_admin', 'manager', 'requester'),
       allowNull: false,
       defaultValue: 'requester'
     },
     is_verified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    email_notification: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     }
 
   }, {
@@ -48,10 +52,9 @@ module.exports = (sequelize, DataTypes) => {
   });
   User.associate = (models) => {
     // associations can be defined here
-    User.belongsTo(models.Department, {
-      foreignKey: 'department_id',
-      constraints: false,
-      onDelete: 'CASCADE'
+    User.belongsTo(models.User, {
+      foreignKey: 'manager_id',
+      constraints: false
     });
   };
   return User;

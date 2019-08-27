@@ -1,15 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const Notification = sequelize.define('Notification', {
-    trip_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'trips',
-        key: 'id',
-        as: 'trip_id'
-      },
-      onDelete: 'CASCADE'
-    },
     subject: {
       type: DataTypes.STRING,
       allowNull: false
@@ -17,16 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     notification: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    receiver_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-        as: 'receiver_id'
-      },
-      onDelete: 'CASCADE'
     },
     read: {
       type: DataTypes.BOOLEAN,
@@ -36,8 +16,17 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'notifications',
     underscored: true
   });
-  Notification.associate = () => {
+  Notification.associate = (models) => {
     // associations can be defined here
+    Notification.belongsTo(models.Request, {
+      foreignKey: 'request_id',
+      onDelete: 'CASCADE'
+    });
+
+    Notification.belongsTo(models.User, {
+      foreignKey: 'receiver_id',
+      onDelete: 'CASCADE'
+    });
     // removed the parameter "models" because it is not being used
   };
   return Notification;

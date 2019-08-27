@@ -7,34 +7,23 @@ module.exports = (sequelize, DataTypes) => {
         min: 1,
         max: 5
       }
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'users',
-        key: 'id',
-        as: 'user_id'
-      },
-      onDelete: 'CASCADE'
-    },
-    facility_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'facilities',
-        key: 'id',
-        as: 'facility_id'
-      },
-      onDelete: 'CASCADE'
     }
   }, {
     tableName: 'ratings',
     underscored: true
   });
 
-  Rating.associate = () => {
+  Rating.associate = (models) => {
     // associations can be defined here
-    // removed the parameter "models" because it is not being used
+    Rating.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      onDelete: 'CASCADE'
+    });
+
+    Rating.belongsTo(models.Facility, {
+      foreignKey: 'facility_id',
+      onDelete: 'CASCADE'
+    });
   };
   return Rating;
 };
