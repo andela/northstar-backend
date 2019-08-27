@@ -12,8 +12,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
-          as: 'user_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -22,8 +21,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'rooms',
-          key: 'id',
-          as: 'room_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -34,6 +32,10 @@ module.exports = {
       departure_date: {
         type: Sequelize.DATE,
         allowNull: false
+      },
+      checked_in: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       created_at: {
         allowNull: false,

@@ -29,15 +29,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      supplier_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'suppliers',
-          key: 'id',
-          as: 'supplier_id'
-        },
-        onDelete: 'CASCADE'
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

@@ -6,24 +6,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING
-    },
-    facility_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'facilities',
-        key: 'id',
-        as: 'facility_id'
-      },
-      onDelete: 'CASCADE'
     }
   }, {
     tableName: 'amenities',
     underscored: true
   });
-  Amenity.associate = () => {
-    // associations can be defined here
-    // removed the parameter "models" because it is not being used
-  };
+  Amenity.associate = (models) => (
+    Amenity.belongsTo(models.Facility, {
+      foreignKey: 'facility_id',
+      oneDelete: 'CASCADE'
+    })
+  );
   return Amenity;
 };
