@@ -1,11 +1,13 @@
 import sgMail from '@sendgrid/mail';
+import logger from '../logs/winston';
 
-// Setup this key on your .env usDrVXltTtqz6NnsAornNQ.WsLmjMfrwEin01Dj7aQ6xZ14eLqgC5o6lzS_Qw77yFw
+// Setup this key on your .env
 sgMail.setApiKey(process.env.SEND_GRID_API);
 
 const templates = {
-  travel_request_notification: 'd-052f3ce066de4a92aa33d254d678e34d',
-  signup_template: 'd-9f73a2f3606c4dbcacb03cdb46df8948'
+  travel_request_notification: 'd-963a476c77a34f318895713712b4d6bb',
+  signup_template: 'd-1ae0bd2e62c742e9a78009512bd1b5b8',
+  request_rejected: 'd-ccd25aa2dd9f47cb9d746d909787db59'
 };
 
 /**
@@ -26,9 +28,9 @@ async function sendEmail(from, to, templateName, payload = null) {
   };
   try {
     await sgMail.send(msg);
-    console.log('Succesfully Sent');
+    logger.info('Successfully Sent');
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 export default { sendEmail };

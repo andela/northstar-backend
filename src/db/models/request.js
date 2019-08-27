@@ -1,20 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-  const Trip = sequelize.define('Trip', {
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-        as: 'user_id'
-      },
-      onDelete: 'CASCADE'
-    },
+  const Request = sequelize.define('Request', {
     category: {
       type: DataTypes.ENUM('one-way', 'round-trip', 'multi-city'),
       allowNull: false
     },
-    from: {
+    origin: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -33,26 +23,26 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    accommodation_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'bookings',
-        key: 'id',
-        as: 'accommodation_id'
-      },
-      onDelete: 'CASCADE'
-    },
     status: {
       type: DataTypes.ENUM('pending', 'declined', 'approved'),
       defaultValue: 'pending'
     }
   }, {
-    tableName: 'trips',
+    tableName: 'requests',
     underscored: true
   });
-  Trip.associate = () => {
+
+  Request.associate = (models) => {
     // associations can be defined here
+    Request.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      onDelete: 'CASCADE'
+    });
+
+    Request.belongsTo(models.Booking, {
+      foreignKey: 'booking_id',
+      onDelete: 'CASCADE'
+    });
   };
-  return Trip;
+  return Request;
 };

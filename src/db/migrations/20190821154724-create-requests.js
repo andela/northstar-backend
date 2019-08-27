@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => (
-    queryInterface.createTable('trips', {
+    queryInterface.createTable('requests', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,8 +12,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
-          as: 'user_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -21,7 +20,7 @@ module.exports = {
         type: Sequelize.ENUM('one-way', 'round-trip', 'multi-city'),
         allowNull: false
       },
-      from: {
+      origin: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -40,13 +39,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      accommodation_id: {
+      booking_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'bookings',
-          key: 'id',
-          as: 'accommodation_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -64,6 +62,7 @@ module.exports = {
       }
     })
   ),
-  down: (queryInterface) => queryInterface.dropTable('trips')
+
+  down: (queryInterface) => queryInterface.dropTable('requests')
   // removed the parameter "Sequelize" because it is not being used
 };

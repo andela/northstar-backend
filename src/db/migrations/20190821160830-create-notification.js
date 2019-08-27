@@ -7,13 +7,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      trip_id: {
+      request_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'trips',
-          key: 'id',
-          as: 'trip_id'
+          model: 'requests',
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -30,8 +29,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
-          as: 'receiver_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -49,6 +47,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('notifications')
   // removed the parameter "Sequelize" because it is not being used
 };

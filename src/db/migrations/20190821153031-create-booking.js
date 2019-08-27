@@ -12,8 +12,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
-          as: 'user_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -22,18 +21,20 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'rooms',
-          key: 'id',
-          as: 'room_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
-      },
-      arrival_date: {
-        type: Sequelize.DATE,
-        allowNull: false
       },
       departure_date: {
         type: Sequelize.DATE,
         allowNull: false
+      },
+      return_date: {
+        type: Sequelize.DATE,
+      },
+      checked_in: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       created_at: {
         allowNull: false,
@@ -45,6 +46,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('bookings')
   // removed the parameter "Sequelize" because it is not being used
 };

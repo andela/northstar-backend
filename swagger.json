@@ -7,7 +7,8 @@
     "contact": {}
   },
   "schemes": [
-    "https"
+    "https",
+    "http"
   ],
   "host": "",
   "basePath": "/api/v1",
@@ -25,7 +26,11 @@
   "tag": [
     {
       "name": "Auth",
-      "description": "Endpoint for Authentication"
+      "description": "Endpoints for Authentication"
+    },
+    {
+      "name": "Requests",
+      "description": "Endpoints for Requests"
     }
   ],
   "paths": {
@@ -47,7 +52,7 @@
             "required": true,
             "description": "This is the request body object containing user  basic information",
             "schema": {
-              "$ref": "#/requestBody/signUpRequest"
+              "$ref": "#/requestBody/signup"
             }
           }
         ],
@@ -60,10 +65,82 @@
           }
         }
       }
+    },
+    "/auth/signin": {
+      "post": {
+        "description": "A user can sign in",
+        "summary": "This endpoint receives POST request sign in a user",
+        "tags": [
+          "Auth"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "description": "The request body for the signin endpoint",
+            "schema": {
+              "$ref": "#/requestBody/signin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/requests/:id": {
+      "patch": {
+        "description": "A manager can reject a user's request application",
+        "summary": "When a manager login, he/she sees a list of requests made by users under him and he is able to reject their requests",
+        "tags": [
+          "Requests"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user request status",
+            "schema": {
+              "$ref": "#/requestBody/reject_request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
   "requestBody": {
-    "signUpRequest": {
+    "signup": {
       "title": "Signup Request",
       "type": "object",
       "properties": {
@@ -124,6 +201,61 @@
         "location":"Lagos",
         "role":"manager",
         "isVerified": "false"
+      }
+    },
+    "signin": {
+      "type": "object",
+      "title": "Signin request body specification",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "description": "User email",
+          "type": "string"
+        },
+        "password": {
+          "description": "User password",
+          "type": "string"
+        }
+      },
+      "example": {
+        "email": "user@example.com",
+        "password": "youknowbetter"
+      }
+    },
+    "reject_request": {
+      "title": "Manager Reject Request",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Status of the user's request application",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID of the request being rejected",
+          "type": "string"
+        }
+      },
+      "example": {
+        "status": "success",
+        "data": {
+          "id": 1,
+          "user_id": 1,
+          "category": "one-way",
+          "origin": "Paris",
+          "destination": [
+            "Lagos"
+          ],
+          "departure_date": "2019-08-30T00:43:35.816Z",
+          "return_date": null,
+          "reason": "I am tired of this office",
+          "booking_id": 1,
+          "status": "declined",
+          "createdAt": "2019-08-30T00:43:35.816Z",
+          "updatedAt": "2019-08-30T00:45:51.983Z"
+        }
       }
     }
   }

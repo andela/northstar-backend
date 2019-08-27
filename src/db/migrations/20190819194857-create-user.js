@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       first_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       last_name: {
         type: Sequelize.STRING,
@@ -24,6 +25,13 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      manager_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
       gender: {
         type: Sequelize.ENUM('male', 'female', 'other')
@@ -42,9 +50,14 @@ module.exports = {
         type: Sequelize.STRING
       },
       role: {
-        type: Sequelize.ENUM('super_admin', 'travel_admin', 'travel_team_member', 'manager', 'requester'),
+        type: Sequelize.ENUM('super_admin', 'travel_admin', 'manager', 'requester'),
         allowNull: false,
         defaultValue: 'requester'
+      },
+      email_notification: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false
       },
       is_verified: {
         type: Sequelize.BOOLEAN,
@@ -62,5 +75,6 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('users')
 };

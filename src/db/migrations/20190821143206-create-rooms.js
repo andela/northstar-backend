@@ -19,13 +19,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      images: {
+        type: Sequelize.ARRAY(Sequelize.STRING)
+      },
       facility_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'facilities',
-          key: 'id',
-          as: 'facility_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -39,6 +41,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('rooms')
   // removed the parameter "Sequelize" because it is not being used
 };

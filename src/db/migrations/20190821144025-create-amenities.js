@@ -19,8 +19,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'facilities',
-          key: 'id',
-          as: 'facility_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
@@ -34,6 +33,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('amenities')
   // removed the parameter "Sequelize" because it is not being used
 };

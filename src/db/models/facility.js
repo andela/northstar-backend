@@ -21,20 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     available_space: {
       type: DataTypes.INTEGER,
       allowNull: false
-    },
-    supplier_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'suppliers',
-        key: 'id',
-        as: 'supplier_id'
-      },
-      onDelete: 'CASCADE'
     }
   }, {
     tableName: 'facilities',
     underscored: true
   });
+
   Facility.associate = () => {
     // associations can be defined here
     // The parameter "models" was removed because it is not in use

@@ -12,23 +12,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    facility_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'facilities',
-        key: 'id',
-        as: 'facility_id'
-      },
-      onDelete: 'CASCADE'
+    images: {
+      type: DataTypes.ARRAY(DataTypes.STRING)
     }
   }, {
     tableName: 'rooms',
     underscored: true
   });
-  Room.associate = () => {
-    // associations can be defined here
-    // removed the parameter "models" because it is not being used
-  };
+
+  Room.associate = (models) => (
+    Room.belongsTo(models.Facility, {
+      foreignKey: 'facility_id',
+      onDelete: 'CASCADE'
+    })
+  );
   return Room;
 };

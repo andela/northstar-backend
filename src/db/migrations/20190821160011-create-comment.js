@@ -12,32 +12,22 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
-          as: 'user_id'
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
-      trip_id: {
+      request_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'trips',
-          key: 'id',
-          as: 'trip_id'
+          model: 'requests',
+          key: 'id'
         },
         onDelete: 'CASCADE'
       },
       comment: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
-      },
-      replied_to: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'comments',
-          key: 'id',
-          as: 'replied_to'
-        }
       },
       created_at: {
         allowNull: false,
@@ -49,6 +39,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('comments')
   // removed the parameter "Sequelize" because it is not being used
 };
