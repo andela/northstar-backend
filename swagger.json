@@ -7,7 +7,8 @@
     "contact": {}
   },
   "schemes": [
-    "https"
+    "https",
+    "http"
   ],
   "host": "",
   "basePath": "/api/v1",
@@ -47,7 +48,7 @@
             "required": true,
             "description": "This is the request body object containing user  basic information",
             "schema": {
-              "$ref": "#/requestBody/signUpRequest"
+              "$ref": "#/requestBody/signup"
             }
           }
         ],
@@ -60,10 +61,44 @@
           }
         }
       }
+    },
+    "/auth/signin": {
+      "post": {
+        "description": "A user can sign in",
+        "summary": "This endpoint receives POST request sign in a user",
+        "tags": [
+          "Auth"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "description": "The request body for the signin endpoint",
+            "schema": {
+              "$ref": "#/requestBody/signin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
     }
   },
   "requestBody": {
-    "signUpRequest": {
+    "signup": {
       "title": "Signup Request",
       "type": "object",
       "properties": {
@@ -124,6 +159,28 @@
         "location":"Lagos",
         "role":"manager",
         "isVerified": "false"
+      }
+    },
+    "signin": {
+      "type": "object",
+      "title": "Signin request body specification",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "description": "User email",
+          "type": "string"
+        },
+        "password": {
+          "description": "User password",
+          "type": "string"
+        }
+      },
+      "example": {
+        "email": "user@example.com",
+        "password": "youknowbetter"
       }
     }
   }

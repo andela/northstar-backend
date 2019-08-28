@@ -29,7 +29,6 @@
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
-    "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "chai-subset": "^1.6.0",
@@ -40,6 +39,7 @@
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
+    "express-validator": "^6.1.1",
     "jsonwebtoken": "^8.3.0",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
