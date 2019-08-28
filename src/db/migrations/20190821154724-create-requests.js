@@ -39,7 +39,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      accommodation_id: {
+      booking_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

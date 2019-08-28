@@ -2,7 +2,7 @@ import { check, validationResult } from 'express-validator';
 // import passport from 'passport';
 
 import Responses from '../utils/response.utils';
-import JWTService from '../services/jwt.service';
+// import JWTService from '../services/jwt.service';
 
 const signinError = { message: 'Incorrect email or password' };
 

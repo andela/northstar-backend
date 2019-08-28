@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';

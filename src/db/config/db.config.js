@@ -1,23 +1,22 @@
-const dotenv = require('dotenv');
+require('dotenv').config();
 
-dotenv.config();
 module.exports = {
   development: {
-    username: process.env.DEV_DB_USER,
-    password: process.env.DEV_DB_PASSWORD,
-    database: process.env.DEV_DATABASE,
-    host: '127.0.0.1',
-    dialect: 'postgres'
+    username: process.env.DB_USER_DEVELOPMENT,
+    password: process.env.DB_PASSWORD_DEVELOPMENT,
+    database: process.env.DB_NAME_DEVELOPMENT,
+    host: process.env.DB_HOST_DEVELOPMENT || 'localhost',
+    dialect: process.env.DB_DIALECT || 'postgres'
   },
-  test: {
-    username: process.env.TEST_DB_USER,
-    password: process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DATABASE,
-    host: '127.0.0.1',
-    dialect: 'postgres'
+  staging: {
+    username: process.env.DB_USER_STAGING,
+    password: process.env.DB_PASSWORD_STAGING,
+    database: process.env.DB_NAME_STAGING,
+    host: process.env.DB_HOST_STAGING || 'localhost',
+    dialect: process.env.DB_DIALECT || 'postgres'
   },
   production: {
-    use_env_variable: process.env.DATABASE_URL,
-    dialect: 'postgres'
+    use_env_variable: process.env.DB_STRING_PRODUCTION,
+    dialect: process.env.DB_DIALECT || 'postgres'
   }
 };

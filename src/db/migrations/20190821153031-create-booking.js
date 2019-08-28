@@ -25,13 +25,12 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      arrival_date: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
       departure_date: {
         type: Sequelize.DATE,
         allowNull: false
+      },
+      return_date: {
+        type: Sequelize.DATE,
       },
       checked_in: {
         type: Sequelize.BOOLEAN,

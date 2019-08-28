@@ -1,10 +1,8 @@
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+// import models from '../db/models';
 
-import models from '../db/models';
-
-
-const { User } = models;
+// const { User } = models;
 
 /**
  * Defines helper functions for the user model
