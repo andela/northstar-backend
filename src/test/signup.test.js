@@ -16,7 +16,6 @@ const user = {
   preferred_language: 'english',
   preferred_currency: 'USD',
   location: 'lagos',
-  isVerified: false
 };
 
 describe('Users', () => {

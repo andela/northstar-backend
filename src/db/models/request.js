@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'pending'
     }
   }, {
-    tableName: 'trips',
+    tableName: 'requests',
     underscored: true
   });
   Request.associate = (models) => {
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Request.belongsTo(models.Booking, {
-      foreignKey: 'accommodation_id',
+      foreignKey: 'booking_id',
       onDelete: 'CASCADE'
     });
   };

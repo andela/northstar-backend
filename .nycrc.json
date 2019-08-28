@@ -4,9 +4,8 @@
         "check-coverage": true,
         "reporter": "lcov",
         "report-dir": "./coverage",
-        "exclude": [
-        "src/index.js"
-    ]
+        "exclude": ["src/index.js"],
+        "sourceMap": false,
+        "instrument": false
     }
 }
-  

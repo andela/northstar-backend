@@ -32,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     location: {
       type: DataTypes.STRING
     },
+    manager_id: {
+      type: DataTypes.INTEGER,
+    },
     role: {
       type: DataTypes.ENUM('super_admin', 'travel_admin', 'manager', 'requester'),
       allowNull: false,
