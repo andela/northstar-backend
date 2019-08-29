@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+import crypto from 'crypto';
+
 import bcrypt from 'bcrypt';
 import models from '../db/models';
 import sender from '../services/email.service';
@@ -6,6 +9,7 @@ import UserUtils from '../utils/user.utils';
 import JWTService from '../services/jwt.service';
 
 const { User } = models;
+const defaultPassword = crypto.createHash('sha1').update(Math.random().toString()).digest('hex');
 
 /**
  * This class creates the user controller
@@ -31,11 +35,7 @@ export default class UserController {
 
       const userToken = JWTService.generateToken(user);
 
-      res.cookie('token', userToken, {
-        expires: new Date(Date.now() + (604800 * 1000)),
-        httpOnly: true,
-        secure: true
-      });
+      UserUtils.setCookie(res, userToken);
 
       return Response.Success(res, {
         id: user.id,
@@ -59,18 +59,18 @@ export default class UserController {
     const signinError = { message: 'Incorrect email or password' };
     User.findOne({ where: { email: req.body.email } })
       .then((user) => {
-        if (!user) return Response.UnauthorizedError(res, signinError);
+        if (!user) throw new Error();
         return UserUtils.validateUserPassword(user, req.body.password)
           .then((matches) => {
-            if (!matches) return Response.UnauthorizedError(res, signinError);
+            if (!matches) throw new Error();
             const data = UserUtils.getPublicUserFields(user.dataValues);
             data.token = JWTService.generateToken(data);
+            UserUtils.setCookie(res, data.token);
             return Response.Success(res, data);
           });
       })
       .catch(() => Response.UnauthorizedError(res, signinError));
   }
-
 
   /**
    * @param {Object} req
@@ -101,5 +101,34 @@ export default class UserController {
         data: userObject
       });
     } catch (error) { next(error); }
+  }
+
+  /**
+   * Handles social authentication
+   * @param {*} req
+   * @param {*} res
+   * @returns {*} response
+   */
+  static async oauthSignin(req, res) {
+    try {
+      const { _json: details } = req.user;
+      const first_name = details.first_name || details.given_name;
+      const last_name = details.last_name || details.family_name;
+      const { email } = details;
+      const [{ dataValues: user }, created] = await User.findOrCreate({
+        where: { email },
+        defaults: {
+          email, first_name, last_name, password: defaultPassword
+        }
+      });
+      const payload = { first_name: user.first_name, email: user.email };
+      if (created) await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
+      user.token = JWTService.generateToken(user);
+      UserUtils.setCookie(res, user.token);
+      const statusCode = created ? 201 : 200;
+      Response.Success(res, UserUtils.getPublicUserFields(user), statusCode);
+    } catch (e) {
+      Response.UnauthorizedError(res, { message: 'Unable to sign in' });
+    }
   }
 }
