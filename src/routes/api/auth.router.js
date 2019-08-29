@@ -5,13 +5,14 @@ import passport from 'passport';
 import UserController from '../../controllers/user.controller';
 import UserMiddleware from '../../middlewares/user.middleware';
 import socialMockMiddleWare from '../../middlewares/social-mock.middleware';
+import signupValidator from '../../validation/user.validation';
 
 const router = express.Router();
 
 const authBase = '/auth';
 
 /* Users Routes Here */
-router.post(`${authBase}/signup`, UserController.signup);
+router.post(`${authBase}/signup`, signupValidator, UserController.signup);
 router.post('/auth/signin', ...UserMiddleware.validateSigninFields(),
   UserController.signin);
 

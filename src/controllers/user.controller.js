@@ -21,9 +21,19 @@ export default class UserController {
    * @returns {object} A signed up user
    */
   static async signup(req, res) {
+    const userData = UserUtils.getUserSignupData(req.body);
+
     try {
+      const isEmailExist = await User.findOne({ where: { email: userData.email } });
+
+      if (isEmailExist) {
+        return res.status(409).json({
+          status: 'error',
+          message: 'user already registered'
+        });
+      }
+
       const hash = await bcrypt.hash(req.body.password, 10);
-      const userData = UserUtils.getUserSignupData(req.body);
       const user = await User.create({
         ...userData,
         password: hash

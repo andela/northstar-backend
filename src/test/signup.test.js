@@ -4,6 +4,7 @@ import app from '../index';
 
 chai.use(chaiHttp);
 chai.should();
+const { expect } = chai;
 
 const user = {
   email: 'chiomadans@gmail.com',
@@ -50,5 +51,113 @@ describe('Users', () => {
                     done();
                 })
         });
+        it('should not register a new user with an already existing email', (done) => {
+            chai.request(app)
+              .post('/api/v1/auth/signup')
+              .send(user)
+              .end((err, res) => {
+                expect(res).to.have.status(409);
+                expect(res.body).to.be.an('object');
+                expect(res.body.message).to.equal('user already registered');
+                done();
+              });
+          });
+        });
+        it('it should not signup invalid lastname', (done) => {
+            chai
+              .request(app)
+              .post('/api/v1/auth/signup')
+              .send( {
+                email: 'chiomadans@gmail.com',
+                first_name: 'Ejike',
+                last_name: '',
+                password: 'secret123',
+                role: 'requester',
+                gender: 'female',
+                birth_date: '02-02-2019',
+                preferred_language: 'english',
+                preferred_currency: 'USD',
+                location: 'lagos',
+              })
+              .end((err, res) => {
+                res.should.have.status(422);
+                res.body.should.have.property('status').to.equals('error');
+        
+                done();
+              });
+          });
+        
+          
+        
+          it('it should not signup invalid firstname', (done) => {
+            chai
+              .request(app)
+              .post('/api/v1/auth/signup')
+              .send( {
+                email: 'chiomadans@gmail.com',
+                first_name: '',
+                last_name: 'Ejike',
+                password: 'secret123',
+                role: 'requester',
+                gender: 'female',
+                birth_date: '02-02-2019',
+                preferred_language: 'english',
+                preferred_currency: 'USD',
+                location: 'lagos',
+              })
+              .end((err, res) => {
+                res.should.have.status(422);
+                res.body.should.have.property('status').to.equals('error');
+                done();
+              });
+            });
+
+            it('it should not signup invalid password', (done) => {
+                chai
+                  .request(app)
+                  .post('/api/v1/auth/signup')
+                  .send( {
+                    email: 'chiomadans@gmail.com',
+                    first_name: 'Ejike',
+                    last_name: 'ddd',
+                    password: 'secre t123',
+                    role: 'requester',
+                    gender: 'female',
+                    birth_date: '02-02-2019',
+                    preferred_language: 'english',
+                    preferred_currency: 'USD',
+                    location: 'lagos',
+                  })
+                  .end((err, res) => {
+                    res.should.have.status(422);
+                    res.body.should.have.property('status').to.equals('error');
+                    done();
+                  });
+                });
+                it('it should not signup invalid email', (done) => {
+                    chai
+                      .request(app)
+                      .post('/api/v1/auth/signup')
+                      .send( {
+                        email: 'chiomadansgmail.com',
+                        first_name: 'Ejike',
+                        last_name: 'ddd',
+                        password: 'secret123',
+                        role: 'requester',
+                        gender: 'female',
+                        birth_date: '02-02-2019',
+                        preferred_language: 'english',
+                        preferred_currency: 'USD',
+                        location: 'lagos',
+                      })
+                      .end((err, res) => {
+                        res.should.have.status(422);
+                        res.body.should.have.property('status').to.equals('error');
+                        done();
+                      });
+                    });
     });
-});
+    
+
+
+
