@@ -12,14 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'ratings',
     underscored: true
   });
-
   Rating.associate = (models) => {
     // associations can be defined here
     Rating.belongsTo(models.User, {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
     });
-
     Rating.belongsTo(models.Facility, {
       foreignKey: 'facility_id',
       onDelete: 'CASCADE'

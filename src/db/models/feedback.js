@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
     });
-
     Feedback.belongsTo(models.Facility, {
       foreignKey: 'facility_id',
       onDelete: 'CASCADE'

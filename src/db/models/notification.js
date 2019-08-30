@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'request_id',
       onDelete: 'CASCADE'
     });
-
     Notification.belongsTo(models.User, {
       foreignKey: 'receiver_id',
       onDelete: 'CASCADE'
