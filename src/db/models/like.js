@@ -17,5 +17,6 @@ module.exports = (sequelize) => {
       onDelete: 'CASCADE'
     });
   };
+
   return Like;
 };

@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+import models from '../db/models';
+
+const { User } = models;
 
 const auth = {
   verifyToken(token) {
@@ -28,7 +31,7 @@ const auth = {
       if (!token) {
         return res.status(401).json({
           status: 'error',
-          error: 'No token provided.',
+          error: 'No token provided!',
         });
       }
 
@@ -38,14 +41,51 @@ const auth = {
           error: 'Failed to authenticate token.',
         });
       }
+
+      const user = await User.findOne({ where: { id: decoded.payload.id } });
+      if (!user) {
+        return res.status(401).json({
+          status: 'error',
+          error: 'This user does not exist.',
+        });
+      }
+      req.currentUser = user;
       return next();
     } catch (error) {
       return res.status(500).json({
         status: 'error',
-        error: 'Internal Server Error',
+        error: ('Internal Server Error'),
       });
     }
-  }
+  },
+
+  async verifyManager(req, res, next) {
+    try {
+      let token;
+
+      if (req.headers.authorization) {
+        [, token] = req.headers.authorization.split(' ');
+      } else if (req.headers['x-access-token']) {
+        token = req.headers['x-access-token'];
+      } else if (req.headers.token) {
+        token = req.headers.token;
+      }
+      const decoded = auth.verifyToken(token);
+
+      if (!((decoded.payload.role === 'super_admin') || (decoded.payload.role === 'manager'))) {
+        return res.status(401).json({
+          status: 'error',
+          error: 'Hi! You are not permitted to perform this action',
+        });
+      }
+      return next();
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'Error Accessing Route',
+      });
+    }
+  },
 };
 
 export default auth;
