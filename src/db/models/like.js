@@ -5,13 +5,11 @@ module.exports = (sequelize) => {
     tableName: 'likes',
     underscored: true
   });
-
   Like.associate = (models) => {
     Like.belongsTo(models.User, {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
     });
-
     Like.belongsTo(models.Facility, {
       foreignKey: 'facility_id',
       onDelete: 'CASCADE'

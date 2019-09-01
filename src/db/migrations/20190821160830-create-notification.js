@@ -47,6 +47,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('notifications')
   // removed the parameter "Sequelize" because it is not being used
 };

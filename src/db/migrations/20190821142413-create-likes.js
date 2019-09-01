@@ -25,6 +25,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('likes')
   // the parameter "Sequelize" was removed because it is not being used
 };

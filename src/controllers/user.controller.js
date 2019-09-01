@@ -11,11 +11,11 @@ const { User } = models;
  * This class creates the user controller
  */
 export default class UserController {
-/**
- * @param {object} req The user's signup details
- * @param {object} res The user's details returned after signup
- * @returns {object} A signed up user
- */
+  /**
+   * @param {object} req The user's signup details
+   * @param {object} res The user's details returned after signup
+   * @returns {object} A signed up user
+   */
   static async signup(req, res) {
     try {
       const hash = await bcrypt.hash(req.body.password, 10);

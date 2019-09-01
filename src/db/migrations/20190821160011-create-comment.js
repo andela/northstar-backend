@@ -39,6 +39,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('comments')
   // removed the parameter "Sequelize" because it is not being used
 };

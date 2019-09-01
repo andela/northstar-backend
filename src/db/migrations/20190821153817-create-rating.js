@@ -42,6 +42,7 @@ module.exports = {
       }
     })
   ),
+
   down: (queryInterface) => queryInterface.dropTable('ratings')
   // removed the parameter "Sequelize" because it is not being used
 };

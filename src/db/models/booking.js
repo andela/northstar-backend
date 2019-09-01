@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
     });
-
     Booking.belongsTo(models.Room, {
       foreignKey: 'room_id',
       onDelete: 'CASCADE'

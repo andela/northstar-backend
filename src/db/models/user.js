@@ -48,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true
     }
-
   }, {
     tableName: 'users',
     underscored: true
