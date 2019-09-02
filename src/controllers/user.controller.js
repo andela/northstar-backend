@@ -30,6 +30,13 @@ export default class UserController {
       await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
 
       const userToken = JWTService.generateToken(user);
+
+      res.cookie('token', userToken, {
+        expires: new Date(Date.now() + (604800 * 1000)),
+        httpOnly: true,
+        secure: true
+      });
+
       return Response.Success(res, {
         id: user.id,
         ...userData,

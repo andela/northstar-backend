@@ -1,11 +1,12 @@
 import models from '../db/models';
 import sender from '../services/email.service';
+import Response from "../utils/response.utils";
 
 const { Request, User } = models;
 /**
  * This class creates the user controller
  */
-export default class UserController {
+export default class RequestController {
   /**
    * @param {object} req The user's signup details
    * @param {object} res The user's details returned after signup
@@ -36,5 +37,23 @@ export default class UserController {
           error: 'Error accessing the request route',
         });
     }
+  }
+
+  /**
+   * @param {Object} req The user's token which is decoded to get the user's id
+   * @param {Object} res List of request returned to the user
+   * @returns {array} An array of objects or an empty one
+   */
+  static async findAll(req, res) {
+    // const requestData;
+
+    await Request.findAll({ where: { user_id: req.body.user_id } })
+        .then((data) => {
+          if (data.length) {
+            return Response.Success(res, data, 200);
+          }
+          return Response.CustomError(res, 404, 'error', 'No requests found');
+        })
+        .catch((err) => Response.InternalServerError(res, err));
   }
 }
