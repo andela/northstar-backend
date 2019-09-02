@@ -6,6 +6,8 @@ chai.use(chaiHttp);
 chai.should();
 const { expect } = chai;
 
+const wrongToken = 'TY3MTE4NzEzLCJleHAiOjE1Njc3MjM1MTN9.zjTooik6NGz258I67aIMri4ML78w2pHprL7dVmPwg';
+
 describe('Resquests', () => {
   let token;
   before('signup to get access userToken', async () => {
@@ -47,8 +49,28 @@ describe('Resquests', () => {
           expect(res.body).to.have.keys('status', 'data');
           expect(res.body.status).to.deep.equals('success');
           expect(res.body.data).to.be.an('object');
+          expect(res.body.data).to.have.keys('booking', 'request');
+          expect(res.body.data.request).to.be.an('object');
+          expect(res.body.data.booking).to.be.an('object');
+          expect(res.body.data.first_name).to.equal(token.first_name);
+          expect(res.body.data.last_name).to.equal(token.last_name);
+          expect(res.body.data.email).to.equal(token.email);
           done();
         });
     });
   });
+
+});
+
+it('it should fail to authenticate incorrect token', (done) => {
+  chai
+      .request(app)
+      .post('/api/v1/request/multiCity')
+      .set('x-access-token', wrongToken)
+      .end((error, data) => {
+          data.should.have.status(401);
+          data.body.should.have.property('status').eql('error');
+          data.body.should.have.property('error').eql('Failed to authenticate token.');
+          done();
+      });
 });
