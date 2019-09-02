@@ -3,6 +3,11 @@ module.exports = (sequelize, DataTypes) => {
     comment: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    delete_status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
     }
   }, {
     tableName: 'comments',
