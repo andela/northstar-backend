@@ -6,10 +6,7 @@
     "description": "Barefoot Nomad - Making company travel and accomodation easy and convinient.",
     "contact": {}
   },
-  "schemes": [
-    "https",
-    "http"
-  ],
+  "schemes": ["https", "http"],
   "host": "",
   "basePath": "/api/v1",
   "securityDefinitions": {
@@ -20,9 +17,7 @@
       "in": "header"
     }
   },
-  "consumes": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
   "tag": [
     {
       "name": "Auth",
@@ -31,6 +26,10 @@
     {
       "name": "Requests",
       "description": "Endpoints for Requests"
+    },
+    {
+      "name": "Comment",
+      "description": "Endpoint for Comments"
     }
   ],
   "paths": {
@@ -38,12 +37,8 @@
       "post": {
         "description": "User Sign Up",
         "summary": "Registers a user with all required information",
-        "tags": [
-          "Auth"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["Auth"],
+        "produces": ["application/json"],
         "security": [],
         "parameters": [
           {
@@ -70,15 +65,9 @@
       "post": {
         "description": "A user can sign in",
         "summary": "This endpoint receives POST request sign in a user",
-        "tags": [
-          "Auth"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["Auth"],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "security": [],
         "parameters": [
           {
@@ -104,12 +93,8 @@
       "patch": {
         "description": "A manager can reject a user's request application",
         "summary": "When a manager login, he/she sees a list of requests made by users under him and he is able to reject their requests",
-        "tags": [
-          "Requests"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["Requests"],
+        "produces": ["application/json"],
         "security": [],
         "parameters": [
           {
@@ -122,6 +107,7 @@
             }
           }
         ],
+
         "responses": {
           "200": {
             "description": "Success"
@@ -137,8 +123,37 @@
           }
         }
       }
+    },
+    "/comment/:comment_id": {
+      "delete": {
+        "description": "User can delete comment",
+        "summary": "allows a user to delete his/her comment",
+        "tags": ["Comment"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "comment_id",
+            "required": true,
+            "description": "This is the comment id of the comment to be deleted",
+            "schema": {
+              "$ref": "#"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
+
   "requestBody": {
     "signup": {
       "title": "Signup Request",
@@ -195,21 +210,18 @@
         "last_name": "Chiemerie",
         "password": "secret123",
         "gender": "female",
-        "birth_date":"16/06/1994",
-        "preferred_language":"english",
-        "preferred_currency":"USD",
-        "location":"Lagos",
-        "role":"manager",
+        "birth_date": "16/06/1994",
+        "preferred_language": "english",
+        "preferred_currency": "USD",
+        "location": "Lagos",
+        "role": "manager",
         "isVerified": "false"
       }
     },
     "signin": {
       "type": "object",
       "title": "Signin request body specification",
-      "required": [
-        "email",
-        "password"
-      ],
+      "required": ["email", "password"],
       "properties": {
         "email": {
           "description": "User email",
@@ -245,9 +257,7 @@
           "user_id": 1,
           "category": "one-way",
           "origin": "Paris",
-          "destination": [
-            "Lagos"
-          ],
+          "destination": ["Lagos"],
           "departure_date": "2019-08-30T00:43:35.816Z",
           "return_date": null,
           "reason": "I am tired of this office",
