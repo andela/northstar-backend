@@ -16,6 +16,7 @@ const authBase = '/auth';
 router.post(`${authBase}/signup`, signupValidator, UserMiddleware.EmailValidation, UserController.signup);
 router.post('/auth/signin', ...UserMiddleware.validateSigninFields(),
   UserController.signin);
+router.post('/password-reset', UserController.resetpasswordEmail);
 
 /* google */
 router.get(`${authBase}/google`, passport.authenticate('google', {

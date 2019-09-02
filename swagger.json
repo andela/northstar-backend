@@ -120,6 +120,47 @@
           }
         }
       }
+    }
+  },
+    "/auth/passwordreset": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Enables a user to request a password reset",
+        "operationId": "passwordReset",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "registered user email ",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserMail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "you will receive a link in your mail shortly to proceed",
+            "schema": {
+              "$ref": "#/definitions/PasswordResetSucess"
+            }
+          },
+          "400": {
+            "description": "password reset failed",
+            "schema": {
+              "$ref": "#/definitions/PasswordResetFail"
+            }
+          }
+        }
+      }
     },
     "/auth/facebook": {
       "get": {
@@ -436,7 +477,7 @@
           }
         }
       }
-    }
+    
   },
 
   "requestBody": {

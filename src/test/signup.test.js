@@ -11,6 +11,8 @@ chai.should();
 chai.use(Sinonchai);
 const { expect } = chai;
 
+
+
 const user = {
   email: 'chiomadans@gmail.com',
   first_name: 'Ejike',
@@ -207,7 +209,38 @@ describe('Users', () => {
               });
             });
     });
-    
 
+    describe('/Post Requests', () => {
+        
+          it('It should fail to reset password with an invalid mail', (done) => {
+            chai
+              .request(app)
+              .post('/api/v1/password-reset')
+              .send({email:'d@ff'})
+              .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.have.property('status').to.equals('error');
+                res.body.should.have
+                  .property('message')
+                  .to.equals('user email not found');
 
+                done();
+              });
+          });
+      
+          it('It should receive a mail ', (done) => {
+            chai
+              .request(app)
+              .post('/api/v1/password-reset')
+              .send({email:'john_doe@email.com'})
+              .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('status').to.equals('success');
+                res.body.should.have.property('data').to.be.an('object')
+
+                done();
+              });
+          });
+        
+    });
 

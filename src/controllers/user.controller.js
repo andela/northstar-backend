@@ -29,7 +29,7 @@ export default class UserController {
         ...userData,
         password: hash
       }, { returning: true });
-      
+
       // parameter(s) to be passed to the sendgrid email template
       const payload = { user };
       await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
@@ -172,5 +172,54 @@ export default class UserController {
     } catch (error) {
       return Response.InternalServerError(res, 'Could not populate the managers(s)');
     }
+  }
+
+  /**
+ * @static
+ * @param {object} req
+ * @param {object} res
+ * @returns {json} - json
+ * @memberof UserController
+ */
+  static async resetpasswordEmail(req, res) {
+    let userToken;
+    let payload;
+    const userData = UserUtils.getUserSignupData(req.body);
+
+    await User.findOne({ attributes: ['first_name', 'email', 'id'], where: { email: userData.email } })
+      .then((data) => {
+        payload = data;
+        userToken = JWTService.generatePasswordToken(data);
+      })
+      .catch(() => res.status(404).json({
+        status: 'error',
+        message: 'user email not found',
+      }));
+
+
+    await User.update({
+      password_reset_token: userToken
+    }, { where: { email: userData.email } })
+      .then(() => {
+        payload.dataValues.token = userToken;
+        const { first_name: firstName, email } = payload.dataValues;
+        sender.sendEmail(process.env.SENDER_EMAIL, payload.dataValues.email, 'passord_reset', { firstName, email });
+      })
+      .then(() => {
+        res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'you will receive a link in your mail shortly to proceed'
+          }
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          status: 'error',
+          message: err.message,
+          info: 'password reset failed',
+          err
+        });
+      });
   }
 }
