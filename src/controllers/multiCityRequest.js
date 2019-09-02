@@ -12,7 +12,7 @@ class RequestController {
 
     static async createMultiCityRequest(req, res) {
         try {
-            const { id: user_id } = req.tokenPayload.payload
+            const { id: user_id } = req.currentUser.dataValues
             const { category, origin, destination, departure_date, return_date, reason, room_id } = req.body
             const bookingData = { departure_date, return_date, user_id, room_id }
             const booking = await models.Booking.create(bookingData);
@@ -24,7 +24,6 @@ class RequestController {
                 data: { request, booking }
             });
         } catch (error) {
-            console.log('issa error', error)
             return res.status(500)
                 .json({
                     status: 'error',

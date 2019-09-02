@@ -8,7 +8,7 @@ import requestRouter from './requests.router';
 const router = express.Router();
 
 router.use('/auth', authRouter);
-router.use('/request', multicityRouter);
+router.use('/', multicityRouter);
 router.use('/', requestRouter);
 
 export default router;

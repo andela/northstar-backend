@@ -27,7 +27,6 @@ const auth = {
             }
 
             const decoded = auth.verifyToken(token);
-
             if (!token) {
                 return res.status(401).json({
                     status: 'error',
