@@ -26,6 +26,7 @@ describe('Resquests', () => {
     .send(user);
     const token = userRes.body.data.token;
     userToken = `Bearer ${token}`;
+    console.log(userRes);
   });
   describe('/POST multi city request', () => {
     const requestData = {
@@ -43,12 +44,12 @@ describe('Resquests', () => {
         .send(requestData)
         .set('authorization', userToken)
         .end((err, res) => {
+          console.log(res.body);
           expect(res).to.be.an('object');
           expect(res.status).to.equal(201);
           expect(res.body).to.have.keys('status', 'data');
           expect(res.body.status).to.deep.equals('success');
           expect(res.body.data).to.be.an('object');
-          const { token } = res.body.data;
           done();
         });
     });
