@@ -62,10 +62,24 @@ export default class {
   }
 
   /**
-   * Defines the specification for 404 server errors
-   * @param {ServerResponse} res
+   * Defines the specification for bad request error cases
+   * @param {object} res (ServerResponse object)
+   * @param {object} error
+   * @param {number} code
+   * @returns {object} ServerResponse
+   */
+  static BadRequestError(res, error, code = 400) {
+    return res.status(code).json({
+      status: 'error',
+      error
+    });
+  }
+
+  /**
+   * Defines the specification for a resource not found error
+   * @param {object} res (ServerResponse)
    * @param {string} message
-   * @returns {ServerResponse} response
+   * @returns {object} ServerResponse
    */
   static NotFoundError(res, message) {
     return res.status(404).json({

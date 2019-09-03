@@ -1,10 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import sgMail from '@sendgrid/mail';
+import sinon from 'sinon';
+import Sinonchai from "sinon-chai";
+
 import app from '../index';
 import UsersController from "../controllers/user.controller";
-import Auth from "../middlewares/auth";
-import sinon from "sinon";
-import Sinonchai from "sinon-chai";
 
 chai.use(chaiHttp);
 chai.should();
@@ -28,21 +29,26 @@ const user = {
 
 describe('Users', () => {
     // Test for creating new user
-  describe('/POST register users', () => {
-    it('it should Signup a user and generate a token', (done) => {
-      chai.request(app)
-        .post('/api/v1/auth/signup')
-        .send(user)
-        .end((err, res) => {
-          user.token = res.body.data.token;
-          res.should.have.status(201);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
-          res.body.data.should.have.property('first_name');
-          res.body.data.should.have.property('last_name');
-          res.body.data.should.have.property('email');
-          done();
+    describe('/POST register users', () => {
+        it('it should Signup a user and generate a token', (done) => {
+            const stub = sinon.stub(sgMail, 'send').callsFake((msg) => 'done');
+
+            chai.request(app)
+                .post('/api/v1/auth/signup')
+                .send(user)
+                .end((err, res) => {
+                    user.token = res.body.data.token;
+                    res.should.have.status(201);
+                    res.body.should.be.an('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.should.have.property('data');
+                    res.body.data.should.have.property('first_name');
+                    res.body.data.should.have.property('last_name');
+                    res.body.data.should.have.property('email');
+                    stub.called.should.be.true;
+                    stub.restore();
+                    done();
+                });
         });
     });
 
@@ -101,7 +107,6 @@ describe('Users', () => {
       res.status.should.have.callCount(1);
       done();
     });
-  });
 
   describe('/Validate Signup Inputs', () => {
     it('should not register a new user with an already existing email', (done) => {

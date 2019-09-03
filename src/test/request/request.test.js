@@ -347,7 +347,7 @@ describe('/GET REQUESTS', () => {
         sinon.stub(res, 'status').returnsThis();
 
         RequestController.findAll(req, res);
-        (res.status).should.have.callCount(0);
+        (res.status).should.have.callCount(1);
         done();
     });
 });
@@ -476,7 +476,7 @@ describe('/POST REQUESTS', () => {
         sinon.stub(res, 'status').returnsThis();
 
         RequestController.findAll(req, res);
-        (res.status).should.have.callCount(0);
+        (res.status).should.have.callCount(1);
         done();
     });
 
@@ -488,9 +488,8 @@ describe('/POST REQUESTS', () => {
             .end((err, res) => {
                 res.body.should.have.property('status').eql('success');
                 res.body.data.should.have.property('status').eql('pending');
-                res.body.data.should.have.property('id').eql(7);
                 res.body.data.should.have.property('origin').eql('Lagos');
-                res.body.data.should.have.property('destination').eql(['Abuja','Onitsha']);
+                res.body.data.should.have.property('destination').eql(['abuja','onitsha']);
                 res.body.data.should.have.property('departure_date');
                 res.body.data.should.have.property('return_date');
                 res.body.data.should.have.property('reason').eql('For the fun of it');
@@ -507,7 +506,6 @@ describe('/POST REQUESTS', () => {
             .end((err, res) => {
                 res.body.should.have.property('status').eql('success');
                 res.body.data.should.have.property('status').eql('pending');
-                res.body.data.should.have.property('id').eql(8);
                 res.body.data.should.have.property('origin').eql('Lagos');
                 res.body.data.should.have.property('destination').eql(['sfo','la']);
                 res.body.data.should.have.property('departure_date');

@@ -36,7 +36,7 @@ describe('SOCIAL AUTHENTICATION', () => {
       expect(res.body.data.last_name).to.not.equal(null);
       expect(res.body.data.email).to.not.equal(null);
       expect(res.body.data.email).to.be.a('string');
-      expect(stub.called).to.equal(true);
+      expect(stub.called).to.be.true;
       stub.restore();
     });
 

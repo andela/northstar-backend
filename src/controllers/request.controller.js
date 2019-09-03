@@ -1,3 +1,5 @@
+// import sequelize from 'sequelize';
+
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
@@ -42,15 +44,22 @@ export default class RequestController {
   * @param {Object} res List of request returned to the user
   * @returns {array} An array of objects or an empty one
   */
-  static findAll(req, res) {
-    Request.findAll({ where: { user_id: req.body.user_id } })
-      .then((data) => {
-        if (data.length) {
-          return Response.Success(res, data, 200);
-        }
-        return Response.CustomError(res, 404, 'error', 'No requests found');
-      })
-      .catch((err) => Response.InternalServerError(res, err));
+  static async findAll(req, res) {
+    try {
+      // Check and handle queries
+      if (Object.keys(req.query).length) {
+        const data = await Request.findAll(req.query);
+        if (data.length) return Response.Success(res, data);
+        return Response.NotFoundError(res,
+          'No travel request found that satisfy the query and/or your permisson level');
+      }
+
+      const data = await Request.findAll({ where: { user_id: req.body.user_id } });
+      if (data.length) return Response.Success(res, data, 200);
+      Response.CustomError(res, 404, 'error', 'No requests found');
+    } catch (err) {
+      Response.InternalServerError(res, err);
+    }
   }
 
   /**
@@ -73,6 +82,8 @@ export default class RequestController {
       const requestData = {
         user_id, category, origin, destination: destination.split(', '), departure_date, return_date, reason, booking_id
       };
+
+      requestData.destination = requestData.destination.map((el) => el.toLowerCase());
       const request = await models.Request.create(requestData);
       return res.status(201).json({
         status: 'success',
@@ -124,7 +135,7 @@ export default class RequestController {
       const newRequest = await Request.create({
         category,
         origin,
-        destination,
+        destination: destination.map((el) => el.toLowerCase()),
         departure_date,
         return_date,
         reason,

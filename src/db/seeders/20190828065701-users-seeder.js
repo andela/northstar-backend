@@ -116,7 +116,37 @@ module.exports = {
       role: 'manager',
       created_at: new Date(),
       updated_at: new Date()
-    }
+    },
+    {
+      first_name: 'Dan',
+      last_name: 'Spielberg',
+      email: 'dan.spielberg@email.com',
+      password: await bcrypt.hash('dannylove', 10),
+      gender: 'male',
+      birth_date: new Date(),
+      preferred_language: 'en',
+      preferred_currency: 'GBP',
+      location: 'Manchester',
+      role: 'requester',
+      manager_id: 1,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      first_name: 'Jelly',
+      last_name: 'Swims',
+      email: 'aqua.me@email.com',
+      password: await bcrypt.hash('seemeseefish', 10),
+      gender: 'female',
+      birth_date: new Date(),
+      preferred_language: 'fr',
+      preferred_currency: 'USD',
+      location: 'Marseille',
+      role: 'requester',
+      manager_id: 2,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
   ], {}),
 
   down: (queryInterface) => queryInterface.bulkDelete('users', null, {})
