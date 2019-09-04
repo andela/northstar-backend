@@ -233,9 +233,19 @@ const user = {
     password: 'qwertyuiop'
 };
 
+
+const newRequest = {
+    category: 'one-way',
+    origin: 'Lagos',
+    destination: 'Abuja',
+    departure_date: new Date(),
+    reason: 'For the fun of it',
+    booking_id: 1
+};
+
 describe('/GET REQUESTS', () => {
 
-    it ('should login and return the token', (done) => {
+    it('should login and return the token', (done) => {
         chai.request(app)
             .post(loginEndpoint)
             .send(user)
@@ -247,7 +257,8 @@ describe('/GET REQUESTS', () => {
     });
 
     // now for the main tests //
-    it ('should ask for token if there is none', (done) => {
+
+    it('should ask for token if there is none', (done) => {
         chai.request(app)
             .get(requestEndpoint)
             .set('Authorization', '')
@@ -257,7 +268,7 @@ describe('/GET REQUESTS', () => {
             })
     });
 
-    it ('should return 200 if requests are found', (done) => {
+    it('should return 200 if requests are found', (done) => {
         const validToken = `Bearer ${user.token}`;
         chai.request(app)
             .get(requestEndpoint)
@@ -269,7 +280,8 @@ describe('/GET REQUESTS', () => {
             })
     });
 
-    it ('return error if token is invalid/expired', (done) => {
+
+    it('return 400 on invalid/expired token', (done) => {
         const invalidToken = `Bearer 000!!000xx0##^&##${user.token}xx000xxx000xxx0000`;
         chai.request(app)
             .get(requestEndpoint)
@@ -303,5 +315,106 @@ describe('/GET REQUESTS', () => {
         RequestController.findAll(req, res);
         (res.status).should.have.callCount(0);
         done();
+    });
+});
+
+describe('/POST REQUESTS', () => {
+
+    it('should return 403 without a token', (done) => {
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', '')
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
+    });
+
+    it('should return 400 on invalid/expired token', (done) => {
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', `Bearer 000!!000xx0##^&##x000xxx000xxx0000`)
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
+    });
+
+    it('should return 201 with valid request data', (done) => {
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', `Bearer ${user.token}`)
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(201);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('success');
+                res.body.data.should.have.property('id');
+                done();
+            });
+    });
+
+    it('should return 500 with nonexistent booking ID', (done) => {
+        newRequest.booking_id = 100000;
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', `Bearer ${user.token}`)
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                res.body.error.should.have.property('message');
+                done();
+            });
+    });
+
+    it('should return 400 with invalid request data', (done) => {
+        newRequest.booking_id = '';
+        delete newRequest.origin;
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', `Bearer ${user.token}`)
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
+    });
+
+    it('should ensure return date not needed for one-way trips', (done) => {
+        newRequest.return_date = new Date();
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', `Bearer ${user.token}`)
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
+    });
+
+    it('should ensure category is set to one-way', (done) => {
+        newRequest.category = 'many-ways';
+        chai.request(app)
+            .post(requestEndpoint)
+            .set('Authorization', `Bearer ${user.token}`)
+            .send(newRequest)
+            .end((err, res) => {
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
     });
 });

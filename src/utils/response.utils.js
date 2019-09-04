@@ -23,8 +23,8 @@ export default class {
    * @param {number} code
    * @returns {ServerResponse} response
    */
-  static Success(res, data, code) {
-    return res.status(code || 200).json({
+  static Success(res, data, code = 200) {
+    return res.status(code).json({
       status: 'success',
       data
     });

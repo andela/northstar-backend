@@ -1,4 +1,3 @@
-
 module.exports = {
   up: (queryInterface) => queryInterface.bulkInsert('bookings', [{
     user_id: 1,
