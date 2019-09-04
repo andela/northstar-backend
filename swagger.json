@@ -89,6 +89,54 @@
         }
       }
     },
+    "/auth/google": {
+      "get": {
+        "description": "A user can sign in/register with a Google account",
+        "summary": "This endpoint receives GET requests to sign in or register a user using a Google account",
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "responses": {
+          "201": {
+            "description": "A new user created"
+          },
+          "200": {
+            "description": "An existing user retrieved"
+          },
+          "401": {
+            "description": "Signin error"
+          }
+        }
+      }
+    },
+    "/auth/facebook": {
+      "get": {
+        "description": "A user can sign in/register with a Facebook account",
+        "summary": "This endpoint receives GET requests to sign in or register a user using a Facebook account",
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "responses": {
+          "201": {
+            "description": "A new user created"
+          },
+          "200": {
+            "description": "An existing user retrieved"
+          },
+          "401": {
+            "description": "Signin error"
+          }
+        }
+      }
+    },
     "/requests/:id": {
       "patch": {
         "description": "A manager can reject a user's request application",

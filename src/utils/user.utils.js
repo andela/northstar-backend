@@ -1,8 +1,5 @@
-// import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 // import models from '../db/models';
-
-// const { User } = models;
 
 /**
  * Defines helper functions for the user model
@@ -50,7 +47,6 @@ export default class UserUtils {
     };
   }
 
-
   /**
    * Gets the public fields of a user
    * @param {Object} userObj
@@ -68,5 +64,19 @@ export default class UserUtils {
       location: userObj.location,
       role: userObj.role
     };
+  }
+
+  /**
+   * Set cookie on response header
+   * @param {ServerResponse} res
+   * @param {string} userToken
+   * @returns {undefined}
+   */
+  static setCookie(res, userToken) {
+    res.cookie('token', userToken, {
+      expires: new Date(Date.now() + (604800 * 1000)),
+      httpOnly: true,
+      secure: true
+    });
   }
 }

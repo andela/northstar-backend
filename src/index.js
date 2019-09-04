@@ -7,10 +7,12 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
+import passport from 'passport';
 import logger from './logs/winston';
 import swaggerDocument from '../swagger.json';
 import v1Router from './routes';
 import indexRouter from './routes/api/index.router';
+import passportConfig from './validation/passport.config';
 
 const app = express();
 
@@ -26,10 +28,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan(':remote-addr - [:date] ":method :url" :status', { stream: logger.stream }));
-
+app.use(passport.initialize());
+passportConfig(passport);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api/v1', v1Router);
+
 app.use('/', indexRouter);
+app.use('/api/v1', v1Router);
 
 app.use((req, res, next) => {
   const err = new Error('No endpoint found');
