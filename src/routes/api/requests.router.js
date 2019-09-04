@@ -19,9 +19,6 @@ router.get('/requests', Auth.verifyToken, RequestController.findAll);
 
 /* Multi City Request route */
 
-const { createMultiCityRequest } = RequestController;
-const { verifyUserToken } = auth;
-
-router.post('/request/multiCity', verifyUserToken, createMultiCityRequest);
+router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
 
 export default router;

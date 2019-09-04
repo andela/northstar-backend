@@ -338,7 +338,7 @@ describe('Requests', () => {
     }
     it('it should successfully create a multy city request trip', (done) => {
       chai.request(app)
-        .post('/api/v1/request/multiCity')
+        .post('/api/v1/request/multi-city')
         .send(requestData)
         .set('authorization', token)
         .end((err, res) => {
@@ -353,6 +353,33 @@ describe('Requests', () => {
           expect(res.body.data.first_name).to.equal(token.first_name);
           expect(res.body.data.last_name).to.equal(token.last_name);
           expect(res.body.data.email).to.equal(token.email);
+          done();
+        });
+    });
+    it('it should return token not found error', (done) => {
+      chai.request(app)
+        .post('/api/v1/request/multi-city')
+        .send(requestData)
+        .end((err, res) => {
+          expect(res).to.be.an('object');
+          expect(res.status).to.equal(401);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equals('error');
+          expect(res.body.error).to.deep.equals('No token provided!');
+          done();
+        });
+    });
+    it('it should return invalid token error', (done) => {
+      chai.request(app)
+        .post('/api/v1/request/multi-city')
+        .send(requestData)
+        .set('authorization', 'kklsdjjadjflkjdakljafsdgkjjgsdlkjasfdklj')
+        .end((err, res) => {
+          expect(res).to.be.an('object');
+          expect(res.status).to.equal(401);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equals('error');
+          expect(res.body.error).to.deep.equals('Failed to authenticate token.');
           done();
         });
     });
