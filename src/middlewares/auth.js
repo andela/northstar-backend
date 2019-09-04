@@ -82,6 +82,34 @@ const auth = {
       });
     }
   },
+
+  async verifyTravelAdmin(req, res, next) {
+    try {
+      let token;
+
+      if (req.headers.authorization) {
+        token = req.headers.authorization;
+      } else if (req.headers['x-access-token']) {
+        token = req.headers['x-access-token'];
+      } else if (req.headers.token) {
+        token = req.headers.token;
+      }
+      const decoded = auth.verifyToken(token);
+
+      if (!((decoded.payload.role === 'super_admin') || (decoded.payload.role === 'travel_admin'))) {
+        return res.status(401).json({
+          status: 'error',
+          error: 'Hi! You are not permitted to perform this action',
+        });
+      }
+      return next();
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'Error Accessing Route',
+      });
+    }
+  },
 };
 
 export default auth;

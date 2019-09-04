@@ -1,9 +1,14 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
+import UsersController from "../controllers/user.controller";
+import Auth from "../middlewares/auth";
+import sinon from "sinon";
+import Sinonchai from "sinon-chai";
 
 chai.use(chaiHttp);
 chai.should();
+chai.use(Sinonchai);
 
 const user = {
   email: 'chiomadans@gmail.com',
@@ -49,6 +54,76 @@ describe('Users', () => {
                     res.should.have.status(404);
                     done();
                 })
+        });
+
+        it('fakes server error', (done) => {
+            const req = { body: {} };
+            const res = {
+                status() { },
+                send() { }
+            };
+
+            sinon.stub(res, 'status').returnsThis();
+
+            UsersController.signup(req, res);
+            (res.status).should.have.callCount(0);
+            done();
+        });
+
+        it("fakes server error", done => {
+            const req = { body: {} };
+            const res = {
+                status() { },
+                send() { }
+            };
+
+            sinon.stub(res, "status").returnsThis();
+
+            UsersController.signin(req, res);
+            res.status.should.have.callCount(0);
+            done();
+        });
+
+        it("fakes server error", done => {
+          const req = { body: {} };
+          const res = {
+            status() {},
+            send() {}
+          };
+
+          sinon.stub(res, "status").returnsThis();
+
+            Auth.verifyUserToken(req, res);
+          res.status.should.have.callCount(1);
+          done();
+        });
+
+        it("fakes server error", done => {
+            const req = { body: {} };
+            const res = {
+                status() { },
+                send() { }
+            };
+
+            sinon.stub(res, "status").returnsThis();
+
+            Auth.verifyManager(req, res);
+            res.status.should.have.callCount(1);
+            done();
+        });
+
+        it("fakes server error", done => {
+            const req = { body: {} };
+            const res = {
+                status() { },
+                send() { }
+            };
+
+            sinon.stub(res, "status").returnsThis();
+
+            Auth.verifyTravelAdmin(req, res);
+            res.status.should.have.callCount(1);
+            done();
         });
     });
 });
