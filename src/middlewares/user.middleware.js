@@ -1,9 +1,8 @@
 import { check, validationResult } from 'express-validator';
-// import passport from 'passport';
-
+import models from '../db/models';
 import Responses from '../utils/response.utils';
-// import JWTService from '../services/jwt.service';
 
+const { User } = models;
 const signinError = { message: 'Incorrect email or password' };
 
 /**
@@ -44,5 +43,23 @@ export default class AuthenticationMiddleware {
         status: 'error',
         error: 'You do not have permission for this action.'
       });
+  }
+
+  /**
+   * Ensure the the user is a super admin
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Function} next | calls the next middleware in the middleware chain
+   * @returns {Function} next
+   */
+  static async EmailValidation(req, res, next) {
+    const isEmailExist = await User.findOne({ where: { email: req.body.email } });
+    if (isEmailExist) {
+      return res.status(409).json({
+        status: 'error',
+        message: 'user already registered'
+      });
+    }
+    return next();
   }
 }
