@@ -26,7 +26,7 @@ module.exports = {
       preferred_language: 'Latin',
       preferred_currency: 'GBP',
       location: 'Texas',
-      role: 'requester',
+      role: 'travel_admin',
       created_at: new Date(),
       updated_at: new Date()
     },

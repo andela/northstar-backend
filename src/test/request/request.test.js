@@ -3,10 +3,10 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
-import app from '../index';
-import models from '../db/models';
+import app from '../../index';
+import models from '../../db/models';
 
-import RequestController from '../controllers/request.controller';
+import RequestController from '../../controllers/request.controller';
 
 chai.use(Sinonchai);
 chai.use(chaiHttp);
@@ -73,7 +73,7 @@ describe('REQUESTS', () => {
     describe('/PATCH Reject a user\'s Request', () => {
         it('it should return unauthorized if user is not logged in', (done) => {
             chai.request(app)
-                .patch('/api/v1/request/1')
+                .patch('/api/v1/requests/1')
                 .end((error, res) => {
                     res.should.have.status(401);
                     res.body.should.be.an('object');
@@ -114,7 +114,7 @@ describe('REQUESTS', () => {
                     const { token } = res.body.data;
 
                     chai.request(app)
-                        .patch('/api/v1/request/2')
+                        .patch('/api/v1/requests/2')
                         .set('x-access-token', token)
                         .end((error, data) => {
                             data.should.have.status(401);
@@ -143,7 +143,7 @@ describe('REQUESTS', () => {
                     expect(res.body.data.email).to.equal(testUser.email);
 
                     chai.request(app)
-                        .patch('/api/v1/request/2')
+                        .patch('/api/v1/requests/2')
                         .end((error, data) => {
                             data.should.have.status(401);
                             data.body.should.be.an('object');
@@ -157,7 +157,7 @@ describe('REQUESTS', () => {
         it('it should return invalid id if id of the request is not a number', (done) => {
             chai
                 .request(app)
-                .patch('/api/v1/request/p')
+                .patch('/api/v1/requests/p')
                 .set('token', adminToken)
                 .end((error, data) => {
                     data.should.have.status(422);
@@ -171,7 +171,7 @@ describe('REQUESTS', () => {
         it('it should return an error if a request does not exist', (done) => {
             chai
                 .request(app)
-                .patch('/api/v1/request/10')
+                .patch('/api/v1/requests/10')
                 .set('x-access-token', adminToken)
                 .end((error, data) => {
                     data.should.have.status(404);
@@ -184,7 +184,7 @@ describe('REQUESTS', () => {
         it('it should fail to authenticate incorrect token', (done) => {
             chai
                 .request(app)
-                .patch('/api/v1/request/1')
+                .patch('/api/v1/requests/1')
                 .set('x-access-token', wrongToken)
                 .end((error, data) => {
                     data.should.have.status(401);
@@ -196,7 +196,7 @@ describe('REQUESTS', () => {
 
         it('it should login and allow a manager to reject a user\'s request', (done) => {
             chai.request(app)
-                .patch('/api/v1/request/1')
+                .patch('/api/v1/requests/1')
                 .set('authorization', adminToken)
                 .end((error, data) => {
                     data.should.have.status(201);
@@ -207,7 +207,7 @@ describe('REQUESTS', () => {
                 });
         });
 
-        it('fakes server error', (done) => {
+        it('fakes server error for reject request', (done) => {
             const req = { body: {} };
             const res = {
                 status() {},
@@ -416,5 +416,19 @@ describe('/POST REQUESTS', () => {
                 res.body.should.have.property('status').eql('error');
                 done();
             });
+    });
+
+    it('fakes server error for TripRequest', (done) => {
+        const req = { body: {} };
+        const res = {
+            status() { },
+            send() { }
+        };
+
+        sinon.stub(res, 'status').returnsThis();
+
+        RequestController.TripRequests(req, res);
+        (res.status).should.have.callCount(0);
+        done();
     });
 });

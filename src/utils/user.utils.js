@@ -1,6 +1,4 @@
 import bcrypt from 'bcrypt';
-// import models from '../db/models';
-
 /**
  * Defines helper functions for the user model
  */
