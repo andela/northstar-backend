@@ -28,4 +28,21 @@ export default class AuthenticationMiddleware {
       }
     ];
   }
+
+  /**
+   * Ensure the the user is a super admin
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Function} next | calls the next middleware in the middleware chain
+   * @returns {Function} next
+   */
+  static isSuperAdmin(req, res, next) {
+    const { role } = req.body.user;
+    return role === 'super_admin'
+      ? next()
+      : res.status(403).json({
+        status: 'error',
+        error: 'You do not have permission for this action.'
+      });
+  }
 }

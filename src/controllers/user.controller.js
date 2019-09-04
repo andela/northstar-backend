@@ -70,4 +70,36 @@ export default class UserController {
       })
       .catch(() => Response.UnauthorizedError(res, signinError));
   }
+
+
+  /**
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Function} next
+   * @returns {JSON} res
+  */
+  static async setUserRole(req, res, next) {
+    try {
+      const { role, email } = req.body;
+      const updatedUser = await User.update(
+        { role },
+        {
+          where: { email },
+          returning: true
+        }
+      );
+
+      if (!updatedUser[1][0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'User not found.'
+        });
+      }
+      const userObject = UserUtils.returnRoleUpdateData(updatedUser[1][0]);
+      res.status(200).json({
+        status: 'success',
+        data: userObject
+      });
+    } catch (error) { next(error); }
+  }
 }

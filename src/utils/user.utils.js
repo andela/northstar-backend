@@ -49,4 +49,24 @@ export default class UserUtils {
       location: reqObj.location
     };
   }
+
+
+  /**
+   * Gets the public fields of a user
+   * @param {Object} userObj
+   * @returns {Object} public fields
+   */
+  static returnRoleUpdateData(userObj) {
+    return {
+      first_name: userObj.first_name,
+      last_name: userObj.last_name,
+      email: userObj.email,
+      gender: userObj.gender,
+      birth_date: userObj.birth_date,
+      preferred_language: userObj.preferred_language,
+      preferred_currency: userObj.preferred_currency,
+      location: userObj.location,
+      role: userObj.role
+    };
+  }
 }

@@ -1,6 +1,6 @@
 import models from '../db/models';
 import sender from '../services/email.service';
-import Response from "../utils/response.utils";
+import Response from '../utils/response.utils';
 
 const { Request, User } = models;
 /**
@@ -48,12 +48,12 @@ export default class RequestController {
     // const requestData;
 
     await Request.findAll({ where: { user_id: req.body.user_id } })
-        .then((data) => {
-          if (data.length) {
-            return Response.Success(res, data, 200);
-          }
-          return Response.CustomError(res, 404, 'error', 'No requests found');
-        })
-        .catch((err) => Response.InternalServerError(res, err));
+      .then((data) => {
+        if (data.length) {
+          return Response.Success(res, data, 200);
+        }
+        return Response.CustomError(res, 404, 'error', 'No requests found');
+      })
+      .catch((err) => Response.InternalServerError(res, err));
   }
 }

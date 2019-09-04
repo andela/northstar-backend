@@ -10,6 +10,7 @@ import swaggerUi from 'swagger-ui-express';
 import logger from './logs/winston';
 import swaggerDocument from '../swagger.json';
 import v1Router from './routes';
+import indexRouter from './routes/api/index.router';
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(morgan(':remote-addr - [:date] ":method :url" :status', { stream: logger
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', v1Router);
-app.use('/', v1Router);
+app.use('/', indexRouter);
 
 app.use((req, res, next) => {
   const err = new Error('No endpoint found');
