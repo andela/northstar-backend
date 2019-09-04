@@ -12,7 +12,7 @@ const { User } = models;
 const defaultPassword = crypto.createHash('sha1').update(Math.random().toString()).digest('hex');
 
 /**
- * This class creates the user controller
+ * This class creates the user Controller
  */
 export default class UserController {
   /**
