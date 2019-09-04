@@ -151,6 +151,34 @@
           }
         }
       }
+    },
+    "/comment/:request_id": {
+      "get": {
+        "description": "Get all comments for each user's request",
+        "summary": "allows a user/manager/superadmin to view comments associated with a request",
+        "tags": ["Comment"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request_id",
+            "required": true,
+            "description": "This is the request id of the request whose comment is to be populated",
+            "schema": {
+              "$ref": "#"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
 
