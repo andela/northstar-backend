@@ -60,4 +60,17 @@ export default class {
       }
     });
   }
+
+  /**
+   * Defines the specification for 404 server errors
+   * @param {ServerResponse} res
+   * @param {string} message
+   * @returns {ServerResponse} response
+   */
+  static NotFoundError(res, message) {
+    return res.status(404).json({
+      status: 'error',
+      error: { message }
+    });
+  }
 }

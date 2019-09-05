@@ -2,7 +2,7 @@ module.exports = {
   up: async (queryInterface) => {
     await queryInterface.bulkInsert('requests', [
       {
-        user_id: 1,
+        user_id: 2,
         category: 'one-way',
         origin: 'Paris',
         destination: ['Lagos'],
@@ -14,7 +14,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
-        user_id: 2,
+        user_id: 3,
         category: 'round-trip',
         origin: 'Hamburg',
         destination: ['Tokyo'],
@@ -26,7 +26,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
-        user_id: 1,
+        user_id: 4,
         category: 'multi-city',
         origin: 'Munich',
         destination: ['Rome', 'Serbia & Montenegro', 'Madagascar'],
