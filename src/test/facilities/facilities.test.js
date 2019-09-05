@@ -176,6 +176,30 @@ describe('FACILITIES', () => {
           expect(res.body.error).deep.to.be.an('array');
           expect(res.body.error[0]).to.have.keys('field', 'message');
           expect(res.body.error[0].field).to.deep.equal('name');
+          expect(res.body.error[0].message).to.deep.equal('The name of your facility must be a string');
+          done();
+        });
+    });
+
+    it('Should send a 422 error if name is too short', (done) => {
+      chai.request(app)
+        .post(route)
+        .send({
+          name: "T",
+          address: 'Otolo, Nnewi',
+          number_of_rooms: 8,
+          available_space: 7,
+          images: ['https://cloudinary.com/16x16/1.png', 'https://cloudinary.com/16x16/1.png'],
+          description: 'Our services are the best'
+        })
+        .set('Authorization', adminToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).deep.to.be.an('array');
+          expect(res.body.error[0]).to.have.keys('field', 'message');
+          expect(res.body.error[0].field).to.deep.equal('name');
           expect(res.body.error[0].message).to.deep.equal('Too short: enter a minimum of 2 characters');
           done();
         });
@@ -200,6 +224,30 @@ describe('FACILITIES', () => {
           expect(res.body.error[0]).to.have.keys('field', 'message');
           expect(res.body.error[0].field).to.deep.equal('address');
           expect(res.body.error[0].message).to.deep.equal('Kindly Provide a valid address for your facility');
+          done();
+        });
+    });
+
+    it('Should send a 422 error if facility address is not a string', (done) => {
+      chai.request(app)
+        .post(route)
+        .send({
+          name: 'Hotel',
+          address: 8989675,
+          number_of_rooms: 8,
+          available_space: 7,
+          images: ['https://cloudinary.com/16x16/1.png', 'https://cloudinary.com/16x16/1.png'],
+          description: 'Our services are the best'
+        })
+        .set('Authorization', adminToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).deep.to.be.an('array');
+          expect(res.body.error[0]).to.have.keys('field', 'message');
+          expect(res.body.error[0].field).to.deep.equal('address');
+          expect(res.body.error[0].message).to.deep.equal('The address of your facility must be a string');
           done();
         });
     });
@@ -271,6 +319,30 @@ describe('FACILITIES', () => {
           expect(res.body.error[0]).to.have.keys('field', 'message');
           expect(res.body.error[0].field).to.deep.equal('description');
           expect(res.body.error[0].message).to.deep.equal('Too short: enter a minimum of 10 characters');
+          done();
+        });
+    });
+
+    it('Should send a 422 error if facility description is not a string', (done) => {
+      chai.request(app)
+        .post(route)
+        .send({
+          name: 'Hotel De Lango',
+          address: 'Nnewi North',
+          number_of_rooms: 8,
+          available_space: 7,
+          images: ['https://cloudinary.com/16x16/1.png', 'https://cloudinary.com/16x16/1.png'],
+          description: 67342155432689765436
+        })
+        .set('Authorization', adminToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).deep.to.be.an('array');
+          expect(res.body.error[0]).to.have.keys('field', 'message');
+          expect(res.body.error[0].field).to.deep.equal('description');
+          expect(res.body.error[0].message).to.deep.equal('The description of your facility must be a string');
           done();
         });
     });

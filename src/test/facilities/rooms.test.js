@@ -155,6 +155,29 @@ describe('FACILITIES/ROOMS', () => {
         });
     });
 
+    it('Should send a 422 error if name is not a string', (done) => {
+      chai.request(app)
+        .post(route)
+        .send({
+          name: 4,
+          type: 'Executive',
+          price: 8000,
+          facility_id: 2,
+          images: ['https://cloudinary.com/16x16/1.png', 'https://cloudinary.com/16x16/1.png']
+        })
+        .set('Authorization', adminToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).deep.to.be.an('array');
+          expect(res.body.error[0]).to.have.keys('field', 'message');
+          expect(res.body.error[0].field).to.deep.equal('name');
+          expect(res.body.error[0].message).to.deep.equal('The name of your facility rooms must be a string');
+          done();
+        });
+    });
+
     it('Should send a 422 error if name is too short', (done) => {
       chai.request(app)
         .post(route)
@@ -196,6 +219,29 @@ describe('FACILITIES/ROOMS', () => {
           expect(res.body.error[0]).to.have.keys('field', 'message');
           expect(res.body.error[0].field).to.deep.equal('type');
           expect(res.body.error[0].message).to.deep.equal('Kindly enter the type of room');
+          done();
+        });
+    });
+
+     it('Should send a 422 error if room type is not a string', (done) => {
+      chai.request(app)
+        .post(route)
+        .send({
+          name: '5Room Now',
+          type: 56,
+          price: 8000,
+          facility_id: 2,
+          images: ['https://cloudinary.com/16x16/1.png', 'https://cloudinary.com/16x16/1.png']
+        })
+        .set('Authorization', adminToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).deep.to.be.an('array');
+          expect(res.body.error[0]).to.have.keys('field', 'message');
+          expect(res.body.error[0].field).to.deep.equal('type');
+          expect(res.body.error[0].message).to.deep.equal('The address of your facility rooms must be a string');
           done();
         });
     });

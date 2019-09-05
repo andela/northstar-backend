@@ -14,12 +14,16 @@ const validateRooms = [
   check('name', 'Kindly Provide a name for your room')
     .not()
     .isEmpty()
+    .isString()
+    .withMessage('The name of your facility rooms must be a string')
     .isLength({ min: 2 })
     .withMessage('Too short: enter a minimum of 2 characters'),
 
   check('type', 'Kindly enter the type of room')
     .not()
     .isEmpty()
+    .isString()
+    .withMessage('The address of your facility rooms must be a string')
     .isLength({ min: 5 })
     .withMessage('Too short: enter a minimum of 5 characters'),
 
