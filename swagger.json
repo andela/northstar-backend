@@ -381,6 +381,32 @@
         }
       }
     },
+    "/comments": {
+      "post":{
+        "description": "Post Comment",
+        "summary": "Adds a comment to a trip request",
+        "tags": ["Comment"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user request status",
+            "schema": { "$ref": "#/requestBody/postComment" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "401": { "description": "Authentication Error" },
+          "403": { "description": "Authentication Error: Access Denied" },
+          "404": { "description": "Not Found" },
+          "422": { "description": "Validation Error" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
     "/comment/:comment_id": {
       "delete": {
         "description": "User can delete comment",
@@ -802,6 +828,24 @@
         ]
       }
     },  
+    "postComment": {
+      "title": "Post Comment on Request",
+      "type": "object",
+      "properties": {
+        "request_id": {
+          "description": "Id of trip request to add the comment to",
+          "type": "integer"
+        },
+        "comment": {
+          "description": "Comment",
+          "type": "string"
+        }
+      },
+      "example": {
+        "request_id": 5,
+        "comment": "How is this going to go down?"
+      }
+    },
     "delete_comment": {
       "title": "User delete Comment",
       "type": "object",

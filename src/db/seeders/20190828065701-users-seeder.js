@@ -11,6 +11,7 @@ module.exports = {
       birth_date: new Date(),
       preferred_language: 'English',
       preferred_currency: 'USD',
+      manager_id: 4,
       location: 'Texas',
       role: 'requester',
       created_at: new Date(),
@@ -69,6 +70,20 @@ module.exports = {
       preferred_currency: 'YEN',
       location: 'Jupiter',
       role: 'super_admin',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      first_name: 'Man',
+      last_name: 'Ager',
+      email: 'manager@email.com',
+      password: await bcrypt.hash('password77', 10),
+      gender: 'male',
+      birth_date: new Date(),
+      preferred_language: 'Edo',
+      preferred_currency: 'GBP',
+      location: 'Xander',
+      role: 'manager',
       created_at: new Date(),
       updated_at: new Date()
     }

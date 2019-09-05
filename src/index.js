@@ -32,9 +32,7 @@ app.use(passport.initialize());
 passportConfig(passport);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-
 app.use(stringSanitizer);
-
 app.use('/', indexRouter);
 app.use('/api/v1', v1Router);
 
