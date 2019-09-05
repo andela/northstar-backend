@@ -29,7 +29,7 @@ export default class UserController {
         ...userData,
         password: hash
       }, { returning: true });
-
+      
       // parameter(s) to be passed to the sendgrid email template
       const payload = { user };
       await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
@@ -97,7 +97,8 @@ export default class UserController {
         });
       }
       const userObject = UserUtils.returnRoleUpdateData(updatedUser[1][0]);
-      res.status(200).json({
+
+      return res.status(200).json({
         status: 'success',
         data: userObject
       });

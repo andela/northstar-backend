@@ -21,16 +21,13 @@ export default {
     }
 
     try {
-      req.user = jwt.decode(token, process.env.JWT_SECRET);
+       req.user = jwt.decode(token, process.env.JWT_SECRET);
 
-      const {
-        id, role
-      } = req.user;
+      const { id, role } = req.user;
 
       /* pipe the token details into the request body */
-      req.body.user_id = id;
-      req.body.role = role;
-
+       req.body.user_id = id;
+       req.body.role = role;
       return next();
     } catch (error) {
       return res.status(400).json({
