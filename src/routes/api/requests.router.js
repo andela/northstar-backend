@@ -19,4 +19,6 @@ router.patch('/request/:id',
 router.get('/requests', Auth.verifyToken, RequestController.findAll);
 router.post('/requests', Auth.verifyToken, Validator.Requests, RequestController.TripRequests);
 
+router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest); 
+
 export default router;

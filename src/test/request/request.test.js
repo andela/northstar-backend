@@ -3,10 +3,10 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
-import app from '../index';
-import models from '../db/models';
+import app from '../../index';
+import models from '../../db/models';
 
-import RequestController from '../controllers/request.controller';
+import RequestController from '../../controllers/request.controller';
 
 chai.use(Sinonchai);
 chai.use(chaiHttp);
