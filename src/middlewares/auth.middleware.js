@@ -38,4 +38,18 @@ export default {
       });
     }
   },
+
+  isAdmin: (req, res, next) => {
+    const { role } = req.body;
+
+    if (role !== 'super_admin' && role !== 'travel_admin') {
+      return res.status(401).json({
+        status: 'error',
+        error: {
+          message: 'Auth Error: Only SuperAdmins/Travel Admins can perform this operation'
+        },
+      });
+    }
+    return next();
+  },
 };
