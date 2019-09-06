@@ -28,6 +28,10 @@
       "description": "Endpoints for Requests"
     },
     {
+      "name": "Facilities",
+      "description": "Endpoints for Facilities"
+    },
+    {
       "name": "Comment",
       "description": "Endpoint for Comments"
     }
@@ -172,6 +176,41 @@
         }
       }
     },
+    "/facilities": {
+      "get": {
+        "description": "An one can get all requests on barefoot nomad",
+        "summary": "Any one who visits barefoot nomad can see all the facilities listed there",
+        "tags": [
+          "Facilities"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the response body of the facilities",
+            "schema": {
+              "$ref": "#/requestBody/get-all-facilities"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/comment/:comment_id": {
       "delete": {
         "description": "User can delete comment",
@@ -185,34 +224,6 @@
             "name": "comment_id",
             "required": true,
             "description": "This is the comment id of the comment to be deleted",
-            "schema": {
-              "$ref": "#"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/comment/:request_id": {
-      "get": {
-        "description": "Get all comments for each user's request",
-        "summary": "allows a user/manager/superadmin to view comments associated with a request",
-        "tags": ["Comment"],
-        "produces": ["application/json"],
-        "security": [],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "request_id",
-            "required": true,
-            "description": "This is the request id of the request whose comment is to be populated",
             "schema": {
               "$ref": "#"
             }
@@ -342,6 +353,51 @@
           "createdAt": "2019-08-30T00:43:35.816Z",
           "updatedAt": "2019-08-30T00:45:51.983Z"
         }
+      }
+    },
+    "get-all-facilities": {
+      "title": "Get All Facilities",
+      "type": "Array",
+      "example": {
+        "status": "success",
+        "data": [
+          {
+            "id": 1,
+            "name": "Hotel Kentucy",
+            "address": "21 El Nino Road",
+            "number_of_rooms": 22,
+            "images": null,
+            "description": "The El Nino facility",
+            "available_space": 22,
+            "createdAt": "2019-09-05T18:39:43.279Z",
+            "updatedAt": "2019-09-05T18:39:43.279Z"
+          },
+          {
+            "id": 2,
+            "name": "Hotel Portugal",
+            "address": "22 Portugal Road",
+            "number_of_rooms": 100,
+            "images": null,
+            "description": "The Hotel Portugal facility",
+            "available_space": 100,
+            "createdAt": "2019-09-05T18:39:43.279Z",
+            "updatedAt": "2019-09-05T18:39:43.279Z"
+          },
+          {
+            "id": 3,
+            "name": "Kings Palace Hotel",
+            "address": "Otolo, Nnewi",
+            "number_of_rooms": 8,
+            "images": [
+              "https://cloudinary.com/16x16/1.png",
+              "https://cloudinary.com/16x16/1.png"
+            ],
+            "description": "Our services are the best",
+            "available_space": 7,
+            "createdAt": "2019-09-05T18:39:51.988Z",
+            "updatedAt": "2019-09-05T18:39:51.988Z"
+          }
+        ]
       }
     }
   }

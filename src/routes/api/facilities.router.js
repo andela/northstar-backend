@@ -22,4 +22,7 @@ router.post('/facilities/rooms',
   validateRooms,
   facilitiesController.createRoom);
 
+router.get('/facilities',
+  facilitiesController.getAllFacilities);
+
 export default router;
