@@ -25,7 +25,6 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan(':remote-addr - [:date] ":method :url" :status', { stream: logger.stream }));
 app.use(passport.initialize());

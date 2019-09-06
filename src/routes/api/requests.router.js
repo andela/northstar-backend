@@ -9,7 +9,7 @@ import Auth from '../../middlewares/auth.middleware';
 const router = express.Router();
 
 /* Requests Routes Here */
-router.patch('/request/:id',
+router.patch('/requests/:id',
   auth.verifyUserToken,
   auth.verifyManager,
   validateRequests.validateRequestsID,
