@@ -219,12 +219,12 @@ export default class RequestController {
     }
   }
 
-   /**
+  /**
     * @param {object} req
     * @param {object} res
     * @returns {json} request
     */
-   static async approveRequest(req, res) {
+  static async approveRequest(req, res) {
     try {
       const request = await Request.update(
         {

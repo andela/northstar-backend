@@ -26,9 +26,12 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'facilities',
     underscored: true
   });
-  Facility.associate = () => {
-    // associations can be defined here
-    // The parameter "models" was removed because it is not in use
+  Facility.associate = (models) => {
+    Facility.hasMany(models.Like, {
+      foreignKey: 'facility_id',
+      onDelete: 'CASCADE',
+      constraints: false
+    });
   };
   return Facility;
 };
