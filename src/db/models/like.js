@@ -1,6 +1,9 @@
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   // remove DataTypes param because it is not being used
   const Like = sequelize.define('Like', {
+    status: {
+      type: DataTypes.BOOLEAN
+    }
   }, {
     tableName: 'likes',
     underscored: true

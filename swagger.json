@@ -141,7 +141,7 @@
         }
       }
     },
-    "/requests/:id": {
+    "/requests/decline/:id": {
       "patch": {
         "description": "A manager can reject a user's request application",
         "summary": "When a manager login, he/she sees a list of requests made by users under him and he is able to reject their requests",
@@ -204,6 +204,121 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "Facilities Endpoint",
+        "summary": "Travel_Admin/Super_Admin Can create Acommodation Facilities",
+        "tags": [
+          "Facilities"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object for the facilities endpoint",
+            "schema": {
+              "$ref": "#/requestBody/facilities"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Unprocessible Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+     "/facilities/rooms": {
+      "post": {
+        "description": "Rooms Endpoint",
+        "summary": "Travel_Admin/Super_Admin Can add rooms to an Acommodation Facilities",
+        "tags": [
+          "Facilities"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object for the rooms endpoint",
+            "schema": {
+              "$ref": "#/requestBody/rooms"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Unprocessible Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/facilities/:facility_id/like": {
+      "post": {
+        "description": "A logged in user can like a facility",
+        "summary": "Any logged in user who visits barefoot nomad can like any facility listed there",
+        "tags": [
+          "Facilities"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the response body of the facility likes",
+            "schema": {
+              "$ref": "#/requestBody/likes"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "200": {
+            "description": "Success"
           },
           "500": {
             "description": "Internal Server Error"
@@ -334,7 +449,7 @@
         },
         "id": {
           "description": "ID of the request being rejected",
-          "type": "string"
+          "type": "Integer"
         }
       },
       "example": {
@@ -352,6 +467,137 @@
           "status": "declined",
           "createdAt": "2019-08-30T00:43:35.816Z",
           "updatedAt": "2019-08-30T00:45:51.983Z"
+        }
+      }
+    },
+    "facilities": {
+      "type": "object",
+      "title": "Accomodation Facilities Request",
+      "required": [
+        "name",
+        "street",
+        "city",
+        "country",
+        "address",
+        "number_of_rooms",
+        "available_space",
+        "images",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "description": "Name of Accomodation Facility",
+          "type": "string"
+        },
+        "street": {
+          "description": "Street of Accomodation Facility",
+          "type": "string"
+        },
+        "city": {
+          "description": "City of Accomodation Facility",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country of Accomodation Facility",
+          "type": "string"
+        },
+        "address": {
+          "description": "Location Address of an Accomodation Facility",
+          "type": "string"
+        },
+        "description": {
+          "description": "Short Description of an Accomodation Facility",
+          "type": "string"
+        },
+        "number_of_rooms": {
+          "description": "Number of rooms on an Accomodation Facility",
+          "type": "string"
+        },
+        "available_space": {
+          "description": "Number of available rooms on an Accomodation Facility",
+          "type": "string"
+        },
+        "images": {
+          "description": "Relevant images of an Accomodation Facility",
+          "type": "string"
+        }
+      },
+      "example": {
+        "name": "Kings Palace Hotel",
+        "street": "34, Hotel",
+        "city": "NY",
+        "country": "USA",
+        "address": "Otolo, Nnewi",
+        "number_of_rooms": "8",
+        "available_space": 7,
+        "images": [
+          "https://cloudinary.com/16x16/1.png",
+          "https://cloudinary.com/16x16/1.png"
+        ],
+        "description": "Our services are the best"
+      }
+    },
+    "rooms": {
+      "type": "object",
+      "title": "Rooms Request",
+      "required": [
+        "name",
+        "type",
+        "price",
+        "facility_id",
+        "images"
+      ],
+      "properties": {
+        "name": {
+          "description": "Name of room on an Accomodation Facility",
+          "type": "string"
+        },
+        "type": {
+          "description": "Category of a room on an Accomodation Facility",
+          "type": "string"
+        },
+        "facility_id": {
+          "description": "The ID of the Accomodation Facility that houses the rooms",
+          "type": "string"
+        },
+        "images": {
+          "description": "Relevant images of the rooms on an Accomodation Facility",
+          "type": "string"
+        }
+      },
+      "example": {
+        "name": "5Room Now",
+        "type": "rExecutive",
+        "price": 8000,
+        "facility_id": 2,
+        "images": [
+          "https://cloudinary.com/16x16/1.png",
+          "https://cloudinary.com/16x16/1.png"
+        ]
+      }
+    },
+    "likes": {
+      "title": "Users like a facility",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Status of the like",
+          "type": "Boolean"
+        },
+        "facility_id": {
+          "description": "ID of the facility being liked",
+          "type": "Integer"
+        }
+      },
+      "example": {
+        "status": "success",
+        "data": {
+          "id": 3,
+          "facility_id": 2,
+          "user_id": 1,
+          "status": true,
+          "createdAt": "2019-09-08T10:20:29.311Z",
+          "updatedAt": "2019-09-08T10:54:35.576Z"
         }
       }
     },

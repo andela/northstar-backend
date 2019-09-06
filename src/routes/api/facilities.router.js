@@ -8,6 +8,10 @@ import FacilitiesChecks from '../../middlewares/facilities.middleware';
 const router = express.Router();
 
 /* Requests Routes Here */
+router.post('/facilities/:facility_id/:like',
+  auth.verifyUserToken,
+  facilitiesController.likeOrUnlikeFacility);
+
 router.post('/facilities',
   auth.verifyUserToken,
   auth.verifyTravelAdmin,
