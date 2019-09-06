@@ -14,5 +14,5 @@ module.exports = {
     updated_at: new Date()
   }], {}),
 
-  down: (queryInterface) => queryInterface.bulkDelete('ratings', null, {})
+  down: (queryInterface) => queryInterface.bulkDelete('feedbacks', null, {})
 };
