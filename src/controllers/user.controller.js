@@ -21,9 +21,10 @@ export default class UserController {
    * @returns {object} A signed up user
    */
   static async signup(req, res) {
+    const userData = UserUtils.getUserSignupData(req.body);
+
     try {
       const hash = await bcrypt.hash(req.body.password, 10);
-      const userData = UserUtils.getUserSignupData(req.body);
       const user = await User.create({
         ...userData,
         password: hash
