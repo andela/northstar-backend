@@ -24,4 +24,5 @@ router.post('/facilities/rooms',
 
 router.get('/facilities',
   facilitiesController.getAllFacilities);
+
 export default router;
