@@ -15,7 +15,7 @@
         "docker:rebuild": "docker-compose up --rebuild",
         "docker:destroy": "docker-compose down -v",
         "lint": "eslint ./src --fix",
-        "nyc": "nyc mocha -r esm --cache false --timeout 100000  --recursive --exit",
+        "nyc": "nyc mocha -r esm --cache false --timeout 600000  --recursive --exit",
         "db:migrate": "sequelize db:migrate",
         "db:seed": "sequelize db:seed:all --debug",
         "undo:migration": "sequelize db:migrate:undo:all",
