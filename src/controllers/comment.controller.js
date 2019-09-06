@@ -27,4 +27,22 @@ export default class CommentController {
       return Response.InternalServerError(res, 'Could not delete comment');
     }
   }
+
+  /**
+ * get comments associated with a travel request
+ * @param {ServerRequest} req
+ * @param {ServerResponse} res
+ * @returns {ServerResponse} response
+ */
+  static async getComments(req, res) {
+    try {
+      const { request_id: id } = req.params;
+      const result = await Comment.findAll({ attributes: ['id', 'comment'], where: { request_id: id, delete_status: false } });
+      return Response.Success(res, {
+        ...result
+      }, 200);
+    } catch (error) {
+      return Response.InternalServerError(res, 'Could not populate the comment(s)');
+    }
+  }
 }
