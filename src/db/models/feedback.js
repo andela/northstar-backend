@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    tableName: 'feedback',
+    tableName: 'feedbacks',
     underscored: true
   });
   Feedback.associate = (models) => {

@@ -28,10 +28,10 @@ export default class UserController {
       const user = await User.create({
         ...userData,
         password: hash
-      }, { returning: true });
+      }, {returning: true});
 
       // parameter(s) to be passed to the sendgrid email template
-      const payload = { user };
+      const payload = {user};
       await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
 
       const userToken = JWTService.generateToken(user);
@@ -57,20 +57,20 @@ export default class UserController {
    * @returns {ServerResponse} response
    */
   static signin(req, res) {
-    const signinError = { message: 'Incorrect email or password' };
-    User.findOne({ where: { email: req.body.email } })
-      .then((user) => {
-        if (!user) throw new Error();
-        return UserUtils.validateUserPassword(user, req.body.password)
-          .then((matches) => {
-            if (!matches) throw new Error();
-            const data = UserUtils.getPublicUserFields(user.dataValues);
-            data.token = JWTService.generateToken(data);
-            UserUtils.setCookie(res, data.token);
-            return Response.Success(res, data);
-          });
-      })
-      .catch(() => Response.UnauthorizedError(res, signinError));
+    const signinError = {message: 'Incorrect email or password'};
+    User.findOne({where: {email: req.body.email}})
+        .then((user) => {
+          if (!user) throw new Error();
+          return UserUtils.validateUserPassword(user, req.body.password)
+              .then((matches) => {
+                if (!matches) throw new Error();
+                const data = UserUtils.getPublicUserFields(user.dataValues);
+                data.token = JWTService.generateToken(data);
+                UserUtils.setCookie(res, data.token);
+                return Response.Success(res, data);
+              });
+        })
+        .catch(() => Response.UnauthorizedError(res, signinError));
   }
 
   /**
@@ -78,16 +78,16 @@ export default class UserController {
    * @param {Object} res
    * @param {Function} next
    * @returns {JSON} res
-  */
+   */
   static async setUserRole(req, res, next) {
     try {
-      const { role, email } = req.body;
+      const {role, email} = req.body;
       const updatedUser = await User.update(
-        { role },
-        {
-          where: { email },
-          returning: true
-        }
+          {role},
+          {
+            where: {email},
+            returning: true
+          }
       );
 
       if (!updatedUser[1][0]) {
@@ -101,7 +101,9 @@ export default class UserController {
         status: 'success',
         data: userObject
       });
-    } catch (error) { next(error); }
+    } catch (error) {
+      next(error);
+    }
   }
 
   /**
@@ -112,24 +114,47 @@ export default class UserController {
    */
   static async oauthSignin(req, res) {
     try {
-      const { _json: details } = req.user;
+      const {_json: details} = req.user;
       const first_name = details.first_name || details.given_name;
       const last_name = details.last_name || details.family_name;
-      const { email } = details;
-      const [{ dataValues: user }, created] = await User.findOrCreate({
-        where: { email },
+      const {email} = details;
+      const [{dataValues: user}, created] = await User.findOrCreate({
+        where: {email},
         defaults: {
           email, first_name, last_name, password: defaultPassword
         }
       });
-      const payload = { first_name: user.first_name, email: user.email };
+      const payload = {first_name: user.first_name, email: user.email};
       if (created) await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
       user.token = JWTService.generateToken(user);
       UserUtils.setCookie(res, user.token);
       const statusCode = created ? 201 : 200;
       Response.Success(res, UserUtils.getPublicUserFields(user), statusCode);
     } catch (e) {
-      Response.UnauthorizedError(res, { message: 'Unable to sign in' });
+      Response.UnauthorizedError(res, {message: 'Unable to sign in'});
+    }
+  }
+
+  /**
+   * Handles auto retrieval of user's profile needed for travel
+   * @param {*} req
+   * @param {*} res
+   * @returns {*} response
+   */
+  static retrieveProfile(req, res) {
+    const {id: user_id} = req.body.user;
+    const {rememberMe} = req.query;
+
+    if (rememberMe === 'yes') {
+      return User.findByPk(user_id, {
+        attributes: ['first_name', 'last_name', 'email',
+          'manager_id', 'gender', 'birth_date', 'location']
+      })
+          .then((data) => Response.Success(res, data))
+          .catch((err) => Response.InternalServerError(res, err));
+    } else if (rememberMe === 'no') {
+      return Response.CustomError(res, 403, 'error',
+          'Error retrieving details', 'Please choose YES to retrieve details automatically');
     }
   }
 }

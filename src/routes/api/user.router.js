@@ -5,9 +5,10 @@ import UserMiddleware from '../../middlewares/user.middleware';
 import roleValidation from '../../validation/user/role.validation';
 
 const { isSuperAdmin } = UserMiddleware;
-const { setUserRole } = UserController;
+const { setUserRole, retrieveProfile } = UserController;
 const router = express.Router();
 
 router.patch('/role', verifyToken, isSuperAdmin, roleValidation, setUserRole);
+router.get('/user/profile', verifyToken, retrieveProfile);
 
 export default router;
