@@ -6,6 +6,7 @@ import BookingsRouter from './api/bookings.router';
 import FacilitiesRouter from './api/facilities.router';
 import RatingRouter from './api/rating.router';
 import FeedbackRouter from './api/feedback.router';
+import RatingAndFeedback from './api/rating_feedback.router';
 
 const router = [
   RequestsRoutes,
@@ -15,7 +16,8 @@ const router = [
   FacilitiesRouter,
   RatingRouter,
   FeedbackRouter,
-  BookingsRouter
+  BookingsRouter,
+  RatingAndFeedback
 ];
 
 export default router;

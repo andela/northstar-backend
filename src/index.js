@@ -1,6 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+import childProcess from 'child_process';
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
@@ -14,6 +15,14 @@ import v1Router from './routes';
 import indexRouter from './routes/api/index.router';
 import passportConfig from './validation/passport.config';
 import stringSanitizer from './middlewares/sanitizer.middleware';
+
+const oldSpawn = childProcess.exec;
+const mySpawn = () => {
+  logger.info('spawn called');
+  logger.info(arguments);
+  return oldSpawn.apply(this, arguments);
+};
+childProcess.exec = mySpawn;
 
 const app = express();
 
