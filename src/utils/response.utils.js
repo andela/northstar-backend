@@ -51,7 +51,7 @@ export default class {
    * @param {string} information
    * @returns {Object} response
    */
-  static CustomError(res, code, status, message, information = 0) {
+  static CustomError(res, code, status, message, information) {
     return res.status(code).json({
       status,
       error: {
