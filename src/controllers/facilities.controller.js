@@ -51,4 +51,24 @@ export default class FacilitiesController {
       return Response.InternalServerError(res, 'Could not register rooms');
     }
   }
+
+  /**
+   * @param {object} req
+   * @param {object} res The facilities being returned
+   * @returns {object} All the facilities on the facilities table
+   */
+  static async getAllFacilities(req, res) {
+    try {
+      const facilities = await Facility.findAll({ returning: true });
+      if (facilities.length < 1) {
+        return res.status(404).json({
+          status: 'success',
+          message: 'There is no facilities listed on barefoot nomad at this time'
+        });
+      }
+      return Response.Success(res, facilities, 200);
+    } catch (error) {
+      return Response.InternalServerError(res, 'Could not return facilities');
+    }
+  }
 }

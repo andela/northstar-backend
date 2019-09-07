@@ -12,7 +12,7 @@ chai.should();
 chai.use(Sinonchai);
 
 const { expect } = chai;
-const { User } = models;
+const { User, Facility } = models;
 
 const newUser = {
   first_name: 'Chidi',
@@ -771,6 +771,50 @@ describe('FACILITIES', () => {
       sinon.stub(res, "status").returnsThis();
 
       FacilitiesController.createRoom(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+  });
+
+  // Anyone can get all facilities on barefoot nomad
+  describe('/GET Anyone can get all facilities on barefoot nomad', () => {
+    afterEach("restore sinon", () => {
+      sinon.restore();
+    });
+
+    it('It Should Successfully get all facilities on barefoot nomad', (done) => {
+      chai.request(app)
+        .get(route)
+        .end((error, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.keys('status', 'data');
+          expect(res.body.status).to.deep.equal('success');
+          expect(res.body.data).to.be.an('array');
+          done();
+        });
+    });
+
+    it('It Should Return No facilities found if the table is empty', (done) => {
+      sinon.stub(Facility, 'findAll').returns([]);
+      chai.request(app)
+        .get(route)
+        .end((error, res) => {
+          expect(res).to.have.status(404);
+          expect(res.body).to.have.keys('status', 'message');
+          expect(res.body.status).to.deep.equal('success');
+          expect(res.body.message).to.deep.equal("There is no facilities listed on barefoot nomad at this time");
+          done();
+        });
+    });
+
+    it("fakes server error", done => {
+      const req = { body: {} };
+      const res = {
+        status() { },
+        send() { }
+      };
+      sinon.stub(res, "status").returnsThis();
+      FacilitiesController.getAllFacilities(req, res);
       res.status.should.have.callCount(0);
       done();
     });

@@ -31,14 +31,12 @@ const validateFacilities = [
   check('city', 'City of location of your facility')
     .not()
     .isEmpty()
-    // .isString()
     .isAlpha()
     .withMessage('The city of your facility must be letters only'),
 
   check('country', 'Kindly Provide a name for your facility')
     .not()
     .isEmpty()
-    // .isString()
     .isAlpha()
     .withMessage('The country of your facility must be letters only'),
 
