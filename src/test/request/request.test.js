@@ -485,7 +485,7 @@ describe('/POST REQUESTS', () => {
             .end((err, res) => {
                 res.body.should.have.property('status').eql('success');
                 res.body.data.should.have.property('status').eql('pending');
-                res.body.data.should.have.property('id').eql(6);
+                res.body.data.should.have.property('id').eql(7);
                 res.body.data.should.have.property('origin').eql('Lagos');
                 res.body.data.should.have.property('destination').eql(['Abuja','Onitsha']);
                 res.body.data.should.have.property('departure_date');
@@ -505,7 +505,7 @@ describe('/POST REQUESTS', () => {
             .end((err, res) => {
                 res.body.should.have.property('status').eql('success');
                 res.body.data.should.have.property('status').eql('pending');
-                res.body.data.should.have.property('id').eql(7);
+                res.body.data.should.have.property('id').eql(8);
                 res.body.data.should.have.property('origin').eql('Lagos');
                 res.body.data.should.have.property('destination').eql(['sfo','la']);
                 res.body.data.should.have.property('departure_date');
