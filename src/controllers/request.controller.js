@@ -2,7 +2,7 @@ import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
 
-const { Request, User, Booking } = models;
+const { Request, User } = models;
 /**
 * This class creates the user controller
 */
@@ -76,120 +76,35 @@ export default class RequestController {
   }
 
   /**
- /**
     * @param {object} req
     * @param {object} res
     * @returns {json} request
     */
- static async createMultiCityRequest(req, res) {
-   try {
-     const { id: user_id } = req.currentUser.dataValues;
-     const {
-       category, origin, destination, departure_date, return_date, reason, room_id
-     } = req.body;
-     const bookingData = {
-       departure_date, return_date, user_id, room_id
-     };
-     const booking = await models.Booking.create(bookingData);
-     const { id: booking_id } = booking;
-     const requestData = {
-       user_id, category, origin, destination: destination.split(', '), departure_date, return_date, reason, booking_id
-     };
-     const request = await models.Request.create(requestData);
-     return res.status(201).json({
-       status: 'success',
-       data: { request, booking }
-     });
-   } catch (error) {
-     return res.status(500)
-       .json({
-         status: 'error',
-         error: 'Internal server error',
-       });
-   }
- }
-
-  /**
-   * @method createReturnTripRequest
-   *
-   * @param {object} req
-   * @param {object} res
-   *
-   * @returns {objet} status and message
-   */
-  static async createReturnTripRequest(req, res){
+  static async createMultiCityRequest(req, res) {
     try {
-      const { id: user_id } = req.user;
+      const { id: user_id } = req.currentUser.dataValues;
       const {
-        booking_id,
-        departure_date,
-        destination,
-        return_date,
-        category,
-        origin,
-        reason
+        category, origin, destination, departure_date, return_date, reason, room_id
       } = req.body;
-
-      const bookingExists = await Booking.findByPk(booking_id);
-
-      if (!bookingExists) {
-       return res
-          .status(400)
-          .json({
-            status: 'error',
-            error: {
-              message: 'No booking with this booking_id exists.'
-            },
-          });
-      }
-
-      const newRequest = await Request.create({
-        category,
-        origin,
-        destination,
-        departure_date,
-        return_date,
-        reason,
-        booking_id,
-        user_id
+      const bookingData = {
+        departure_date, return_date, user_id, room_id
+      };
+      const booking = await models.Booking.create(bookingData);
+      const { id: booking_id } = booking;
+      const requestData = {
+        user_id, category, origin, destination: destination.split(', '), departure_date, return_date, reason, booking_id
+      };
+      const request = await models.Request.create(requestData);
+      return res.status(201).json({
+        status: 'success',
+        data: { request, booking }
       });
-
-      return Response.Success(res, newRequest.dataValues, 201);
-    } catch(error){
-      Response.CustomError(
-        res,
-        500,
-        'error',
-        'Request failed. Please see information below.',
-          error.message
-      )
+    } catch (error) {
+      return res.status(500)
+        .json({
+          status: 'error',
+          error: 'Internal server error',
+        });
     }
-  }
-
-  /**
-     * @param {object} req The data which contains dates, reason, origin, destination etc
-     * @param {object} res Response returned to the user
-     * @returns {object} An object containing the request submitted into the db
-     */
-  static TripRequests(req, res) {
-    const destination = [];
-    const {
-      user_id, category, origin, departure_date, reason, booking_id
-    } = req.body;
-
-    if (category === 'round-trip') {
-      return RequestController.createReturnTripRequest(req, res);
-    }
-
-    const newRequest = {
-      user_id, category, origin, destination, departure_date, reason, booking_id
-    };
-
-    // persist booking to database
-    Request.create(newRequest)
-      .then((data) => Response.Success(res, data, 201))
-      .catch((error) => Response.CustomError(res, 500, 'error',
-        'Request failed. Please see information below.',
-        error.message));
   }
 }

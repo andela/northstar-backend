@@ -5,7 +5,6 @@ import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
 import app from '../../index';
 import models from '../../db/models';
-import Response from '../../utils/response.utils';
 
 import RequestController from '../../controllers/request.controller';
 
@@ -14,7 +13,7 @@ chai.use(chaiHttp);
 chai.should();
 
 const { expect } = chai;
-const { User, Request } = models;
+const { User } = models;
 
 const newUser = {
     first_name: 'Chidi',
@@ -244,37 +243,6 @@ const newRequest = {
     booking_id: 1
 };
 
-const newRequest2 = {
-    category: 'round-trip',
-    origin: 'Lagos',
-    destination: ['Abuja','Onitsha'],
-    departure_date: '2019-9-30',
-    return_date:'2019-10-30',
-    reason: 'For the fun of it',
-    booking_id: 1
-};
-
-const newRequest3 = {
-    category: 'round-trip',
-    origin: 'Lagos',
-    destination: ['Abuja','Onitsha'],
-    departure_date: '2019-9-30',
-    return_date:'2019-9-30',
-    reason: 'For the fun of it',
-    booking_id: ''
-};
-
-const newRequest4 = {
-    category: 'round-trip',
-    origin: 'Lagos',
-    destination: ['Abuja','Onitsha'],
-    departure_date: '2019-9-30',
-    return_date:'2019-9-30',
-    reason: 'For the fun of it',
-    booking_id: '2654'
-};
-
-
 describe('/GET REQUESTS', () => {
 
     it('should login and return the token', (done) => {
@@ -475,88 +443,6 @@ describe('/POST REQUESTS', () => {
 
         RequestController.findAll(req, res);
         (res.status).should.have.callCount(0);
-        done();
-    });
-
-    it('should create a round trip request', (done) => {
-        chai.request(app)
-            .post(requestEndpoint)
-            .set('Authorization', `Bearer ${user.token}`)
-            .send(newRequest2)
-            .end((err, res) => {
-                res.body.should.have.property('status').eql('success');
-                res.body.data.should.have.property('status').eql('pending');
-                res.body.data.should.have.property('id').eql(7);
-                res.body.data.should.have.property('origin').eql('Lagos');
-                res.body.data.should.have.property('destination').eql(['Abuja','Onitsha']);
-                res.body.data.should.have.property('departure_date');
-                res.body.data.should.have.property('return_date');
-                res.body.data.should.have.property('reason').eql('For the fun of it');
-                res.body.data.should.have.property('booking_id').eql(1);
-                res.body.data.should.have.property('user_id').eql(1);
-                done();
-            });
-    });
-
-    it('should create a round trip request and set destination as an array', (done) => {
-        chai.request(app)
-            .post(requestEndpoint)
-            .set('Authorization', `Bearer ${user.token}`)
-            .send({ ...newRequest2, destination: "['sfo', 'la']" })
-            .end((err, res) => {
-                res.body.should.have.property('status').eql('success');
-                res.body.data.should.have.property('status').eql('pending');
-                res.body.data.should.have.property('id').eql(8);
-                res.body.data.should.have.property('origin').eql('Lagos');
-                res.body.data.should.have.property('destination').eql(['sfo','la']);
-                res.body.data.should.have.property('departure_date');
-                res.body.data.should.have.property('return_date');
-                res.body.data.should.have.property('reason').eql('For the fun of it');
-                res.body.data.should.have.property('booking_id').eql(1);
-                res.body.data.should.have.property('user_id').eql(1);
-                done();
-            });
-    });
-
-    it('should return an error if booking_id does not exist', (done) => {
-        chai.request(app)
-            .post(requestEndpoint)
-            .set('Authorization', `Bearer ${user.token}`)
-            .send(newRequest3)
-            .end((err, res) => {
-                res.should.have.status(400);
-                res.body.should.be.an('object');
-                res.body.should.have.property('status').eql('error');
-                res.body.should.have.property('error').eql(['Booking ID is invalid']);
-                done();
-            });
-    });
-
-    it('should return 400 with nonexistent bookings', (done) => {
-        chai.request(app)
-            .post(requestEndpoint)
-            .set('Authorization', `Bearer ${user.token}`)
-            .send(newRequest4)
-            .end((err, res) => {
-                res.should.have.status(400);
-                res.body.should.be.an('object');
-                res.body.should.have.property('status').eql('error');
-                res.body.error.should.have.property('message').eql('No booking with this booking_id exists.');
-                done();
-            });
-    });
-
-    it('should call Response.customError for server error on createReturnTripRequest controller', (done) => {
-        const req = { body: {} };
-        const res = {
-            status() {},
-            send() {}
-        };
-         sinon.stub(Request, 'create').throws();
-        const CustomErrorStub = sinon.stub(Response, 'CustomError').returnsThis();
-
-        RequestController.createReturnTripRequest(req, res);
-        (CustomErrorStub).should.have.callCount(1);
         done();
     });
 });
