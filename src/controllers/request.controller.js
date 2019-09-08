@@ -156,7 +156,7 @@ export default class RequestController {
 
       return Response.Success(res, newRequest.dataValues, 201);
     } catch(error){
-      return Response.CustomError(
+      Response.CustomError(
         res,
         500,
         'error',

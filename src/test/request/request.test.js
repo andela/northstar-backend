@@ -5,6 +5,7 @@ import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
 import app from '../../index';
 import models from '../../db/models';
+import Response from '../../utils/response.utils';
 
 import RequestController from '../../controllers/request.controller';
 
@@ -13,7 +14,7 @@ chai.use(chaiHttp);
 chai.should();
 
 const { expect } = chai;
-const { User } = models;
+const { User, Request } = models;
 
 const newUser = {
     first_name: 'Chidi',
@@ -449,7 +450,6 @@ describe('/POST REQUESTS', () => {
             });
     });
 
-<<<<<<< HEAD
     it('fakes server error for TripRequest', (done) => {
         const req = { body: {} };
         const res = {
@@ -476,7 +476,8 @@ describe('/POST REQUESTS', () => {
         RequestController.findAll(req, res);
         (res.status).should.have.callCount(0);
         done();
-=======
+    });
+
     it('should create a round trip request', (done) => {
         chai.request(app)
             .post(requestEndpoint)
@@ -543,6 +544,19 @@ describe('/POST REQUESTS', () => {
                 res.body.error.should.have.property('message').eql('No booking with this booking_id exists.');
                 done();
             });
->>>>>>> ft(round-trips-request): implement create-round-trips-request
+    });
+
+    it('should call Response.customError for server error on createReturnTripRequest controller', (done) => {
+        const req = { body: {} };
+        const res = {
+            status() {},
+            send() {}
+        };
+         sinon.stub(Request, 'create').throws();
+        const CustomErrorStub = sinon.stub(Response, 'CustomError').returnsThis();
+
+        RequestController.createReturnTripRequest(req, res);
+        (CustomErrorStub).should.have.callCount(1);
+        done();
     });
 });
