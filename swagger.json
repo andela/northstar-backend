@@ -24,6 +24,10 @@
       "description": "Endpoints for Authentication"
     },
     {
+      "name": "User",
+      "description": "Endpoints associated with users"
+    },
+    {
       "name": "Requests",
       "description": "Endpoints for Requests"
     },
@@ -141,7 +145,58 @@
         }
       }
     },
-    "/requests/decline/:id": {
+    "/profile": {
+      "patch": {
+        "description": "Update profile",
+        "summary": "Updates a user's profile",
+        "tags": ["User"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Every field here is optional. However, at least one filed has to be sent",
+            "schema": { "$ref": "#/requestBody/profileUpdate"}
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "401": { "description": "Authentication Error" },
+          "422": { "description": "Validation Error" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+
+    "/role": {
+      "patch": {
+        "description": "Update profile",
+        "summary": "Updates a user's role",
+        "tags": ["User"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Every field here is optional. However, at least one filed has to be",
+            "schema": { "$ref": "#/requestBody/roleSettings" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "401": { "description": "Authentication Error" },
+          "403": { "description": "Authentication Error" },
+          "422": { "description": "Validation Error" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    
+    "/requests/:id": {
       "patch": {
         "description": "A manager can reject a user's request application",
         "summary": "When a manager login, he/she sees a list of requests made by users under him and he is able to reject their requests",
@@ -465,6 +520,79 @@
       "example": {
         "email": "user@example.com",
         "password": "youknowbetter"
+      }
+    },
+
+    "profileUpdate": {
+      "type": "object",
+      "title": "Update profile request body specification",
+      "required": [],
+      "properties": {
+        "first_name": {
+          "description": "user's first name",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "user's last name",
+          "type": "string"
+        },
+        "gender": {
+          "description": "user's gender ('male', 'female' or 'other')",
+          "type": "string"
+        },
+        "birth_date": {
+          "description": "user's date of birth",
+          "type": "string"
+        },
+        "preferred_language": {
+          "description": "user's preferred language",
+          "type": "string"
+        },
+        "preferred_currency": {
+          "description": "user's preferred currency ('NGN', 'USD', 'GBP', 'YEN', or 'EUR')",
+          "type": "string"
+        },
+        "manager_id": {
+          "description": "user's manager's unique identifier",
+          "type": "integer"
+        },
+        "location": {
+          "description": "user's location",
+          "type": "string"
+        },
+        "email_notification": {
+          "description": "determines whether a user opts in or out of email notifications",
+          "type": "boolean"
+        }
+      },
+      "example": {
+        "first_name": "Joseph",
+        "last_name": "Doe",
+        "gender": "male",
+        "birth_date": "07/07/1977",
+        "preferred_language": "english",
+        "preferred_currency": "NGN",
+        "manager_id": 1,
+        "location": "Lagos",
+        "email_notification": false
+      }
+    },
+    "roleSettings": {
+      "title": "Role Settings Request",
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "Email of user to be upgraded",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role to assign: 'super_admin', 'manager', 'trave_admin', or 'requester'",
+          "type": "string"
+        }
+      },
+      "example": {
+        "email": "jane_doe@email.com",
+        "role": "manager"
       }
     },
     "reject_request": {

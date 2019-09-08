@@ -74,6 +74,31 @@ export default class UserController {
   }
 
   /**
+   * @param {Object} req The request object
+   * @param {Object} res The response object
+   * @param {Function} next a callback function
+   * @returns {JSON} updatedUser The updates user
+   */
+  static async updateProfile(req, res, next) {
+    // userValues and id were appended to the req.body by the preceding middlewares
+    const { userValues, user } = req.body;
+    try {
+      const updatedUser = await User.update(
+        userValues,
+        {
+          where: { id: user.id },
+          returning: true
+        }
+      );
+
+      res.status(200).json({
+        status: 'success',
+        data: updatedUser[1][0]
+      });
+    } catch (error) { next(error); }
+  }
+
+  /**
    * @param {Object} req
    * @param {Object} res
    * @param {Function} next
