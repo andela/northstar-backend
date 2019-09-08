@@ -13,6 +13,7 @@ import swaggerDocument from '../swagger.json';
 import v1Router from './routes';
 import indexRouter from './routes/api/index.router';
 import passportConfig from './validation/passport.config';
+import stringSanitizer from './middlewares/sanitizer.middleware';
 
 const app = express();
 
@@ -30,6 +31,9 @@ app.use(morgan(':remote-addr - [:date] ":method :url" :status', { stream: logger
 app.use(passport.initialize());
 passportConfig(passport);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+app.use(stringSanitizer);
 
 app.use('/', indexRouter);
 app.use('/api/v1', v1Router);

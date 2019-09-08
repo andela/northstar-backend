@@ -77,4 +77,33 @@ export default class UserUtils {
       secure: true
     });
   }
+
+  /**
+   * Retrieves any combination of optional profile details a user wants to update
+   * These allowed profile details to update are set within the method
+   * @param {Object} reqBody: http request body
+   * @return {Object} User object to update
+   */
+  static getValuesToUpdate(reqBody) {
+    // a list of all the profile details a user is allowed to update
+    const permittedValues = [
+      'first_name',
+      'last_name',
+      'gender',
+      'birth_date',
+      'preferred_language',
+      'preferred_currency',
+      'manager_id',
+      'location',
+      'email_notification',
+      'manager_id'
+    ];
+    const valuesToUpdate = {};
+
+    permittedValues.forEach((key) => {
+      // remove fields that user did not specify
+      if (reqBody[key]) valuesToUpdate[key] = reqBody[key];
+    });
+    return valuesToUpdate;
+  }
 }
