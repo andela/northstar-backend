@@ -31,6 +31,34 @@ module.exports = {
       updated_at: new Date()
     },
     {
+      first_name: 'Peter',
+      last_name: 'Doe',
+      email: 'peter_koke@email.com',
+      password: await bcrypt.hash('asdfghjkl', 10),
+      gender: 'male',
+      birth_date: new Date(),
+      preferred_language: 'Latin',
+      preferred_currency: 'GBP',
+      location: 'Texas',
+      role: 'manager',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      first_name: 'Gowon',
+      last_name: 'Nenpan',
+      email: 'nenpan_gowon@email.com',
+      password: await bcrypt.hash('asdfghjkl', 10),
+      gender: 'female',
+      birth_date: new Date(),
+      preferred_language: 'Latin',
+      preferred_currency: 'GBP',
+      location: 'Texas',
+      role: 'manager',
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
       first_name: 'Super',
       last_name: 'Admin',
       email: 'superadmin@barefootnomad.com',
