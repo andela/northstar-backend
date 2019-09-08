@@ -74,7 +74,7 @@ describe('REQUESTS', () => {
     describe('/PATCH Reject a user\'s Request', () => {
         it('it should return unauthorized if user is not logged in', (done) => {
             chai.request(app)
-                .patch('/api/v1/requests/1')
+                .patch('/api/v1/requests/decline/1')
                 .end((error, res) => {
                     res.should.have.status(401);
                     res.body.should.be.an('object');
@@ -115,7 +115,7 @@ describe('REQUESTS', () => {
                     const { token } = res.body.data;
 
                     chai.request(app)
-                        .patch('/api/v1/requests/2')
+                        .patch('/api/v1/requests/decline/2')
                         .set('x-access-token', token)
                         .end((error, data) => {
                             data.should.have.status(401);
@@ -144,7 +144,7 @@ describe('REQUESTS', () => {
                     expect(res.body.data.email).to.equal(testUser.email);
 
                     chai.request(app)
-                        .patch('/api/v1/requests/2')
+                        .patch('/api/v1/requests/decline/2')
                         .end((error, data) => {
                             data.should.have.status(401);
                             data.body.should.be.an('object');
@@ -158,7 +158,7 @@ describe('REQUESTS', () => {
         it('it should return invalid id if id of the request is not a number', (done) => {
             chai
                 .request(app)
-                .patch('/api/v1/requests/p')
+                .patch('/api/v1/requests/decline/p')
                 .set('token', adminToken)
                 .end((error, data) => {
                     data.should.have.status(422);
@@ -172,7 +172,7 @@ describe('REQUESTS', () => {
         it('it should return an error if a request does not exist', (done) => {
             chai
                 .request(app)
-                .patch('/api/v1/requests/10')
+                .patch('/api/v1/requests/decline/10')
                 .set('x-access-token', adminToken)
                 .end((error, data) => {
                     data.should.have.status(404);
@@ -185,7 +185,7 @@ describe('REQUESTS', () => {
         it('it should fail to authenticate incorrect token', (done) => {
             chai
                 .request(app)
-                .patch('/api/v1/requests/1')
+                .patch('/api/v1/requests/decline/1')
                 .set('x-access-token', wrongToken)
                 .end((error, data) => {
                     data.should.have.status(401);
@@ -197,7 +197,7 @@ describe('REQUESTS', () => {
 
         it('it should login and allow a manager to reject a user\'s request', (done) => {
             chai.request(app)
-                .patch('/api/v1/requests/1')
+                .patch('/api/v1/requests/decline/1')
                 .set('authorization', adminToken)
                 .end((error, data) => {
                     data.should.have.status(201);

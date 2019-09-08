@@ -25,6 +25,14 @@ module.exports = {
       },
       status: {
         type: Sequelize.BOOLEAN
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     })
   ),

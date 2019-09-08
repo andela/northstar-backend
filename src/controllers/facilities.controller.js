@@ -1,7 +1,7 @@
 import models from '../db/models';
 import Response from '../utils/response.utils';
 
-const { Facility, Room } = models;
+const { Facility, Room, Like } = models;
 
 /**
  * This class creates the facilities controllers
@@ -69,6 +69,42 @@ export default class FacilitiesController {
       return Response.Success(res, facilities, 200);
     } catch (error) {
       return Response.InternalServerError(res, 'Could not return facilities');
+    }
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res The facilities being returned
+   * @returns {object} All the facilities on the facilities table
+   */
+  static async likeOrUnlikeFacility(req, res) {
+    try {
+      const [like, created] = await Like.findOrCreate(
+        {
+          where: {
+            facility_id: req.params.facility_id,
+            user_id: req.currentUser.id
+          },
+          defaults: { status: true }
+        }
+      );
+      if (!created) {
+        const unlike = await Like.update(
+          { status: !like.status },
+          {
+            where: {
+              facility_id: req.params.facility_id,
+              user_id: req.currentUser.id
+            },
+            returning: true
+          }
+        );
+        return Response.Success(res, unlike[1][0], 200);
+      }
+
+      return Response.Success(res, like, 201);
+    } catch (error) {
+      return Response.InternalServerError(res, 'Could not like facility');
     }
   }
 }
