@@ -101,7 +101,7 @@ describe('Users', () => {
     });
   });
 
-  describe('/GET Requests', () => {
+  describe('/Validate Signup Inputs', () => {
     it('should not register a new user with an already existing email', (done) => {
         chai.request(app)
           .post('/api/v1/auth/signup')
