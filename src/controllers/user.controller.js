@@ -133,4 +133,19 @@ export default class UserController {
       Response.UnauthorizedError(res, { message: 'Unable to sign in' });
     }
   }
+
+  /**
+ * get all managers
+ * @param {ServerRequest} req
+ * @param {ServerResponse} res
+ * @returns {ServerResponse} response
+ */
+  static async getManagers(req, res) {
+    try {
+      const result = await User.findAll({ attributes: ['id', 'first_name', 'last_name', 'email', 'preferred_language', 'location'], where: { role: 'manager' } });
+      return Response.Success(res, result, 200);
+    } catch (error) {
+      return Response.InternalServerError(res, 'Could not populate the managers(s)');
+    }
+  }
 }

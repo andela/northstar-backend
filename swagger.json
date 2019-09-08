@@ -34,7 +34,7 @@
     {
       "name": "Comment",
       "description": "Endpoint for Comments"
-    }
+    }    
   ],
   "paths": {
     "/auth/signup": {
@@ -336,9 +336,37 @@
         "parameters": [
           {
             "in": "body",
-            "name": "comment_id",
+            "name": "body",
             "required": true,
-            "description": "This is the comment id of the comment to be deleted",
+            "description": "This is the request body object containing user request status",
+            "schema": {
+              "$ref": "#/requestBody/delete_comment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/managers": {
+      "delete": {
+        "description": "User can get all managers",
+        "summary": "allows a user to retrieve all managers",
+        "tags": [""],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user request status",
             "schema": {
               "$ref": "#"
             }
@@ -644,6 +672,26 @@
             "updatedAt": "2019-09-05T18:39:51.988Z"
           }
         ]
+      }
+    },  
+    "delete_comment": {
+      "title": "User delete Comment",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Status of the user's request application",
+          "type": "string"
+        },
+        "comment_id": {
+          "description": "ID of the comment to be deleted",
+          "type": "integer"
+        }
+      },
+      "example": {
+        "status": "success",
+        "data": {
+          "message": "comment deleted successfully"                
+        }
       }
     }
   }
