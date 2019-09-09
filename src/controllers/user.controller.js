@@ -5,7 +5,7 @@ import sender from '../services/email.service';
 import Response from '../utils/response.utils';
 import UserUtils from '../utils/user.utils';
 import JWTService from '../services/jwt.service';
-import auth from "../middlewares/auth";
+import auth from '../middlewares/auth';
 
 const { User } = models;
 const defaultPassword = crypto.createHash('sha1').update(Math.random().toString()).digest('hex');
@@ -51,7 +51,7 @@ export default class UserController {
     }
   }
 
-   /**
+  /**
    * @param {object} req The user's ID
    * @param {object} res The user's details returned after verification
    * @returns {object} A verified user
@@ -70,7 +70,7 @@ export default class UserController {
       );
       const verificationResult = verified[1][0];
       return res.status(200).json({
-        status: "success",
+        status: 'success',
         data: verificationResult
       });
     } catch (error) {
