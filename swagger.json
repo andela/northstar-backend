@@ -10,10 +10,15 @@
   "host": "",
   "basePath": "/api/v1",
   "securityDefinitions": {
-    "Bearer": {
+    "x-access": {
       "description": "Standard Authorization header using the bearer scheme. Example: \"bearer {token}\"",
       "type": "apiKey",
       "name": "x-access-token",
+      "in": "header"
+    },
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
       "in": "header"
     }
   },
@@ -80,6 +85,7 @@
         "parameters": [
           {
             "in": "body",
+            "name": "body",
             "required": true,
             "description": "The request body for the signin endpoint",
             "schema": {
@@ -120,8 +126,7 @@
           }
         }
       }
-    }
-  },
+    },
     "/auth/passwordreset": {
       "get": {
         "tags": [
@@ -210,7 +215,6 @@
         }
       }
     },
-
     "/role": {
       "patch": {
         "description": "Update profile",
@@ -236,7 +240,6 @@
         }
       }
     },
-    
     "/requests/:id": {
       "patch": {
         "description": "A manager can reject a user's request application",
@@ -477,9 +480,52 @@
           }
         }
       }
-    
+    },
+    "/requests/{request_id}": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Fetch a single travel request",
+        "description": "This endpoint fetches a single travel request (with booking and user) using its ID. Only a request owner, his/her manager, or super admin can access a request",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "description": "ID of the travel request to fetch",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid token"
+          },
+          "403": {
+            "description": "No permission to view resource"
+          },
+          "404": {
+            "description": "Travel request not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
   },
-
   "requestBody": {
     "signup": {
       "title": "Signup Request",
@@ -546,7 +592,6 @@
     },
     "signin": {
       "type": "object",
-      "title": "Signin request body specification",
       "required": ["email", "password"],
       "properties": {
         "email": {

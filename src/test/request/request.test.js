@@ -3,9 +3,11 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
+
 import app from '../../index';
 import models from '../../db/models';
 import Response from '../../utils/response.utils';
+import JWTService from '../../services/jwt.service';
 
 import RequestController from '../../controllers/request.controller';
 
@@ -493,7 +495,6 @@ describe('/POST REQUESTS', () => {
                 res.body.data.should.have.property('return_date');
                 res.body.data.should.have.property('reason').eql('For the fun of it');
                 res.body.data.should.have.property('booking_id').eql(1);
-                res.body.data.should.have.property('user_id').eql(1);
                 done();
             });
     });
@@ -513,7 +514,6 @@ describe('/POST REQUESTS', () => {
                 res.body.data.should.have.property('return_date');
                 res.body.data.should.have.property('reason').eql('For the fun of it');
                 res.body.data.should.have.property('booking_id').eql(1);
-                res.body.data.should.have.property('user_id').eql(1);
                 done();
             });
     });

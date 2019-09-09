@@ -170,4 +170,40 @@ export default class RequestController {
         'Request failed. Please see information below.',
         error.message));
   }
+
+  /**
+   * Retrieves a single travel request, alongside the associated
+   * user (owner), and the associated booking from the database.
+   * Only a travel request owner, owner manager, or super admin
+   * can view a travel request
+   * @param {object} req (Request object)
+   * @param {object} res (ServerResponse object)
+   * @param {function} next
+   * @returns {object} ServerResponse object
+   */
+  static async getSingleRequest(req, res, next) {
+    try {
+      const request = await Request.findOne({
+        where: { id: req.params.request_id },
+        include: [
+          { model: Booking },
+          {
+            model: User,
+            attributes: ['id', 'email', 'first_name', 'last_name', 'location', 'role', 'manager_id']
+          }]
+      });
+      if (!request) return Response.NotFoundError(res, 'Travel request not found');
+
+      if (request.user_id !== req.body.user_id && req.body.role !== 'super_admin'
+        && request.User.manager_id !== req.body.user_id) {
+        return Response.UnauthorizedError(res, {
+          message: 'You do not have permission to view this travel request'
+        }, 403);
+      }
+
+      return Response.Success(res, request);
+    } catch (error) {
+      next(new Error('Internal server error'));
+    }
+  }
 }

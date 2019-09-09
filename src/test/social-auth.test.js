@@ -1,5 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import sgMail from '@sendgrid/mail';
+import sinon from 'sinon';
 
 import app from '../index';
 
@@ -12,6 +14,7 @@ const authBase = '/api/v1/auth';
 describe('SOCIAL AUTHENTICATION', () => {
   describe('SUCCESS', () => {
     it('should save a google user into the database', async () => {
+      const stub = sinon.stub(sgMail, 'send').callsFake((msg) => 'done');
       const res = await chai.request(app)
         .post(`${authBase}/google`)
         .send({ provider: 'google' });
@@ -33,6 +36,8 @@ describe('SOCIAL AUTHENTICATION', () => {
       expect(res.body.data.last_name).to.not.equal(null);
       expect(res.body.data.email).to.not.equal(null);
       expect(res.body.data.email).to.be.a('string');
+      expect(stub.called).to.equal(true);
+      stub.restore();
     });
 
     it('should save a facebook user into the database', async () => {

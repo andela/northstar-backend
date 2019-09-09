@@ -18,6 +18,7 @@ router.patch('/requests/decline/:id',
 
 router.get('/requests', Auth.verifyToken, RequestController.findAll);
 router.post('/requests', Auth.verifyToken, Validator.Requests, RequestController.TripRequests);
+router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingleRequest);
 
 router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
 
