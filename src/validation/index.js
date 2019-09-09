@@ -1,7 +1,9 @@
 import helpers from '../utils/helpers.utils';
 import numberRegex from '../utils/regexen.utils';
 
-const { checkForEmptyFields, checkPatternedFields, fieldNotNeeded, trimValues } = helpers;
+const {
+  checkForEmptyFields, checkPatternedFields, fieldNotNeeded, trimValues
+} = helpers;
 
 export default {
   Requests: (req, res, next) => {
@@ -15,18 +17,18 @@ export default {
       if (return_date) {
         errors.push(...fieldNotNeeded('Return date', departure_date));
       }
-       errors.push(...checkForEmptyFields('Origin', origin));
-       errors.push(...checkForEmptyFields('Destination', destination));
-       errors.push(...checkForEmptyFields('Departure date', departure_date));
-       errors.push(...checkForEmptyFields('Reason', reason));
-       errors.push(...checkPatternedFields('Booking ID', booking_id, numberRegex));
+      errors.push(...checkForEmptyFields('Origin', origin));
+      errors.push(...checkForEmptyFields('Destination', destination));
+      errors.push(...checkForEmptyFields('Departure date', departure_date));
+      errors.push(...checkForEmptyFields('Reason', reason));
+      errors.push(...checkPatternedFields('Booking ID', booking_id, numberRegex));
     } else if (category.toLowerCase().trim() === 'round-trip') {
-       errors.push(...checkForEmptyFields('Origin', origin));
-       errors.push(...checkForEmptyFields('Destination', destination));
-       errors.push(...checkForEmptyFields('Departure date', departure_date));
-       errors.push(...checkForEmptyFields('Return date', return_date));
-       errors.push(...checkForEmptyFields('Reason', reason));
-       errors.push(...checkPatternedFields('Booking ID', booking_id, numberRegex));
+      errors.push(...checkForEmptyFields('Origin', origin));
+      errors.push(...checkForEmptyFields('Destination', destination));
+      errors.push(...checkForEmptyFields('Departure date', departure_date));
+      errors.push(...checkForEmptyFields('Return date', return_date));
+      errors.push(...checkForEmptyFields('Reason', reason));
+      errors.push(...checkPatternedFields('Booking ID', booking_id, numberRegex));
     } else {
       return res.status(400).json({
         status: 'error',
@@ -35,6 +37,24 @@ export default {
         },
       });
     }
+
+    if (errors.length) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors,
+      });
+    }
+
+    return next();
+  },
+
+  feedback: (req, res, next) => {
+    const errors = [];
+    const { feedback } = req.body;
+    const { id: facility_id } = req.params;
+
+    errors.push(...checkPatternedFields('Facility ID', facility_id, numberRegex));
+    errors.push(...checkForEmptyFields('Feedback', feedback));
 
     if (errors.length) {
       return res.status(400).json({

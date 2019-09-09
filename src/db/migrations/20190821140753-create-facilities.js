@@ -29,6 +29,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      checked_in_users: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER)
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

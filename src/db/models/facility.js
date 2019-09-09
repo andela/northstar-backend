@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     available_space: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    checked_in_users: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER)
     }
   }, {
     tableName: 'facilities',

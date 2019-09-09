@@ -16,6 +16,16 @@ module.exports = {
     available_space: 100,
     created_at: new Date(),
     updated_at: new Date(),
+  },
+  {
+    name: 'Hotel Transylvania',
+    address: '52B Wolf Road',
+    number_of_rooms: 500,
+    description: 'The Hotel Transylvania facility',
+    available_space: 500,
+    checked_in_users: [1, 3],
+    created_at: new Date(),
+    updated_at: new Date(),
   }
   ], {}),
 
