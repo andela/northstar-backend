@@ -21,5 +21,6 @@ router.post('/requests', Auth.verifyToken, Validator.Requests, RequestController
 router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingleRequest);
 
 router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
+router.patch('/requests/approve/:id', auth.verifyUserToken, auth.verifyManager, validateRequests.validateRequestsID, requestChecks.validateRequests, RequestController.approveRequest);
 
 export default router;

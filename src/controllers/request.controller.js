@@ -206,4 +206,34 @@ export default class RequestController {
       next(new Error('Internal server error'));
     }
   }
+ /**
+    * @param {object} req
+    * @param {object} res
+    * @returns {json} request
+    */
+   static async approveRequest(req, res) {
+    try {
+      const request = await Request.update(
+        {
+          status: 'approved'
+        }, { returning: true, where: { id: req.params.id } }
+      );
+      const requestResult = request[1][0];
+      const user = await User.findOne({ where: { id: requestResult.user_id } });
+      const { first_name: firstName, email } = user;
+      // parameter(s) to be passed to the sendgrid email template
+      await sender.sendEmail(process.env.SENDER_EMAIL, email, 'request_approved', { firstName, email });
+      return res.status(201).json({
+        status: 'success',
+        data: requestResult
+      });
+    } catch (error) {
+      return res.status(500)
+        .json({
+          status: 'error',
+          error: 'Internal server error',
+        });
+    }
+  }
+
 }
