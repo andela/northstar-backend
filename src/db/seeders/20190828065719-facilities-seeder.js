@@ -16,6 +16,15 @@ module.exports = {
     available_space: 100,
     created_at: new Date(),
     updated_at: new Date(),
+  },
+  {
+    name: 'La Tortura De Sprunei',
+    address: '101 Tortuga District',
+    number_of_rooms: 100,
+    description: 'The Tortura De Sprunei facility',
+    available_space: 100,
+    created_at: new Date(),
+    updated_at: new Date(),
   }
   ], {}),
 

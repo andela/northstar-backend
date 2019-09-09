@@ -45,4 +45,20 @@ export default {
 
     return next();
   },
+
+  facilityID: (req, res, next) => {
+    const errors = [];
+    const { id } = req.params;
+
+    errors.push(...checkPatternedFields('Facility ID', id, numberRegex));
+
+    if (errors.length) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors,
+      });
+    }
+
+    return next();
+  },
 };
