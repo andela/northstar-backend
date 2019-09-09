@@ -7,7 +7,30 @@ const { Comment } = models;
  * This class creates the comment controller
  */
 export default class CommentController {
-/**
+  /**
+   * Handles posting of comments
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Callback} next
+   * @returns {JSON} comment
+   */
+  static async postComment(req, res, next) {
+    const { request_id, comment, user } = req.body;
+    try {
+      const postedComment = await Comment.create({
+        request_id,
+        comment,
+        user_id: user.id
+      });
+
+      res.status(201).json({
+        status: 'success',
+        data: postedComment
+      });
+    } catch (error) { next(error); }
+  }
+
+  /**
  * Handles deletion of comment
  * @param {ServerRequest} req
  * @param {ServerResponse} res

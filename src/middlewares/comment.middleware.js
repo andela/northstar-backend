@@ -1,7 +1,8 @@
-
+import models from '../db/models/index';
 import Response from '../utils/response.utils';
 import CommentUtils from '../utils/comment.util';
 
+const { Request, User } = models;
 /**
  * Middleware for the comment routes
  */
@@ -42,5 +43,41 @@ export default class AuthenticationMiddleware {
     } catch (error) {
       return Response.InternalServerError(res, 'Error checking permission');
     }
+  }
+
+  /**
+   * Ensures a user is the owner of the request or the request owner's manager
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Callback} next | next middleware in the chain
+   * @returns {Function} next | next middleware in the chain
+   */
+  static async ensureUserCanPost(req, res, next) {
+    const { request_id, user } = req.body;
+
+    try {
+      const request = await Request.findByPk(request_id, {
+        include: [{ model: User }]
+      });
+
+      // send a 404 error if request does not exist
+      if (!request) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'Request not found.'
+        });
+      }
+
+      // permit if user owns the request or is the manager of the request owner
+      const isPermitted = (user.id === request.user_id)
+                            || (user.id === request.User.manager_id);
+
+      return isPermitted
+        ? next()
+        : res.status(403).json({
+          status: 'error',
+          error: 'You cannot add a comment to this request.'
+        });
+    } catch (error) { next(error); }
   }
 }
