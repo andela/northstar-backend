@@ -13,4 +13,14 @@ export default class JWTService {
     return jwt.sign({ id, role },
       process.env.JWT_SECRET, { expiresIn: '7d' });
   }
+
+  /**
+   * Generates a new token for a particular user
+   * @param {string} data
+   * @returns {string} token
+   */
+  static generatePasswordToken(data) {
+    return jwt.sign({ id: data.id, role: data.role },
+      process.env.JWT_SECRET, { expiresIn: '1h' });
+  }
 }
