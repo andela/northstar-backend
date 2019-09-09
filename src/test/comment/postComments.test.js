@@ -154,7 +154,7 @@ describe('Post Comments /comments', () => {
         .post('/api/v1/comments')
         .set('Authorization', myToken)
         .send({
-            request_id: 2,
+            request_id: 3,
             comment: 'Is there a way forward?'
         })
         .end((error, res) => {
@@ -170,7 +170,7 @@ describe('Post Comments /comments', () => {
         .post('/api/v1/comments')
         .set('Authorization', myToken)
         .send({
-            request_id: 2,
+            request_id: 3,
             comment: 'Is there a way forward?'
         })
         .end((error, res) => {
@@ -186,7 +186,7 @@ describe('Post Comments /comments', () => {
         .post('/api/v1/comments')
         .set('Authorization', myToken)
         .send({
-            request_id: 3,
+            request_id: 2,
             comment: 'Is there a way forward?'
         })
         .end((error, res) => {
@@ -203,7 +203,7 @@ describe('Post Comments /comments', () => {
         chai.request(app)
         .post('/api/v1/comments')
         .send({
-            request_id: 3,
+            request_id: 2,
             comment: 'Please what is the status?',
             token: myToken
         })
@@ -222,7 +222,7 @@ describe('Post Comments /comments', () => {
         .post('/api/v1/comments')
         .set('token', myToken)
         .send({
-            request_id: 3,
+            request_id: 2,
             comment: 'Please what is the status?',
         })
         .end((error, res) => {
@@ -239,7 +239,7 @@ describe('Post Comments /comments', () => {
         chai.request(app)
         .post('/api/v1/comments')
         .send({
-            request_id: 3,
+            request_id: 2,
             comment: 'Please what is the status?',
             authorization: myToken
         })

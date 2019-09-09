@@ -39,7 +39,6 @@ module.exports = {
       birth_date: new Date(),
       preferred_language: 'English',
       preferred_currency: 'USD',
-      manager_id: 4,
       location: 'Texas',
       role: 'requester',
       manager_id: 1,
