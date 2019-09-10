@@ -1,7 +1,10 @@
 import models from '../db/models';
 import Response from '../utils/response.utils';
+import FacilityUtils from '../utils/facility.utils';
 
-const { Facility, Room, Like } = models;
+const {
+  Facility, Room, Like, Booking
+} = models;
 
 /**
  * This class creates the facilities controllers
@@ -106,5 +109,38 @@ export default class FacilitiesController {
     } catch (error) {
       return Response.InternalServerError(res, 'Could not like facility');
     }
+  }
+
+  /**
+   * Books a room in an accomodation facility
+   * @param {object} req
+   * @param {object} res
+   * @param {object} next
+   * @return {object|function} ServerResponse or next
+   */
+  static async bookFacility(req, res, next) {
+    const { room_id } = req.params, { id: user_id } = req.currentUser;
+    try {
+      // Confirm the specified room exists, else return a 404
+      const room = await Room.findByPk(room_id, { attributes: [] });
+      if (!room) return Response.NotFoundError(res, 'Room not found');
+      // Check if an existing booking conflicts with the one to be made and return a 409
+      const { departure_date, return_date } = req.body;
+      const conflictingBooking = await Booking.findOne(FacilityUtils
+        .getConflictingBookingQuery(room_id, departure_date, return_date));
+
+      if (conflictingBooking) {
+        return Response.ConflictError(res, {
+          message: `This accomodation is already book from ${conflictingBooking.departure_date} to ${
+            conflictingBooking.return_date}`
+        });
+      }
+      // If all checks out so far, create a new booking and return its details
+      const newBooking = await Booking.create({
+        room_id, user_id, departure_date, return_date
+      }, { returning: true });
+
+      return Response.Success(res, newBooking.dataValues, 201);
+    } catch (error) { next(new Error('Internal server error')); }
   }
 }

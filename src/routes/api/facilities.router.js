@@ -5,6 +5,7 @@ import validateFacilities from '../../validation/facilities/facilities.validatio
 import validateRooms from '../../validation/facilities/rooms.validation';
 import FacilitiesChecks from '../../middlewares/facilities.middleware';
 
+
 const router = express.Router();
 
 /* Requests Routes Here */
@@ -28,5 +29,8 @@ router.post('/facilities/rooms',
 
 router.get('/facilities',
   facilitiesController.getAllFacilities);
+
+router.post('/facilities/rooms/:room_id/book', auth.verifyUserToken,
+  FacilitiesChecks.validateBookingDates, facilitiesController.bookFacility);
 
 export default router;

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import models from '../db/models';
+import Response from '../utils/response.utils';
 
 const { User } = models;
 
@@ -40,6 +41,7 @@ const auth = {
       }
 
       const user = await User.findOne({ where: { id: decoded.payload.id } });
+      if (!user) return Response.UnauthorizedError(res, 'Failed to authenticate token', 401);
       req.currentUser = user;
       const { payload } = decoded;
       req.body.user = user;
