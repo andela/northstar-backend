@@ -5,12 +5,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    tableName: 'feedback',
+    tableName: 'feedbacks',
     underscored: true
   });
   Feedback.associate = (models) => {
     Feedback.belongsTo(models.User, {
       foreignKey: 'user_id',
+      as: 'user',
       onDelete: 'CASCADE'
     });
     Feedback.belongsTo(models.Facility, {
