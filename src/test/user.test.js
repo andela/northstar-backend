@@ -3,9 +3,12 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import app from '../index';
 import userController from '../controllers/user.controller';
+import models from '../db/models'
+import { promises } from 'dns';
 
 const { expect } = chai;
 chai.use(chaiHttp);
+const {User} = models;
 
 let myToken;
 
@@ -35,6 +38,8 @@ describe('Update profile', () => {
     (res.status).should.have.callCount(0);
     done();
   });
+
+  
 
   describe('Validation Errors', () => {
     it('Should send a 422 error if no value was provided to update', (done) => {
@@ -285,4 +290,53 @@ describe('Update profile', () => {
         done();
       });
   });
+
+  describe('/Get user information', () => {
+
+  
+
+    it('it should view user information', (done) => {
+      chai.request(app)
+        .get('/api/v1/users-information')
+        .set('Authorization', `Bearer ${myToken}`)
+        .end((error, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.keys('status', 'data');
+          expect(res.body.status).to.deep.equal('success');
+          expect(res.body.data).to.be.an('object');
+          done();
+        });
+    });
+
+    it('it should not view user information', (done) => {
+      const stub = sinon.stub(User, 'findByPk').returns(new Promise((resolve,reject) => {
+        resolve(null);
+      }))
+      chai.request(app)
+        .get('/api/v1/users-information')
+        .set('Authorization', `Bearer ${myToken}`)
+        .end((error, res) => {
+          expect(res).to.have.status(404);
+          expect(res.body).to.have.keys('status','error');
+          expect(res.body.status).to.deep.equal('error');
+          stub.restore();
+          done();
+        });
+    });
+  });
+
+  it('it should not view user information for internal server error', (done) => {
+    const stub = sinon.stub(User, 'findByPk').throws(new Error())
+    chai.request(app)
+      .get('/api/v1/users-information')
+      .set('Authorization', `Bearer ${myToken}`)
+      .end((error, res) => {
+        expect(res).to.have.status(500);
+        expect(res.body).to.have.keys('status','error');
+        expect(res.body.status).to.deep.equal('error');
+        stub.restore();
+        done();
+      });
+  });
+
 });

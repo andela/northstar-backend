@@ -9,7 +9,7 @@ import Validator from '../../validation/index';
 
 const { isSuperAdmin } = UserMiddleware;
 const {
-  setUserRole, updateProfile, getManagers, retrieveProfile
+  setUserRole, updateProfile, getManagers, retrieveProfile, viewUserInformation
 } = UserController;
 
 const router = express.Router();
@@ -18,5 +18,6 @@ router.patch('/role', auth.verifyUserToken, isSuperAdmin, roleValidation, setUse
 router.get('/managers', auth.verifyUserToken, getManagers);
 router.patch('/profile', auth.verifyUserToken, profileValidation, getValuesToUpdate, updateProfile);
 router.get('/user/profile', auth.verifyUserToken, Validator.rememberMe, retrieveProfile);
+router.get('/users-information', auth.verifyUserToken, viewUserInformation);
 
 export default router;

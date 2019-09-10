@@ -196,6 +196,56 @@
         }
       }
     },
+    "users-information": {
+      "get": {
+        "description": "Get User Information",
+        "summary": "User should be able to view their information",
+        "tags": [
+          "user"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "format": "int64",
+            "required": true,
+            "description": "ID of user"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Supply the 'Bearer <token>'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/users-information"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/profile": {
       "patch": {
         "description": "Update profile",
