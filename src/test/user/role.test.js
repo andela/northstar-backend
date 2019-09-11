@@ -45,7 +45,7 @@ describe('User Role', () => {
       .end((error, res) => {
         expect(res).to.have.status(401);
         expect(res.body.status).to.deep.equal('error');
-        expect(res.body.error).to.deep.equal('Token was not provided.');
+        expect(res.body.error).to.deep.equal('No token provided!');
         done();
       })
     });

@@ -1,6 +1,6 @@
 import express from 'express';
 import UserController from '../../controllers/user.controller';
-import verifyToken from '../../middlewares/jwtAuth';
+import auth from "../../middlewares/auth";
 import UserMiddleware from '../../middlewares/user.middleware';
 import roleValidation from '../../validation/user/role.validation';
 import profileValidation from '../../validation/profile.validation';
@@ -10,9 +10,9 @@ const { isSuperAdmin } = UserMiddleware;
 const { setUserRole, updateProfile, getManagers } = UserController;
 const router = express.Router();
 
-router.patch('/role', verifyToken, isSuperAdmin, roleValidation, setUserRole);
-router.get('/managers', verifyToken, getManagers);
+router.patch('/role', auth.verifyUserToken, isSuperAdmin, roleValidation, setUserRole);
+router.get('/managers', auth.verifyUserToken, getManagers);
 
-router.patch('/profile', verifyToken, profileValidation, getValuesToUpdate, updateProfile);
+router.patch('/profile', auth.verifyUserToken, profileValidation, getValuesToUpdate, updateProfile);
 
 export default router;
