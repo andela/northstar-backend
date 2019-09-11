@@ -2,7 +2,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
 import UsersController from "../controllers/user.controller";
-import Auth from "../middlewares/auth";
 import sinon from "sinon";
 import Sinonchai from "sinon-chai";
 

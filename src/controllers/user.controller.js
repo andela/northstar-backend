@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import crypto from 'crypto';
-
 import bcrypt from 'bcrypt';
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
 import UserUtils from '../utils/user.utils';
 import JWTService from '../services/jwt.service';
+import auth from "../middlewares/auth";
 
 const { User } = models;
 const defaultPassword = crypto.createHash('sha1').update(Math.random().toString()).digest('hex');
@@ -31,12 +31,13 @@ export default class UserController {
       }, { returning: true });
 
       // parameter(s) to be passed to the sendgrid email template
-      const payload = { user };
-      await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
-
       const userToken = JWTService.generateToken(user);
+      const payload = {
+        user,
+        url: `${process.env.VERIFICATION_ROUTE}${userToken}`
+      };
 
-      UserUtils.setCookie(res, userToken);
+      await sender.sendEmail(process.env.SENDER_EMAIL, user.email, 'signup_template', payload);
 
       return Response.Success(res, {
         id: user.id,
@@ -47,6 +48,37 @@ export default class UserController {
       }, 201);
     } catch (error) {
       return Response.InternalServerError(res, 'Could not signup user');
+    }
+  }
+
+  /**
+   * @param {object} req The user's ID
+   * @param {object} res The user's details returned after verification
+   * @returns {object} A verified user
+   */
+  static async verifyUser(req, res) {
+    try {
+      const decoded = auth.verifyToken(req.params.userToken);
+      const verified = await User.update(
+        {
+          is_verified: true
+        },
+        {
+          returning: true,
+          where: { id: decoded.payload.id }
+        }
+      );
+      const verificationResult = verified[1][0];
+      return res.status(200).json({
+        status: "success",
+        data: verificationResult
+      });
+    } catch (error) {
+      return res.status(500)
+        .json({
+          status: 'error',
+          error: 'Error verifying user',
+        });
     }
   }
 

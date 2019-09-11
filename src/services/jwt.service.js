@@ -9,8 +9,8 @@ export default class JWTService {
    * @param {string} email
    * @returns {string} token
    */
-  static generateToken({ id, role }) {
-    return jwt.sign({ id, role },
+  static generateToken({ id, role, email }) {
+    return jwt.sign({ id, role, email },
       process.env.JWT_SECRET, { expiresIn: '7d' });
   }
 
