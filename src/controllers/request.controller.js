@@ -1,6 +1,9 @@
+import Sequelize from 'sequelize';
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
+
+const { Op } = Sequelize;
 
 const { Request, User, Booking } = models;
 /**
@@ -244,6 +247,47 @@ export default class RequestController {
           status: 'error',
           error: 'Internal server error',
         });
+    }
+  }
+
+  /**
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {JSON} travelHistory
+   */
+  static async getTravelHistory(req, res) {
+    const { id: user_id } = req.body.user;
+
+    try {
+      const today = new Date();
+      // changing date to the format with which it was saved in the DB (ISO (yyyy-mm-dd))
+      const todayIso = today.toISOString().slice(0, 10);
+
+      const tripHistory = await Request.findAll({
+        where: {
+          user_id,
+          departure_date: {
+            [Op.lt]: todayIso
+          }
+        },
+        include: [{ model: Booking }]
+      });
+
+      return tripHistory.length > 0
+        ? res.status(200).json({
+          status: 'success',
+          data: tripHistory
+        })
+        : res.status(404).json({
+          status: 'error',
+          error: 'No travel or booking history found'
+        });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        error: 'Could not retrieve trip history'
+      });
     }
   }
 }

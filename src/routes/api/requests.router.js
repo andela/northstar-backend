@@ -17,10 +17,12 @@ router.patch('/requests/decline/:id',
   RequestController.rejectRequest);
 
 router.post('/requests', Auth.verifyToken, Validator.Requests, RequestController.TripRequests);
+router.get('/requests/history', auth.verifyUserToken, RequestController.getTravelHistory);
 router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingleRequest);
 
 router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
 router.get('/requests', Auth.verifyToken, RequestMiddleware.prepareRequestQuery, RequestController.findAll);
 router.patch('/requests/approve/:id', auth.verifyUserToken, auth.verifyManager, validateRequests.validateRequestsID, RequestMiddleware.validateRequests, RequestController.approveRequest);
+
 
 export default router;
