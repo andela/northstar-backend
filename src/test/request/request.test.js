@@ -7,7 +7,6 @@ import bcrypt from 'bcrypt';
 import app from '../../index';
 import models from '../../db/models';
 import Response from '../../utils/response.utils';
-import JWTService from '../../services/jwt.service';
 
 import RequestController from '../../controllers/request.controller';
 
@@ -192,7 +191,7 @@ describe('REQUESTS', () => {
                 .end((error, data) => {
                     data.should.have.status(401);
                     data.body.should.have.property('status').eql('error');
-                    data.body.should.have.property('error').eql('Failed to authenticate token.');
+                    data.body.should.have.property('error').eql('Invalid authentication token.');
                     done();
                 });
         });

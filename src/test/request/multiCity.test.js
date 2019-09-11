@@ -88,7 +88,7 @@ describe("Requests", () => {
          expect(res.body).to.have.keys("status", "error");
          expect(res.body.status).to.deep.equals("error");
          expect(res.body.error).to.deep.equals(
-           "Failed to authenticate token."
+           "Invalid authentication token."
          );
          done();
        });

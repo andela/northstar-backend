@@ -16,17 +16,12 @@ const auth = {
 
   async verifyUserToken(req, res, next) {
     try {
-      let token;
-
-      if (req.headers.authorization) {
-        token = req.headers.authorization;
-      } else if (req.headers['x-access-token']) {
-        token = req.headers['x-access-token'];
-      } else if (req.headers.token) {
-        token = req.headers.token;
-      }
-
-      const decoded = auth.verifyToken(token);
+      let token =
+        req.headers.token
+        || req.body.token
+        || req.headers.authorization
+        || req.body.authorization
+        || req.headers["x-access-token"];
 
       if (!token) {
         return res.status(401).json({
@@ -34,17 +29,21 @@ const auth = {
           error: 'No token provided!',
         });
       }
+      
+      if (token.startsWith("Bearer")) token = token.slice(7);
+      const decoded = auth.verifyToken(token);
 
       if (decoded.error) {
         return res.status(401).json({
-          status: 'error',
-          error: 'Failed to authenticate token.',
+          status: "error",
+          error: "Invalid authentication token."
         });
       }
 
       const user = await User.findOne({ where: { id: decoded.payload.id } });
       req.currentUser = user;
       const { payload } = decoded;
+      req.body.user = user;
       req.tokenData = payload;
       return next();
     } catch (error) {
@@ -57,18 +56,7 @@ const auth = {
 
   async verifyManager(req, res, next) {
     try {
-      let token;
-
-      if (req.headers.authorization) {
-        token = req.headers.authorization;
-      } else if (req.headers['x-access-token']) {
-        token = req.headers['x-access-token'];
-      } else if (req.headers.token) {
-        token = req.headers.token;
-      }
-      const decoded = auth.verifyToken(token);
-
-      if (!((decoded.payload.role === 'super_admin') || (decoded.payload.role === 'manager'))) {
+      if (!((req.currentUser.role === 'super_admin') || (req.currentUser.role === 'manager'))) {
         return res.status(401).json({
           status: 'error',
           error: 'Hi! You are not permitted to perform this action',
@@ -85,18 +73,7 @@ const auth = {
 
   async verifyTravelAdmin(req, res, next) {
     try {
-      let token;
-
-      if (req.headers.authorization) {
-        token = req.headers.authorization;
-      } else if (req.headers['x-access-token']) {
-        token = req.headers['x-access-token'];
-      } else if (req.headers.token) {
-        token = req.headers.token;
-      }
-      const decoded = auth.verifyToken(token);
-
-      if (!((decoded.payload.role === 'super_admin') || (decoded.payload.role === 'travel_admin'))) {
+      if (!((req.currentUser.role === 'super_admin') || (req.currentUser.role === 'travel_admin'))) {
         return res.status(401).json({
           status: 'error',
           error: 'Hi! You are not permitted to perform this action',
