@@ -17,6 +17,7 @@
       "in": "header"
     },
     "Bearer": {
+      "description": "Sends the bearer token in the header in the format \"Bearer {token}\"",
       "type": "apiKey",
       "name": "Authorization",
       "in": "header"
@@ -597,6 +598,89 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/requests": {
+      "get": {
+        "tags": ["Requests"],
+        "summary": "Get requests",
+        "description": "Send GET requests to fetch all requests for a super admin, or all by a user, or a manager's surbodinates. Also query travel requests",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "query",
+            "description": "Query by a request's ID",
+            "type": "int64"
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "Query by requests user email (may not be the full email)",
+            "type": "string"
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "description": "Query by requests destination",
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "query",
+            "description": "Query by requests origin",
+            "type": "string"
+          },
+          {
+            "name": "duration",
+            "in": "query",
+            "description": "Query by requests duration in days",
+            "type": "int64"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Query by requests start (departure) date",
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Query by requests status",
+            "type": "string",
+            "enum": ["pending", "approved", "declined"]
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Query by requests category",
+            "type": "string",
+            "enum": ["one-way", "multi-city", "round-trip"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid token, no valid query parameter in search and/or invalid query parameter value"
+          },
+          "403": {
+            "description": "No token provided"
+          },
+          "404": {
+            "description": "No result found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }

@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     departure_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     return_date: {
-      type: DataTypes.DATE // return date allows null because it could be a one-way-trip
+      type: DataTypes.DATEONLY // return date allows null because it could be a one-way-trip
     },
     reason: {
       type: DataTypes.STRING,
