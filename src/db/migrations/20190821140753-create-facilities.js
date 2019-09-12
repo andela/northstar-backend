@@ -39,6 +39,9 @@ module.exports = {
       }
     })
   ),
-  down: (queryInterface) => queryInterface.dropTable('facilities')
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('check_ins');
+    queryInterface.dropTable('facilities');
+  }
   // the parameter "Sequelize" was commented out because it is not in use
 };

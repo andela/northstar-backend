@@ -2,7 +2,7 @@ import helpers from '../utils/helpers.utils';
 import numberRegex from '../utils/regexen.utils';
 
 const {
-  checkForEmptyFields, checkPatternedFields, fieldNotNeeded, trimValues
+  checkForEmptyFields, checkPatternedFields, fieldNotNeeded, trimValues, checkRange,
 } = helpers;
 
 export default {
@@ -71,6 +71,24 @@ export default {
     if (rememberMe.toLowerCase() !== 'yes') {
       errors.push('user profile will not be automatically retrieved. Choose "YES" to do so.');
     }
+
+    if (errors.length) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors,
+      });
+    }
+
+    return next();
+  },
+
+  ratingAndFeedback: (req, res, next) => {
+    const errors = [];
+    const { facility_id, rating } = req.body;
+
+    errors.push(...checkPatternedFields('Facility ID', facility_id, numberRegex));
+    errors.push(...checkForEmptyFields('Rating', rating));
+    errors.push(...checkRange('Rating', rating, 1, 5));
 
     if (errors.length) {
       return res.status(400).json({

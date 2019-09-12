@@ -2,8 +2,8 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
-import app from '../index';
-import RatingController from '../controllers/rating.controller';
+import app from '../../index';
+import RatingController from '../../controllers/rating.controller';
 
 chai.use(Sinonchai);
 chai.use(chaiHttp);

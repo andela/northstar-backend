@@ -6,6 +6,13 @@ export default {
     return [];
   },
 
+  checkRange: (field, value, rangeX, rangeY) => {
+    if (value >= rangeX && value <= rangeY) {
+      return [];
+    }
+    return [`${field} must be between ${rangeX} and ${rangeY}`];
+  },
+
   fieldNotNeeded: (field, value) => {
     if (value) return [`${field} is not required`];
   },
