@@ -8,7 +8,7 @@ const options = {
     filename: `${appRoot}/src/logs/app.log`,
     handleExceptions: true,
     json: true,
-    maxsize: 5242880, // %MB
+    maxsize: 20971520, // 20MB
     maxFiles: 5,
     colorize: false,
   },

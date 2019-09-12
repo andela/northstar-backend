@@ -1,6 +1,4 @@
-/* eslint-disable camelcase */
 import crypto from 'crypto';
-
 import bcrypt from 'bcrypt';
 import models from '../db/models';
 import sender from '../services/email.service';
@@ -103,7 +101,7 @@ export default class UserController {
    * @param {Object} res
    * @param {Function} next
    * @returns {JSON} res
-  */
+   */
   static async setUserRole(req, res, next) {
     try {
       const { role, email } = req.body;
@@ -160,11 +158,11 @@ export default class UserController {
   }
 
   /**
- * get all managers
- * @param {ServerRequest} req
- * @param {ServerResponse} res
- * @returns {ServerResponse} response
- */
+   * get all managers
+   * @param {ServerRequest} req
+   * @param {ServerResponse} res
+   * @returns {ServerResponse} response
+   */
   static async getManagers(req, res) {
     try {
       const result = await User.findAll({ attributes: ['id', 'first_name', 'last_name', 'email', 'preferred_language', 'location'], where: { role: 'manager' } });
@@ -175,12 +173,12 @@ export default class UserController {
   }
 
   /**
- * @static
- * @param {object} req
- * @param {object} res
- * @returns {json} - json
- * @memberof UserController
- */
+   * @static
+   * @param {object} req
+   * @param {object} res
+   * @returns {json} - json
+   * @memberof UserController
+   */
   static async resetpasswordEmail(req, res) {
     let userToken;
     let payload;
@@ -221,5 +219,25 @@ export default class UserController {
           err
         });
       });
+  }
+
+  /**
+   * Handles auto retrieval of user's profile needed for travel
+   * @param {*} req
+   * @param {*} res
+   * @returns {*} response
+   */
+  static retrieveProfile(req, res) {
+    const { id: user_id } = req.body.user;
+
+    return User.findByPk(user_id, {
+      attributes: ['first_name', 'last_name', 'email',
+        'manager_id', 'gender', 'birth_date', 'location']
+    })
+      .then((data) => {
+        data.dataValues.birth_date = data.dataValues.birth_date.toString().slice(4, 15);
+        Response.Success(res, data);
+      })
+      .catch((err) => Response.InternalServerError(res, err));
   }
 }

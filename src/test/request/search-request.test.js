@@ -24,7 +24,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?origin=${origin}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -48,7 +48,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?destination=${encodeURIComponent(destination)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -72,7 +72,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?request_id=${requestId}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -94,7 +94,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?duration=${encodeURIComponent(duration)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -120,7 +120,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?start_date=${encodeURIComponent(startDate)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -144,7 +144,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?status=${encodeURIComponent(requestStatus)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -168,7 +168,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?category=${encodeURIComponent(category)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -194,7 +194,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?origin=${origin}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -219,7 +219,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?destination=${destination}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -244,7 +244,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?request_id=${requestId}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -267,7 +267,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?owner=${encodeURIComponent(ownerEmail)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -287,7 +287,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?duration=${duration}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -314,7 +314,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?start_date=${encodeURIComponent(startDate)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -339,7 +339,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?status=${requestStatus}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -364,7 +364,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?category=${category}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -389,9 +389,9 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?origin=${origin}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
-        
-        
+
+
+
         expect(res.status).to.equal(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'data');
@@ -433,7 +433,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?request_id=${requestId}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'data');
@@ -453,7 +453,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
                 .get(`${requestEndpoint}?owner=${encodeURIComponent(ownerEmail)}`)
                 .set('Authorization', `Bearer ${userToken}`)
                 .send();
-            
+
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys('status', 'data');
@@ -472,7 +472,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?duration=${duration}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'data');
@@ -496,7 +496,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?start_date=${encodeURIComponent(startDate)}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         const dbRequests = await Request.findAll({ where: { departure_date: startDate } });
 
         expect(res.status).to.equal(200);
@@ -519,7 +519,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?status=${requestStatus}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         const dbRequests = await Request.findAll({ where: { status: requestStatus } });
 
         expect(res.status).to.equal(200);
@@ -542,7 +542,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?category=${category}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         const dbRequests = await Request.findAll({ where: { category } });
 
         expect(res.status).to.equal(200);
@@ -573,7 +573,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests for a manager otherwise of a requester\'s manager', async () => {
@@ -589,7 +589,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests with only invalid parameters supplied', async () => {
@@ -614,7 +614,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?duration=${encodeURIComponent('days 500')}`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(400);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
@@ -623,7 +623,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
         expect(res.body.error.duration).to.equal(
             'Invalid duration value. Please ensure it is a whole number (note: it is assumed to be in days).');
     });
-    
+
     it('should fail to search requests using non-existing duration', async () => {
         const userDetails = { id: 5, email: 'superadmin@barefootnomad.com', role: 'super_admin' };
         const userToken = JWTService.generateToken(userDetails);
@@ -631,15 +631,15 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?duration=900`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(404);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
         });
-        
+
     // request ID, owner, destination, origin, duration, start date, request status etc
     it('should fail to search requests using invalid/non-existing request ID', async () => {
         const userDetails = { id: 5, email: 'superadmin@barefootnomad.com', role: 'super_admin' };
@@ -648,13 +648,13 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?request_id=900`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(404);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests using invalid/non-existing owner', async () => {
@@ -664,13 +664,13 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?owner=900`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(404);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests using invalid/non-existing destination', async () => {
@@ -680,13 +680,13 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?destination=antartica`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(404);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests using invalid/non-existing origin', async () => {
@@ -696,13 +696,13 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?origin=mars`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(404);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests using invalid/non-existing start date', async () => {
@@ -712,13 +712,13 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?start_date=19000210`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(404);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.status).to.equal('error');
         expect(res.body.error.message).to.equal(
-            'No travel request found that satisfy the query and/or your permisson level');
+            'No travel request found that satisfy the query and/or your permission level');
     });
 
     it('should fail to search requests using invalid request status', async () => {
@@ -728,7 +728,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?status=hanging`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(400);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
@@ -745,7 +745,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
             .get(`${requestEndpoint}?category=up-and-down`)
             .set('Authorization', `Bearer ${userToken}`)
             .send();
-        
+
         expect(res.status).to.equal(400);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');

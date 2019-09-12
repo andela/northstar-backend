@@ -51,12 +51,13 @@ export default class RequestController {
         const data = await Request.findAll(req.query);
         if (data.length) return Response.Success(res, data);
         return Response.NotFoundError(res,
-          'No travel request found that satisfy the query and/or your permisson level');
+          'No travel request found that satisfy the query and/or your permission level');
       }
 
       const data = await Request.findAll({ where: { user_id: req.body.user_id } });
       if (data.length) return Response.Success(res, data, 200);
-      Response.CustomError(res, 404, 'error', 'No requests found');
+      Response.CustomError(res, 404, 'error',
+        'No requests found', 'Consult the travel admin');
     } catch (err) {
       Response.InternalServerError(res, err);
     }

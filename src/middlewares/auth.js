@@ -16,12 +16,11 @@ const auth = {
 
   async verifyUserToken(req, res, next) {
     try {
-      let token =
-        req.headers.token
+      let token = req.headers.token
         || req.body.token
         || req.headers.authorization
         || req.body.authorization
-        || req.headers["x-access-token"];
+        || req.headers['x-access-token'];
 
       if (!token) {
         return res.status(401).json({
@@ -29,14 +28,14 @@ const auth = {
           error: 'No token provided!',
         });
       }
-      
-      if (token.startsWith("Bearer")) token = token.slice(7);
+
+      if (token.startsWith('Bearer')) token = token.slice(7);
       const decoded = auth.verifyToken(token);
 
       if (decoded.error) {
         return res.status(401).json({
-          status: "error",
-          error: "Invalid authentication token."
+          status: 'error',
+          error: 'Invalid authentication token.'
         });
       }
 

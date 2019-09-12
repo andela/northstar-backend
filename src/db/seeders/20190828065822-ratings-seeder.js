@@ -7,6 +7,20 @@ module.exports = {
     updated_at: new Date()
   },
   {
+    rating: 5,
+    user_id: 3,
+    facility_id: 1,
+    created_at: new Date(),
+    updated_at: new Date()
+  },
+  {
+    rating: 2,
+    user_id: 2,
+    facility_id: 1,
+    created_at: new Date(),
+    updated_at: new Date()
+  },
+  {
     rating: 3,
     user_id: 2,
     facility_id: 2,

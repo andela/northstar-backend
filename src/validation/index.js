@@ -63,4 +63,22 @@ export default {
 
     return next();
   },
+
+  rememberMe: (req, res, next) => {
+    const errors = [];
+    const { rememberMe } = req.query;
+
+    if (rememberMe.toLowerCase() !== 'yes') {
+      errors.push('user profile will not be automatically retrieved. Choose "YES" to do so.');
+    }
+
+    if (errors.length) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors,
+      });
+    }
+
+    return next();
+  },
 };
