@@ -84,6 +84,40 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       },
+      {
+        user_id: 10,
+        category: 'one-way',
+        origin: 'Kumasi',
+        destination: ['manchester'],
+        departure_date: new Date(),
+        reason: 'I want to see the world before I die.',
+        booking_id: 1,
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        user_id: 10,
+        category: 'one-way',
+        origin: 'Kumasi',
+        destination: ['manchester'],
+        departure_date: new Date(),
+        reason: 'I want to see the world before I die.',
+        booking_id: 1,
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        user_id: 10,
+        category: 'one-way',
+        origin: 'Kumasi',
+        destination: ['manchester'],
+        departure_date: new Date(),
+        reason: 'I want to see the world before I die.',
+        booking_id: 1,
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+
     ], {});
 
     return queryInterface.bulkInsert('comments', [{

@@ -23,6 +23,5 @@ router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingl
 router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
 router.get('/requests', Auth.verifyToken, RequestMiddleware.prepareRequestQuery, RequestController.findAll);
 router.patch('/requests/approve/:id', auth.verifyUserToken, auth.verifyManager, validateRequests.validateRequestsID, RequestMiddleware.validateRequests, RequestController.approveRequest);
-
-
+router.get('/most-travelled', RequestController.mostTravelledDestination);
 export default router;

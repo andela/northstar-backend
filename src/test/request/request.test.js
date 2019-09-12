@@ -173,7 +173,7 @@ describe('REQUESTS', () => {
     it('it should return an error if a request does not exist', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/requests/decline/10')
+        .patch('/api/v1/requests/decline/1000')
         .set('x-access-token', adminToken)
         .end((error, data) => {
           data.should.have.status(404);
@@ -553,5 +553,32 @@ describe('/POST REQUESTS', () => {
     RequestController.createReturnTripRequest(req, res);
     (CustomErrorStub).should.have.callCount(1);
     done();
+  });
+
+  describe('/GET REQUESTS', () => {
+    it('it should return the most travelled destination', (done) => {
+      chai.request(app)
+        .get('/api/v1/most-travelled')
+        .set('Authorization', `Bearer ${user.token}`)
+        .end((error, res) => {
+          console.log('res',res)
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.keys('status', 'results','message');
+          expect(res.body.status).to.deep.equal('success');
+          done();
+        });
+    });
+    
+    it('fakes server error for most travelled Destination', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() { },
+        send() { }
+      };
+      sinon.stub(res, 'status').returnsThis();
+      RequestController.mostTravelledDestination(req, res);
+      (res.status).should.have.callCount(0);
+      done();
+    });
   });
 });

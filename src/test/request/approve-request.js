@@ -171,7 +171,7 @@ describe('REQUESTS', () => {
     it('it should return an error if a request does not exist', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/requests/approve/10')
+        .patch('/api/v1/requests/approve/1000')
         .set('x-access-token', adminToken)
         .end((error, data) => {
           data.should.have.status(404);

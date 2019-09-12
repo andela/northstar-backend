@@ -136,7 +136,7 @@ describe('Post Comments /comments', () => {
         .post('/api/v1/comments')
         .set('Authorization', myToken)
         .send({
-            request_id: 10,
+            request_id: 1000,
             comment: 'Is there a way forward?'
         })
         .end((error, res) => {

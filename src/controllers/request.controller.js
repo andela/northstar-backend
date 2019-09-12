@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
+import occurrenceCalculator from '../utils/calc.utils';
 
 const { Op } = Sequelize;
 
@@ -289,5 +290,38 @@ export default class RequestController {
         error: 'Could not retrieve trip history'
       });
     }
+  }
+
+  /**
+ *
+ * get comments associated with a travel request
+ * @param {ServerRequest} req
+ * @param {ServerResponse} res
+ * @returns {ServerResponse} response
+ */
+  static mostTravelledDestination(req, res) {
+    Request.findAll({ attributes: ['destination'], returning: true })
+      .then((data) => {
+        data = data.reduce((t, d) => t.concat(d.destination), []);
+        const results = occurrenceCalculator(data);
+        if (results) {
+          return res.status(200).json({
+            status: 'success',
+            results,
+            message: 'most Travelled Destination fetched successfully'
+          });
+        }
+        return res.status(404).json({
+          status: 'error',
+          message: 'there is no most travelled destination for now'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          status: 'error',
+          message: err.message,
+          info: 'Internal Server Error',
+        });
+      });
   }
 }
