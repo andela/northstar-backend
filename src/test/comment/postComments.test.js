@@ -2,14 +2,16 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import app from '../../index';
-import commentController from '../../controllers/comment.controller';
-import commentMiddleware from '../../middlewares/comment.middleware';
+import models from '../../db/models/index';
+const { Request, Comment, Notification } = models;
 
 const { expect } = chai;
 
 chai.use(chaiHttp);
 
 let myToken;
+let managerToken;
+let userWithoutManagerToken;
 
 before((done) => {
   chai.request(app)
@@ -20,35 +22,31 @@ before((done) => {
     })
     .end((err, res) => {
       myToken = res.body.data.token;
-      done();
     });
+
+  chai.request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'bola.akin@email.com',
+      password: 'bolaji99'
+    })
+    .end((err, res) => {
+      managerToken = res.body.data.token;
+    });  
+
+  chai.request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'peter_koke@email.com',
+      password: 'asdfghjkl'
+    })
+    .end((err, res) => {
+      userWithoutManagerToken = res.body.data.token;
+    });  
+    done();
 });
 
 describe('Post Comments /comments', () => {
-    it('Should fake controller server error', (done) => {
-        const req = { body: {} };
-        const res = {
-          status(){},
-          send(){}
-        };
-        sinon.stub(res, 'status').returnsThis();
-        commentController.postComment(req, res);
-        (res.status).should.have.callCount(0);
-        done();
-      });
-
-    it('Should fake middleware server error', (done) => {
-        const req = { body: {} };
-        const res = {
-          status(){},
-          send(){}
-        };
-        sinon.stub(res, 'status').returnsThis();
-        commentMiddleware.ensureUserCanPost(req, res);
-        (res.status).should.have.callCount(0);
-        done();
-      });
-
     it('Should send a 401 error if authorization token was not provided', (done) => {
         chai.request(app)
         .post('/api/v1/comments')
@@ -152,9 +150,9 @@ describe('Post Comments /comments', () => {
     it('Should send a 403 error if request does not belong to user', (done) => {
         chai.request(app)
         .post('/api/v1/comments')
-        .set('Authorization', myToken)
+        .set('Authorization', userWithoutManagerToken)
         .send({
-            request_id: 3,
+            request_id: 2,
             comment: 'Is there a way forward?'
         })
         .end((error, res) => {
@@ -168,9 +166,9 @@ describe('Post Comments /comments', () => {
     it('Should send a 403 error is user is neither the manager or owner of the request', (done) => {
         chai.request(app)
         .post('/api/v1/comments')
-        .set('Authorization', myToken)
+        .set('Authorization', userWithoutManagerToken)
         .send({
-            request_id: 3,
+            request_id: 2,
             comment: 'Is there a way forward?'
         })
         .end((error, res) => {
@@ -195,6 +193,7 @@ describe('Post Comments /comments', () => {
             expect(res.body.data).to.be.an('object');
             expect(res.body.data).to.have
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
+            expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
         });    
     });
@@ -213,6 +212,7 @@ describe('Post Comments /comments', () => {
             expect(res.body.data).to.be.an('object');
             expect(res.body.data).to.have
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
+            expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
         });    
     });
@@ -231,6 +231,7 @@ describe('Post Comments /comments', () => {
             expect(res.body.data).to.be.an('object');
             expect(res.body.data).to.have
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
+            expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
         });    
     });
@@ -249,6 +250,79 @@ describe('Post Comments /comments', () => {
             expect(res.body.data).to.be.an('object');
             expect(res.body.data).to.have
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
+            expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
+            done();
+        });    
+    });
+
+    it('Should post comment if user is the manager of the request\s owner', (done) => {
+        chai.request(app)
+        .post('/api/v1/comments')
+        .send({
+            request_id: 2,
+            comment: 'Please what is the status?',
+            authorization: managerToken
+        })
+        .end((error, res) => {
+            expect(res).to.have.status(201);
+            expect(res.body.status).to.deep.equal('success');
+            expect(res.body.data).to.be.an('object');
+            expect(res.body.data).to.have
+                .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
+            expect(res.body.message).to.deep.equal('A notification was sent to the request\'s owner.');
+            done();
+        });    
+    });
+
+    it('Should fake request server error', (done) => {
+        const stub = sinon.stub(Request, 'findByPk').throws(new Error());
+        chai.request(app)
+        .post('/api/v1/comments')
+        .send({
+            request_id: 2,
+            comment: 'Can a notification be sent?',
+            authorization: myToken
+        })
+        .end((error, res) => {
+            stub.restore();
+            expect(res).to.have.status(500);
+            done();
+        });    
+    });
+
+    it('Should fake comments error', (done) => {
+        const stub = sinon.stub(Comment, 'create').throws(new Error());
+        chai.request(app)
+        .post('/api/v1/comments')
+        .send({
+            request_id: 2,
+            comment: 'Can a notification be sent?',
+            authorization: myToken
+        })
+        .end((error, res) => {
+            stub.restore();
+            expect(res).to.have.status(500);
+            done();
+        });    
+    });
+
+    it('Should fake notification error', (done) => {
+        const stub = sinon.stub(Notification, 'create').throws(new Error());
+        chai.request(app)
+        .post('/api/v1/comments')
+        .send({
+            request_id: 2,
+            comment: 'Can a notification be sent?',
+            authorization: myToken
+        })
+        .end((error, res) => {
+            stub.restore();
+            expect(res).to.have.status(201);
+            expect(res.body.status).to.deep.equal('success');
+            expect(res.body.data).to.be.an('object');
+            expect(res.body.data).to.have
+                .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
+            expect(res.body.message).to.deep.equal('Could not send notification.');
             done();
         });    
     });

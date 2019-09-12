@@ -72,6 +72,9 @@ export default class AuthenticationMiddleware {
       const isPermitted = (user.id === request.user_id)
                             || (user.id === request.User.manager_id);
 
+      // make request available to the next middleware
+      req.body.requestData = request;
+
       return isPermitted
         ? next()
         : res.status(403).json({

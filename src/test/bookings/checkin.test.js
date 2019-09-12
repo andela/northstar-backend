@@ -1,6 +1,10 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import sinon from 'sinon';
 import app from '../../index';
+import models from '../../db/models/index';
+
+const { Booking } = models;
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -82,6 +86,18 @@ describe('Bookings', () => {
                 expect(res.body.status).to.deep.equal('success');
                 expect(res.body.data).to.have.keys('id', 'user_id', 'room_id', 'departure_date', 'return_date', 'checked_in', 'createdAt', 'updatedAt');
                 expect(res.body.data.checked_in).to.be.true;
+                done();
+            });
+        });
+
+        it('Should fake server error', (done) => {
+            const stub = sinon.stub(Booking, 'update').throws(new Error());
+            chai.request(app)
+            .patch('/api/v1/bookings/1/checkin')
+            .set('Authorization', myToken)
+            .end((error, res) => {
+                stub.restore();
+                expect(res).to.have.status(500);
                 done();
             });
         });
