@@ -12,7 +12,7 @@ const { expect } = chai;
 
 describe("Requests", () => {
  let token;
- before("signup to get access userToken", async () => {
+ before("signup to get access userToken", (done) => {
    const user = {
      email: "chiwe@gmail.com",
      first_name: "Chinwe",
@@ -25,11 +25,14 @@ describe("Requests", () => {
      preferred_currency: "USD",
      location: "lagos"
    };
-   const userRes = await chai
-     .request(app)
+   
+  chai.request(app)
      .post("/api/v1/auth/signup")
-     .send(user);
-   token = userRes.body.data.token;
+     .send(user)
+     .end((error, res) => {
+       token = res.body.data.token;
+       done();
+     });
  });
  describe("/POST multi city request", () => {
    const requestData = {

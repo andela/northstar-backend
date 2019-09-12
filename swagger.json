@@ -38,6 +38,10 @@
       "description": "Endpoints for Requests"
     },
     {
+      "name": "Bookings",
+      "description": "Endpoints associated with bookings"
+    },
+    {
       "name": "Facilities",
       "description": "Endpoints for Facilities"
     },
@@ -326,6 +330,32 @@
         }
       }
     },
+    "/bookings/:booking_id": {
+      "patch":{
+        "description": "A user can check into a facility",
+        "summary": "A user should be able to check into a facility so that he/she can have the permission to rate or give feedback on a facility",
+        "tags": ["Bookings"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "params",
+            "name": "params",
+            "required": true,
+            "description": "The unique identifier of a booking"
+          }
+        ],
+        "responses": {
+          "200": "success",
+          "401": "Authentication error",
+          "403": "Authorization error",
+          "404": "Booking not found",
+          "422": "Validation error",
+          "500": "Server error"
+        }
+      }
+    },
+
     "/facilities": {
       "get": {
         "description": "An one can get all requests on barefoot nomad",
