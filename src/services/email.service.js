@@ -8,7 +8,8 @@ const templates = {
   travel_request_notification: 'd-963a476c77a34f318895713712b4d6bb',
   signup_template: 'd-1ae0bd2e62c742e9a78009512bd1b5b8',
   request_rejected: 'd-ccd25aa2dd9f47cb9d746d909787db59',
-  passord_reset: 'd-0e43d73f3e3048bba2d124ff5f384107'
+  passord_reset: 'd-0e43d73f3e3048bba2d124ff5f384107',
+  request_approved: 'd-ba9b6d3c27d1452f88bc0cf4351cca22'
 
 };
 
