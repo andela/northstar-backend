@@ -14,7 +14,8 @@ const authBase = '/api/v1/auth';
 describe('SOCIAL AUTHENTICATION', () => {
   describe('SUCCESS', () => {
     it('should save a google user into the database', async () => {
-      const stub = sinon.stub(sgMail, 'send').callsFake((msg) => 'done');
+      // The catch block for the email service file isn't running yet, make it
+      const stub = sinon.stub(sgMail, 'send').throws(new Error());
       const res = await chai.request(app)
         .post(`${authBase}/google`)
         .send({ provider: 'google' });

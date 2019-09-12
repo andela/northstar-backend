@@ -1,3 +1,5 @@
+const invalidDateError = 'Invalid date. Please ensure the date in the format YYYY-MM-DD';
+
 export default {
   checkForEmptyFields: (field, value) => {
     if (!value) return [`${field} is required`];
@@ -35,5 +37,20 @@ export default {
     }
 
     return values;
+  },
+
+  /**
+  * Validates the format
+  * @param {object} fields
+  * @param {object} errors
+  * @param {string} errorMessage
+  * @returns {undefined}
+  */
+  validateDatesFieldFormat(fields, errors, errorMessage = invalidDateError) {
+    // eslint-disable-next-line no-useless-escape
+    const dateRegex = /^[1-9]\d{3}\-(?:0[1-9]|1[0-2])\-(?:0[1-9]|[12][0-9]|3[01])$/;
+    Object.entries(fields).forEach(([key, value]) => {
+      if (!dateRegex.test(value)) errors[key] = errorMessage;
+    });
   }
 };

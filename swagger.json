@@ -714,6 +714,59 @@
           }
         }
       }
+    },
+    "/facilities/rooms/{room_id}/book": {
+      "post": {
+        "tags": ["Facilities"],
+        "summary": "Book an accomodation facility",
+        "description": "This endpoint receives POST requests to book a room in a facility.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the room to be booked",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "The request body consisting of a \"departure_date\" field and a \"return_date\" field.",
+            "schema": {
+              "$ref":"#/requestBody/bookRoom"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request. Invalid date fields, or date fields (or combination) not logical"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Referenced room not found"
+          },
+          "409": {
+            "description": "Booking dates conflict with an existing booking for same room"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "requestBody": {
@@ -1114,6 +1167,27 @@
         "data": {
           "message": "comment deleted successfully"
         }
+      }
+    },
+    "bookRoom": {
+      "title": "Book an accomodation",
+      "type": "object",
+      "required": ["departure_date", "return_date"],
+      "properties": {
+        "departure_date": {
+          "description": "The date from which the booking will be effective",
+          "type": "string",
+          "format": "date"
+        },
+        "return_date": {
+          "description": "The date at which the booking will cease to be effective",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "example": {
+        "departure_date": "2019-10-22",
+        "return_date": "2020-02-19"
       }
     }
   }

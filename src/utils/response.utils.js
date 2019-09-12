@@ -87,4 +87,17 @@ export default class {
       error: { message }
     });
   }
+
+  /**
+   * Defines the specification for conflicting resource
+   * @param {object} res (ServerResponse)
+   * @param {object} error
+   * @returns {object} ServerResponse
+   */
+  static ConflictError(res, error) {
+    return res.status(409).json({
+      status: 'error',
+      error
+    });
+  }
 }

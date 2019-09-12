@@ -1,3 +1,7 @@
+import sequelize from 'sequelize';
+
+const { Op } = sequelize;
+
 /**
  * Defines helper functions for the facility model
  */
@@ -50,5 +54,29 @@ export default class FacilityUtils {
       if (reqBody[key]) valuesToPost[key] = reqBody[key];
     });
     return valuesToPost;
+  }
+
+  /**
+   * Builds the query object that fetches an existing booking for an
+   * accomodation that conflicts with the present booking being sought
+   * @param {number} room_id
+   * @param {string} departure_date
+   * @param {string} return_date
+   * @returns {object} formatted query object
+   */
+  static getConflictingBookingQuery(room_id, departure_date, return_date) {
+    return {
+      // The goal is to build a query that checks if dates and intervals of a new
+      // booking about to be made conflicts with an existing booking's for same room
+      where: {
+        room_id,
+        [Op.and]: {
+          [Op.or]: [sequelize.literal(`'${departure_date}' between departure_date and return_date`),
+            sequelize.literal(`'${return_date}' between departure_date and return_date`),
+            sequelize.literal(`departure_date between '${departure_date}' and '${return_date}'`),
+            sequelize.literal(`return_date between '${departure_date}' and '${return_date}'`)],
+        }
+      }
+    };
   }
 }
