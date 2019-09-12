@@ -1,9 +1,14 @@
-import helpers from '../utils/helpers.utils';
-import numberRegex from '../utils/regexen.utils';
+/* eslint-disable no-irregular-whitespace */
+import helpers from '../utils/helpers.utils';
+import numberRegex from '../utils/regexen.utils';
 
-const {
-  checkForEmptyFields, checkPatternedFields, fieldNotNeeded, trimValues
-} = helpers;
+const {
+  checkForEmptyFields,
+  checkPatternedFields,
+  fieldNotNeeded,
+  trimValues,
+} = helpers;
+
 
 export default {
   Requests: (req, res, next) => {
@@ -62,5 +67,5 @@ export default {
     }
 
     return next();
-  },
+  }
 };

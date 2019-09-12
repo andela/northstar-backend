@@ -73,4 +73,17 @@ export default class {
       error: { message }
     });
   }
+
+  /**
+   * Defines the specification for 404 server errors
+   * @param {ServerResponse} res
+   * @param {string} message
+   * @returns {ServerResponse} response
+   */
+  static ValidationError(res, message) {
+    return res.status(404).json({
+      status: 'error',
+      error: { message }
+    });
+  }
 }

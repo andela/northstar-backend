@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 export default {
   checkForEmptyFields: (field, value) => {
     if (!value) return [`${field} is required`];
@@ -35,5 +37,7 @@ export default {
     }
 
     return values;
-  }
+  },
+
+
 };

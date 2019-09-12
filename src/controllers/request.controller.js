@@ -1,6 +1,7 @@
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
+import valuesToUpdate from '../utils/request.utils';
 
 const { Request, User, Booking } = models;
 /**
@@ -204,6 +205,54 @@ export default class RequestController {
       return Response.Success(res, request);
     } catch (error) {
       next(new Error('Internal server error'));
+    }
+  }
+
+  /**
+   * @method
+   *
+   * @param {object} req
+   * @param {object} res
+   *
+   * @returns {object} server response
+   */
+  static async editRequest(req, res) {
+    try {
+      const requestObject = valuesToUpdate(req.body);
+      const { user_id } = req.body;
+      const { request_id: id } = req.params;
+
+      // delete req.body.user_id;
+      // delete req.body.role;
+
+      const updatedRequest = await Request.update(
+        requestObject,
+        {
+          where: { id, user_id },
+          returning: true
+        }
+      );
+
+      if (!updatedRequest) {
+        return res
+          .status(400)
+          .json({
+            status: 'error',
+            error: {
+              message: 'No request with this rßequest id exists.'
+            },
+          });
+      }
+      return Response.Success(res, updatedRequest, 200);
+    } catch (error) {
+      console.log(error);
+      Response.CustomError(
+        res,
+        500,
+        'error',
+        'Request failed. Please see information below.',
+        error.message
+      );
     }
   }
 }
