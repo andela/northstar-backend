@@ -4,9 +4,12 @@ import facilitiesController from '../../controllers/facilities.controller';
 import validateFacilities from '../../validation/facilities/facilities.validation';
 import validateRooms from '../../validation/facilities/rooms.validation';
 import FacilitiesChecks from '../../middlewares/facilities.middleware';
+import validateOneFacility from '../../validation/facilities/oneFacility.validator';
 
 
 const router = express.Router();
+
+router.get('/facilities/:facility_id', auth.verifyUserToken, validateOneFacility, facilitiesController.getOne);
 
 /* Requests Routes Here */
 router.post('/facilities/:facility_id/:like',

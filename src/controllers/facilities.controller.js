@@ -11,6 +11,32 @@ const {
  */
 export default class FacilitiesController {
   /**
+     * Retrieves one facility
+     * @param {Object} req
+     * @param {Object} res
+     * @param {Callback} next
+     * @returns {JSON} facility
+     */
+  static async getOne(req, res, next) {
+    const { facility_id } = req.params;
+    try {
+      const facility = await Facility.findByPk(facility_id, {
+        include: [{ model: Like }]
+      });
+
+      return facility
+        ? res.status(200).json({
+          status: 'success',
+          data: facility
+        })
+        : res.status(404).json({
+          status: 'error',
+          error: 'Facility not found.'
+        });
+    } catch (error) { next(error); }
+  }
+
+  /**
    * @param {object} req The facility details
    * @param {object} res The facility details returned after listing a facility
    * @returns {object} A newly created facility
