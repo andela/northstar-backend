@@ -22,11 +22,9 @@ export default class CommentController {
         comment,
         user_id: user.id
       });
-
-      res.status(201).json({
-        status: 'success',
-        data: postedComment
-      });
+      // sends the comment data to the notification middleware
+      req.body.commentData = postedComment;
+      return next(); // calls the notification middleware
     } catch (error) { next(error); }
   }
 
