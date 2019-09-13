@@ -1,8 +1,14 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable require-jsdoc */
+import validationHelpers from './helpers.utils';
+
+/**
+ * Function to check if an array is an array of strings
+ * @param {string} value
+ * @param {string} message
+ * @return {(error|bool)} returns error or true
+ */
 function isValidArray(value, message) {
   if (typeof value === 'string') {
-    value = value.replace(/[\[\]"' ]+/g, '').split(',');
+    value = validationHelpers.trimArrayValues(value.replace(/[[\]"']+/g, '').split(','));
   }
 
   const isArrayOfValidStrings = value.every((item) => item && typeof item === 'string');
@@ -10,6 +16,7 @@ function isValidArray(value, message) {
   if (!Array.isArray(value) || !isArrayOfValidStrings) {
     throw new Error(message);
   }
+
   return true;
 }
 

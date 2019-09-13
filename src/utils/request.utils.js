@@ -1,7 +1,7 @@
 const getValuestoUpdate = (reqObject) => {
   const permittedValues = [
     'destination',
-    'depature_date',
+    'departure_date',
     'return_date',
     'origin',
     'reason',

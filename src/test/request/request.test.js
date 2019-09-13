@@ -276,6 +276,40 @@ const newRequest4 = {
     booking_id: '2654'
 };
 
+const newRequest5 = {
+    category: 'round-trip',
+    origin: 'Lagos',
+    destination: ['Abuja','Onitsha'],
+    departure_date: '2019-09-29',
+    return_date:'2019-10-30',
+    reason: 'For the fun of it',
+    booking_id: '1'
+};
+
+
+const newRequest6 = {
+    category: 'one-way',
+    origin: 'Lagos',
+    destination: ['Abuja'],
+    departure_date: '2019-09-29',
+    return_date:'2019-10-30',
+    reason: 'For the fun of it',
+    booking_id: '1'
+};
+
+const newRequest7 = {
+    category: 'one-way',
+    origin: 'Lagos',
+    destination: ['Abuja','Onitsha'],
+    departure_date: '2019-09-29',
+    reason: 'For the fun of it',
+    booking_id: '1'
+};
+
+
+
+
+
 
 describe('/GET REQUESTS', () => {
 
@@ -560,3 +594,48 @@ describe('/POST REQUESTS', () => {
         done();
     });
 });
+
+describe('/PATCH REQUESTS', () =>{
+
+    it('should return 200 with valid updated request data', (done) => {
+        chai.request(app)
+            .patch(`${requestEndpoint}/7`)
+            .set('Authorization', `Bearer ${user.token}`) 
+            .send(newRequest5)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('success');
+                res.body.data.should.have.property('id');
+                done();
+            });
+    });
+
+    it('should not update one-way trips with return_date', (done) => {
+        chai.request(app)
+            .patch(`${requestEndpoint}/7`)
+            .set('Authorization', `Bearer ${user.token}`) 
+            .send(newRequest6)
+            .end((err, res) => {
+                console.log(res.body);
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
+    });
+
+    it('should not update one-way trips with more than one destinations', (done) => {
+        chai.request(app)
+            .patch(`${requestEndpoint}/7`)
+            .set('Authorization', `Bearer ${user.token}`) 
+            .send(newRequest7)
+            .end((err, res) => {
+                console.log(res.body);
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                done();
+            });
+    });
+})

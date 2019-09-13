@@ -2,6 +2,7 @@ import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
 import valuesToUpdate from '../utils/request.utils';
+import extractDate from '../utils/extractDate.utils';
 
 const { Request, User, Booking } = models;
 /**
@@ -219,34 +220,28 @@ export default class RequestController {
   static async editRequest(req, res) {
     try {
       const requestObject = valuesToUpdate(req.body);
-      const { user_id } = req.body;
-      const { request_id: id } = req.params;
 
-      // delete req.body.user_id;
-      // delete req.body.role;
-
-      const updatedRequest = await Request.update(
-        requestObject,
-        {
-          where: { id, user_id },
-          returning: true
-        }
-      );
-
-      if (!updatedRequest) {
-        return res
-          .status(400)
-          .json({
-            status: 'error',
-            error: {
-              message: 'No request with this rßequest id exists.'
-            },
-          });
+      /*
+        Remove existing return_date if trip category is
+        changed to one-way trip
+       */
+      if (requestObject.category === 'one-way') {
+        requestObject.return_date = null;
       }
+
+      const updatedRequest = await req.existingRequest.update(requestObject, { returning: true });
+
+      if (updatedRequest.dataValues.return_date) {
+        updatedRequest.dataValues.return_date = extractDate(updatedRequest.get('return_date'));
+      } else {
+        delete updatedRequest.dataValues.return_date;
+      }
+
+      updatedRequest.dataValues.departure_date = extractDate(updatedRequest.get('departure_date'));
+
       return Response.Success(res, updatedRequest, 200);
     } catch (error) {
-      console.log(error);
-      Response.CustomError(
+      return Response.CustomError(
         res,
         500,
         'error',

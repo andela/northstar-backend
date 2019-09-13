@@ -23,7 +23,7 @@ router.patch('/requests/decline/:id',
 router.get('/requests', Auth.verifyToken, RequestController.findAll);
 router.post('/requests', Auth.verifyToken, Validator.Requests, RequestController.TripRequests);
 router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingleRequest);
-router.patch('/requests/:request_id', Auth.verifyToken, validate(requestSchema), requestChecks.checkRequestStatus, RequestController.editRequest);
+router.patch('/requests/:request_id', Auth.verifyToken, requestChecks.checkRequestStatus, validate(requestSchema), RequestController.editRequest);
 router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
 
 export default router;

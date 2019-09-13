@@ -81,7 +81,7 @@ export default class {
    * @returns {ServerResponse} response
    */
   static ValidationError(res, message) {
-    return res.status(404).json({
+    return res.status(400).json({
       status: 'error',
       error: { message }
     });

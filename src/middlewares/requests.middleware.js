@@ -15,29 +15,34 @@ const requestChecks = {
   },
 
   async checkRequestStatus(req, res, next) {
-    const existingRequest = await Request.findByPk(req.params.id);
+    const existingRequest = await Request.findByPk(req.params.request_id);
 
-    // if (existingRequest) {
-    //   return res.status(404).json({
-    //     status: 'error',
-    //     error: 'Request not found'
-    //   });
-    // }
+    if (!existingRequest) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'Request not found'
+      });
+    }
 
     const isOwner = (existingRequest.user_id === req.body.user_id);
-    if (isOwner) {
+
+    if (!isOwner) {
       return res.status(403).json({
         status: 'error',
         error: ' You cannot edit this request'
       });
     }
 
-    return existingRequest.status === 'pending'
-      ? next()
-      : res.status(400).json({
+    if (!(existingRequest.status === 'pending')) {
+      res.status(400).json({
         status: 'error',
         error: 'You cannot update a request that is not pending'
       });
+    }
+
+    req.existingRequest = existingRequest;
+
+    return next();
   }
 };
 
