@@ -236,6 +236,10 @@ const user = {
     password: 'qwertyuiop'
 };
 
+const user2 = {
+    email: 'h.milan@email.com',
+    password: 'milanogelato'
+};
 
 const newRequest = {
     category: 'one-way',
@@ -306,9 +310,15 @@ const newRequest7 = {
     booking_id: '1'
 };
 
-
-
-
+const newRequest8 = {
+    category: 'round-trip',
+    origin: 'Lagos',
+    destination: ['Abuja','Onitsha'],
+    departure_date: '2019-09-29',
+    return_date:'2019-10-30',
+    reason: 'For the fun of it',
+    booking_id: '1',
+};
 
 
 describe('/GET REQUESTS', () => {
@@ -319,6 +329,17 @@ describe('/GET REQUESTS', () => {
             .send(user)
             .end((err, res) => {
                 user.token = res.body.data.token;
+                res.should.have.status(200);
+                done();
+            })
+    });
+
+    it('should login and return the token', (done) => {
+        chai.request(app)
+            .post(loginEndpoint)
+            .send(user2)
+            .end((err, res) => {
+                user2.token = res.body.data.token;
                 res.should.have.status(200);
                 done();
             })
@@ -591,6 +612,7 @@ describe('/POST REQUESTS', () => {
 
         RequestController.createReturnTripRequest(req, res);
         (CustomErrorStub).should.have.callCount(1);
+        sinon.restore();
         done();
     });
 });
@@ -617,13 +639,14 @@ describe('/PATCH REQUESTS', () =>{
             .set('Authorization', `Bearer ${user.token}`) 
             .send(newRequest6)
             .end((err, res) => {
-                console.log(res.body);
                 res.should.have.status(400);
                 res.body.should.be.an('object');
                 res.body.should.have.property('status').eql('error');
+                res.body.error.message.should.have.property('return_date').eql('Return date is not required for one-way trips');
                 done();
             });
     });
+
 
     it('should not update one-way trips with more than one destinations', (done) => {
         chai.request(app)
@@ -631,11 +654,70 @@ describe('/PATCH REQUESTS', () =>{
             .set('Authorization', `Bearer ${user.token}`) 
             .send(newRequest7)
             .end((err, res) => {
-                console.log(res.body);
                 res.should.have.status(400);
                 res.body.should.be.an('object');
                 res.body.should.have.property('status').eql('error');
+                res.body.error.message.should.have.property('destination').eql('One way trips can only have one destination');
                 done();
             });
+    });
+
+    it('should not update a request with wrong user_id', (done) => {
+        chai.request(app)
+            .patch(`${requestEndpoint}/1`)
+            .set('Authorization', `Bearer ${user.token}`) 
+            .send(newRequest8)
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                res.body.should.have.property('error').eql('You cannot edit this request');
+                done();
+            });
+    });
+
+    it('should not update a request with wrong user_id', (done) => {
+        chai.request(app)
+            .patch(`${requestEndpoint}/1`)
+            .set('Authorization', `Bearer ${user.token}`) 
+            .send(newRequest8)
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                res.body.should.have.property('error').eql('You cannot edit this request');
+                done();
+            });
+    });
+
+    it('should not update a request with wrong user_id', (done) => {
+        chai.request(app)
+            .patch(`${requestEndpoint}/1`)
+            .set('Authorization', `Bearer ${user2.token}`) 
+            .send(newRequest8)
+            .end((err, res) => {
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');
+                res.body.should.have.property('error').eql('You cannot update a request that is not pending');
+                done();
+            });
+    });
+
+
+
+    it('should call Response.customError for server error on editRequest controller', (done) => {
+        const req = { body: {} };
+        const res = {
+            status() {},
+            send() {}
+        };
+         sinon.stub(Request, 'update').throws();
+        const CustomErrorStub = sinon.stub(Response, 'CustomError').returnsThis();
+
+        RequestController.editRequest(req, res);
+        (CustomErrorStub).should.have.callCount(1);
+        sinon.restore();
+        done();
     });
 })

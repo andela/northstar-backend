@@ -29,7 +29,7 @@ const requestChecks = {
     if (!isOwner) {
       return res.status(403).json({
         status: 'error',
-        error: ' You cannot edit this request'
+        error: 'You cannot edit this request'
       });
     }
 

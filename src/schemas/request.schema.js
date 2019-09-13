@@ -1,7 +1,6 @@
 import { check } from 'express-validator';
 import isISO8601 from 'validator/lib/isISO8601';
 import isAfter from 'validator/lib/isAfter';
-
 import isNotEmpty from '../utils/isNotEmpty.utils';
 import isBeforeDate from '../utils/isBeforeDate.utils';
 import isValidArray from '../utils/isValidArray.utils';
