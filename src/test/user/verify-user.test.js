@@ -1,9 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import sinon from 'sinon';
+import Sinonchai from 'sinon-chai';
 import app from '../../index';
-import UsersController from "../../controllers/user.controller";
-import sinon from "sinon";
-import Sinonchai from "sinon-chai";
+import UsersController from '../../controllers/user.controller';
 
 chai.use(chaiHttp);
 chai.use(Sinonchai);
@@ -42,14 +42,14 @@ describe('Verify User', () => {
         });
     });
 
-    it('fakes server error for Verification', done => {
+    it('fakes server error for Verification', (done) => {
       const req = { body: {} };
       const res = {
         status() { },
         send() { }
       };
 
-      sinon.stub(res, "status").returnsThis();
+      sinon.stub(res, 'status').returnsThis();
 
       UsersController.verifyUser(req, res);
       res.status.should.have.callCount(1);

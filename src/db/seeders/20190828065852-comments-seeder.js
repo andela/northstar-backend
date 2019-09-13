@@ -7,7 +7,6 @@ module.exports = {
         origin: 'Paris',
         destination: ['lagos'],
         departure_date: new Date(),
-        // return_date: new Date(),
         reason: 'I am tired of this office',
         booking_id: 1,
         created_at: new Date(),

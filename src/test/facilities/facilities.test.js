@@ -1,11 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcrypt';
+import sinon from 'sinon';
+import Sinonchai from 'sinon-chai';
 import app from '../../index';
 import models from '../../db/models';
-import FacilitiesController from "../../controllers/facilities.controller";
-import sinon from "sinon";
-import Sinonchai from "sinon-chai";
+import FacilitiesController from '../../controllers/facilities.controller';
 
 chai.use(chaiHttp);
 chai.should();
@@ -22,15 +22,15 @@ const newUser = {
 };
 
 const facility = {
-  name: "48989",
-  street: "34 Idu",
-  city: "Abuja",
-  country: "Nigeria",
-  address: "Otolo, Nnewi",
+  name: '48989',
+  street: '34 Idu',
+  city: 'Abuja',
+  country: 'Nigeria',
+  address: 'Otolo, Nnewi',
   number_of_rooms: 8,
   available_space: 7,
-  images: "https://cloudinary.com/16x16/1.png,https://cloudinary.com/16x16/1.png",
-  description: "Our services are the best"
+  images: 'https://cloudinary.com/16x16/1.png,https://cloudinary.com/16x16/1.png',
+  description: 'Our services are the best'
 };
 
 let testUser;
@@ -188,7 +188,7 @@ describe('FACILITIES', () => {
       chai.request(app)
         .post(route)
         .send({
-          name: "T",
+          name: 'T',
           address: 'Otolo, Nnewi',
           number_of_rooms: 8,
           available_space: 7,
@@ -212,7 +212,7 @@ describe('FACILITIES', () => {
       chai.request(app)
         .post(route)
         .send({
-          name: "Towers",
+          name: 'Towers',
           address: 'Otolo, Nnewi',
           number_of_rooms: 8,
           available_space: 7,
@@ -761,14 +761,14 @@ describe('FACILITIES', () => {
       done();
     });
 
-    it("fakes server error", done => {
+    it('fakes server error', (done) => {
       const req = { body: {} };
       const res = {
         status() {},
         send() {}
       };
 
-      sinon.stub(res, "status").returnsThis();
+      sinon.stub(res, 'status').returnsThis();
 
       FacilitiesController.createRoom(req, res);
       res.status.should.have.callCount(0);
@@ -778,7 +778,7 @@ describe('FACILITIES', () => {
 
   // Anyone can get all facilities on barefoot nomad
   describe('/GET Anyone can get all facilities on barefoot nomad', () => {
-    afterEach("restore sinon", () => {
+    afterEach('restore sinon', () => {
       sinon.restore();
     });
 
@@ -802,18 +802,18 @@ describe('FACILITIES', () => {
           expect(res).to.have.status(404);
           expect(res.body).to.have.keys('status', 'message');
           expect(res.body.status).to.deep.equal('success');
-          expect(res.body.message).to.deep.equal("There is no facilities listed on barefoot nomad at this time");
+          expect(res.body.message).to.deep.equal('There is no facilities listed on barefoot nomad at this time');
           done();
         });
     });
 
-    it("fakes server error", done => {
+    it('fakes server error', (done) => {
       const req = { body: {} };
       const res = {
         status() { },
         send() { }
       };
-      sinon.stub(res, "status").returnsThis();
+      sinon.stub(res, 'status').returnsThis();
       FacilitiesController.getAllFacilities(req, res);
       res.status.should.have.callCount(0);
       done();

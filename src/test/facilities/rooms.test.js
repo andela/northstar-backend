@@ -1,11 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcrypt';
+import sinon from 'sinon';
+import Sinonchai from 'sinon-chai';
 import app from '../../index';
 import models from '../../db/models';
-import RoomsController from "../../controllers/facilities.controller";
-import sinon from "sinon";
-import Sinonchai from "sinon-chai";
+import RoomsController from '../../controllers/facilities.controller';
 
 chai.use(chaiHttp);
 chai.should();
@@ -223,7 +223,7 @@ describe('FACILITIES/ROOMS', () => {
         });
     });
 
-     it('Should send a 422 error if room type is not a string', (done) => {
+    it('Should send a 422 error if room type is not a string', (done) => {
       chai.request(app)
         .post(route)
         .send({
@@ -365,14 +365,14 @@ describe('FACILITIES/ROOMS', () => {
       done();
     });
 
-    it("fakes server error", done => {
+    it('fakes server error', (done) => {
       const req = { body: {} };
       const res = {
         status() { },
         send() { }
       };
 
-      sinon.stub(res, "status").returnsThis();
+      sinon.stub(res, 'status').returnsThis();
 
       RoomsController.createRoom(req, res);
       res.status.should.have.callCount(0);

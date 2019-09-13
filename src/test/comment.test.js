@@ -1,8 +1,8 @@
 import chai from 'chai';
-import app from '../index';
-import JWTService from '../services/jwt.service';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
+import app from '../index';
+import JWTService from '../services/jwt.service';
 
 import CommentController from '../controllers/comment.controller';
 
@@ -179,5 +179,4 @@ describe('Comments', () => {
       done();
     });
   });
-
 });

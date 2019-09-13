@@ -2,7 +2,7 @@ import models from '../db/models';
 import Response from '../utils/response.utils';
 
 const {
-  Feedback, Rating, Facility, Check_in
+  Feedback, Rating, Facility, Booking
 } = models;
 
 /**
@@ -42,7 +42,9 @@ export default class RatingAndFeedbackController {
       }
 
       // if facility exists, check if user has checked in
-      const hasCheckedIn = await Check_in.findAll({ where: { user_id, facility_id } });
+      const hasCheckedIn = await Booking.findAll({
+        where: { user_id, facility_id, checked_in: true }
+      });
 
       // if user hasn't checked in, return error message
       if (!hasCheckedIn.length) {

@@ -32,7 +32,7 @@ before((done) => {
     })
     .end((err, res) => {
       managerToken = res.body.data.token;
-    });  
+    });
 
   chai.request(app)
     .post('/api/v1/auth/signin')
@@ -42,7 +42,7 @@ before((done) => {
     })
     .end((err, res) => {
       userWithoutManagerToken = res.body.data.token;
-    });  
+    });
     done();
 });
 
@@ -75,9 +75,9 @@ describe('Post Comments /comments', () => {
             expect(res.body.status).to.deep.equal('error');
             expect(res.body.error).to.deep.equal('Invalid authentication token.')
             done();
-        });    
+        });
     });
-    
+
     it('Should send a 422 error if request_id is not an integer', (done) => {
         chai.request(app)
         .post('/api/v1/comments')
@@ -92,7 +92,7 @@ describe('Post Comments /comments', () => {
             expect(res.body.error[0].field).to.deep.equal('request_id');
             expect(res.body.error[0].message).to.deep.equal('Invalid request id.');
             done();
-        });    
+        });
     });
 
     it('Should send a 422 error if comment is was not provided', (done) => {
@@ -108,7 +108,7 @@ describe('Post Comments /comments', () => {
             expect(res.body.error[0].field).to.deep.equal('comment');
             expect(res.body.error[0].message).to.deep.equal('Please enter comment.');
             done();
-        });    
+        });
     });
 
     it('Should send a 422 error if comment is more than 350 characters', (done) => {
@@ -128,7 +128,7 @@ describe('Post Comments /comments', () => {
             expect(res.body.error[0].field).to.deep.equal('comment');
             expect(res.body.error[0].message).to.deep.equal('Too long. Enter a maximum of 350 characters');
             done();
-        });    
+        });
     });
 
     it('Should send a 404 error if request does not exist', (done) => {
@@ -195,7 +195,7 @@ describe('Post Comments /comments', () => {
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
             expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
-        });    
+        });
     });
 
     it('Should post comment if token was sent from the req.body', (done) => {
@@ -214,7 +214,7 @@ describe('Post Comments /comments', () => {
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
             expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
-        });    
+        });
     });
 
     it('Should post comment if token was sent from the req.headers.token', (done) => {
@@ -233,7 +233,7 @@ describe('Post Comments /comments', () => {
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
             expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
-        });    
+        });
     });
 
     it('Should post comment if token was sent from the req.body.authorization', (done) => {
@@ -252,7 +252,7 @@ describe('Post Comments /comments', () => {
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
             expect(res.body.message).to.deep.equal('A notification was sent to your manager.');
             done();
-        });    
+        });
     });
 
     it('Should post comment if user is the manager of the request\s owner', (done) => {
@@ -271,7 +271,7 @@ describe('Post Comments /comments', () => {
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
             expect(res.body.message).to.deep.equal('A notification was sent to the request\'s owner.');
             done();
-        });    
+        });
     });
 
     it('Should fake request server error', (done) => {
@@ -287,7 +287,7 @@ describe('Post Comments /comments', () => {
             stub.restore();
             expect(res).to.have.status(500);
             done();
-        });    
+        });
     });
 
     it('Should fake comments error', (done) => {
@@ -303,7 +303,7 @@ describe('Post Comments /comments', () => {
             stub.restore();
             expect(res).to.have.status(500);
             done();
-        });    
+        });
     });
 
     it('Should fake notification error', (done) => {
@@ -324,6 +324,6 @@ describe('Post Comments /comments', () => {
                 .keys('comment', 'createdAt', 'delete_status', 'id', 'request_id', 'updatedAt', 'user_id');
             expect(res.body.message).to.deep.equal('Could not send notification.');
             done();
-        });    
+        });
     });
 });
