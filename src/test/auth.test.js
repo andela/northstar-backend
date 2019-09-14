@@ -22,25 +22,25 @@ describe('/Auth Middlewares', () => {
     done();
   });
 
-  it("fakes server error on verifyManager", done => {
+  it('fakes server error on verifyManager', (done) => {
     const req = { body: {} };
     const res = {
       status() {},
       send() {}
     };
-    sinon.stub(res, "status").returnsThis();
+    sinon.stub(res, 'status').returnsThis();
     Auth.verifyManager(req, res);
     res.status.should.have.callCount(1);
     done();
   });
 
-  it("fakes server error on verifyTravelAdmin", done => {
+  it('fakes server error on verifyTravelAdmin', (done) => {
     const req = { body: {} };
     const res = {
       status() { },
       send() { }
     };
-    sinon.stub(res, "status").returnsThis();
+    sinon.stub(res, 'status').returnsThis();
     Auth.verifyTravelAdmin(req, res);
     res.status.should.have.callCount(1);
     done();

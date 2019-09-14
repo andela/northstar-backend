@@ -25,13 +25,21 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      facility_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'facilities',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
+      },
       departure_date: {
         type: Sequelize.DATEONLY,
         allowNull: false
       },
       return_date: {
         type: Sequelize.DATEONLY,
-        allowNull: false
       },
       checked_in: {
         type: Sequelize.BOOLEAN,

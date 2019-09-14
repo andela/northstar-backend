@@ -17,7 +17,7 @@ describe('App.js', () => {
           done();
         });
     });
-  
+
     it('Should return a 404 error if page is not found', (done) => {
       chai.request(app)
         .get('/not/an/endpoint')

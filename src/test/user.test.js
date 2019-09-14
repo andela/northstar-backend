@@ -23,12 +23,11 @@ before((done) => {
 });
 
 describe('Update profile', () => {
-
   it('Should fake server error', (done) => {
     const req = { body: {} };
     const res = {
-      status(){},
-      send(){}
+      status() {},
+      send() {}
     };
     sinon.stub(res, 'status').returnsThis();
     userController.updateProfile(req, res);
@@ -275,7 +274,7 @@ describe('Update profile', () => {
   it('Should update the user\'s profile if token is attached to req.body', (done) => {
     chai.request(app)
       .patch('/api/v1/profile')
-      .send({ location: 'Nairobi, Kenya.' ,token: myToken})
+      .send({ location: 'Nairobi, Kenya.', token: myToken })
       .end((error, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.keys('status', 'data');

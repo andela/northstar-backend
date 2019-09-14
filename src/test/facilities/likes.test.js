@@ -1,25 +1,25 @@
-import chai from "chai";
+import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../../index'
-import FacilitiesController from "../../controllers/facilities.controller";
-import sinon from "sinon";
-import Sinonchai from "sinon-chai";
+import sinon from 'sinon';
+import Sinonchai from 'sinon-chai';
+import app from '../../index';
+import FacilitiesController from '../../controllers/facilities.controller';
 
 chai.use(chaiHttp);
 chai.should();
 chai.use(Sinonchai);
 
-const route = '/api/v1/facilities/1/like'
+const route = '/api/v1/facilities/1/like';
 let userToken;
 const user = {
-  email: "jane_doe@email.com",
-  password: "asdfghjkl"
+  email: 'jane_doe@email.com',
+  password: 'asdfghjkl'
 };
 
-before("signin to get access userToken", async () => {
+before('signin to get access userToken', async () => {
   const userRes = await chai
     .request(app)
-    .post("/api/v1/auth/signin")
+    .post('/api/v1/auth/signin')
     .send(user);
   userToken = userRes.body.data.token;
 });
@@ -53,13 +53,13 @@ describe('FACILITIES/LIKES', () => {
         });
     });
 
-    it('fakes server error', done => {
+    it('fakes server error', (done) => {
       const req = { body: {} };
       const res = {
         status() { },
         send() { }
       };
-      sinon.stub(res, "status").returnsThis();
+      sinon.stub(res, 'status').returnsThis();
       FacilitiesController.likeOrUnlikeFacility(req, res);
       res.status.should.have.callCount(1);
       done();

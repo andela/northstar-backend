@@ -4,8 +4,8 @@
     "description": "Make company global travel and accommodation easy and convenient",
     "main": "index.js",
     "scripts": {
-        "clear:log": "rm ./src/logs/app.log && touch ./src/logs/app.log",
-        "clean": "rm -rf dist && mkdir dist",
+        "clear:logs": "rm ./src/logs/app.log && touch ./src/logs/app.log",
+        "clean": "rm -rf dist coverage && mkdir dist coverage",
         "build": "babel src -d dist --copy-files",
         "start:dev": "NODE_ENV=development nodemon --exec babel-node src/index.js",
         "start:staging": "NODE_ENV=staging node dist/index.js",

@@ -138,7 +138,7 @@ export default class FacilitiesController {
   }
 
   /**
-   * Books a room in an accomodation facility
+   * Books a room in an accommodation facility
    * @param {object} req
    * @param {object} res
    * @param {object} next
@@ -151,19 +151,19 @@ export default class FacilitiesController {
       const room = await Room.findByPk(room_id, { attributes: [] });
       if (!room) return Response.NotFoundError(res, 'Room not found');
       // Check if an existing booking conflicts with the one to be made and return a 409
-      const { departure_date, return_date } = req.body;
+      const { departure_date, return_date, facility_id } = req.body;
       const conflictingBooking = await Booking.findOne(FacilityUtils
         .getConflictingBookingQuery(room_id, departure_date, return_date));
 
       if (conflictingBooking) {
         return Response.ConflictError(res, {
-          message: `This accomodation is already book from ${conflictingBooking.departure_date} to ${
+          message: `This accommodation is already book from ${conflictingBooking.departure_date} to ${
             conflictingBooking.return_date}`
         });
       }
       // If all checks out so far, create a new booking and return its details
       const newBooking = await Booking.create({
-        room_id, user_id, departure_date, return_date
+        room_id, user_id, departure_date, return_date, facility_id
       }, { returning: true });
 
       return Response.Success(res, newBooking.dataValues, 201);

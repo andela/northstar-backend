@@ -1,8 +1,8 @@
 import chai from 'chai';
-import app from '../../index';
-import JWTService from '../../services/jwt.service';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
+import app from '../../index';
+import JWTService from '../../services/jwt.service';
 
 import UserController from '../../controllers/user.controller';
 
@@ -21,7 +21,7 @@ describe('Managers', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');          
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -56,16 +56,15 @@ describe('Managers', () => {
     it('fakes server error', (done) => {
       const req = { body: {} };
       const res = {
-          status() {},
-          send() {}
+        status() {},
+        send() {}
       };
-  
+
       sinon.stub(res, 'status').returnsThis();
-  
+
       UserController.getManagers(req, res);
-    //   (res.status).should.have.callCount(1);
+      //   (res.status).should.have.callCount(1);
       done();
     });
   });
-  
 });

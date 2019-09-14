@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 
 
 let adminToken;
-let userToken
+let userToken;
 
 before((done) => {
   chai.request(app)
@@ -37,33 +37,33 @@ describe('User Role', () => {
   describe('Update Role', () => {
     it('Should send a 401 error if Authorization token was not provided', (done) => {
       chai.request(app)
-      .patch('/api/v1/role')
-      .send({
-        email: 'john_doe@email.com',
-        role: 'manager'
-      })
-      .end((error, res) => {
-        expect(res).to.have.status(401);
-        expect(res.body.status).to.deep.equal('error');
-        expect(res.body.error).to.deep.equal('No token provided!');
-        done();
-      })
+        .patch('/api/v1/role')
+        .send({
+          email: 'john_doe@email.com',
+          role: 'manager'
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).to.deep.equal('No token provided!');
+          done();
+        });
     });
 
     it('Should send a 401 error if Authorization token is invalid', (done) => {
       chai.request(app)
-      .patch('/api/v1/role')
-      .set('Authorization', 'vjvnls;vlsf')
-      .send({
-        email: 'john_doe@email.com',
-        role: 'manager'
-      })
-      .end((error, res) => {
-        expect(res).to.have.status(401);
-        expect(res.body.status).to.deep.equal('error');
-        expect(res.body.error).to.deep.equal('Invalid authentication token.');
-        done();
-      })
+        .patch('/api/v1/role')
+        .set('Authorization', 'vjvnls;vlsf')
+        .send({
+          email: 'john_doe@email.com',
+          role: 'manager'
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).to.deep.equal('Invalid authentication token.');
+          done();
+        });
     });
 
     it('Should send a 422 error if email is not provided', (done) => {
@@ -155,18 +155,18 @@ describe('User Role', () => {
 
     it('Should send a 403 status if user is not a super admin', (done) => {
       chai.request(app)
-      .patch('/api/v1/role')
-      .set('Authorization', userToken)
-      .send({
-        email: 'john_doe@email.com',
-        role: 'manager'
-      })
-      .end((error, res) => {
-        expect(res).to.have.status(403);
-        expect(res.body.status).to.deep.equal('error');
-        expect(res.body.error).to.deep.equal("You do not have permission for this action.");
-        done();
-      });
+        .patch('/api/v1/role')
+        .set('Authorization', userToken)
+        .send({
+          email: 'john_doe@email.com',
+          role: 'manager'
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(403);
+          expect(res.body.status).to.deep.equal('error');
+          expect(res.body.error).to.deep.equal('You do not have permission for this action.');
+          done();
+        });
     });
 
 

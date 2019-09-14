@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     return_date: {
       type: DataTypes.DATEONLY,
-      allowNull: false
     },
     checked_in: {
       type: DataTypes.BOOLEAN,
@@ -23,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     });
     Booking.belongsTo(models.Room, {
       foreignKey: 'room_id',
+      onDelete: 'CASCADE'
+    });
+    Booking.belongsTo(models.Facility, {
+      foreignKey: 'facility_id',
       onDelete: 'CASCADE'
     });
   };

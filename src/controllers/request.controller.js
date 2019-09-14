@@ -1,5 +1,3 @@
-// import sequelize from 'sequelize';
-
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
@@ -73,19 +71,19 @@ export default class RequestController {
     try {
       const { id: user_id } = req.currentUser.dataValues;
       const {
-        category, origin, destination, departure_date, return_date, reason, room_id
+        category, origin, destination, departure_date, return_date, reason, room_id, facility_id
       } = req.body;
       const bookingData = {
-        departure_date, return_date, user_id, room_id
+        departure_date, return_date, user_id, room_id, facility_id
       };
-      const booking = await models.Booking.create(bookingData);
+      const booking = await Booking.create(bookingData);
       const { id: booking_id } = booking;
       const requestData = {
         user_id, category, origin, destination: destination.split(', '), departure_date, return_date, reason, booking_id
       };
 
       requestData.destination = requestData.destination.map((el) => el.toLowerCase());
-      const request = await models.Request.create(requestData);
+      const request = await Request.create(requestData);
       return res.status(201).json({
         status: 'success',
         data: { request, booking }
@@ -105,7 +103,7 @@ export default class RequestController {
    * @param {object} req
    * @param {object} res
    *
-   * @returns {objet} status and message
+   * @returns {object} status and message
    */
   static async createReturnTripRequest(req, res) {
     try {

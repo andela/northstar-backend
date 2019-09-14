@@ -65,7 +65,7 @@ const FacilitiesChecks = {
     if ((new Date(departure_date) - new Date(today)) < 0) {
       errors.departureDateError = 'Departure date cannot be lesser than today';
     }
-    // If any error has occured return a bad request error, else proceed to the controller
+    // If any error has occurred return a bad request error, else proceed to the controller
     if (Object.keys(errors).length) return Response.BadRequestError(res, errors);
 
     next();
