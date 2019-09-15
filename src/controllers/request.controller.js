@@ -1,6 +1,7 @@
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
+import RequestUtils from '../utils/request.utils';
 
 const { Request, User, Booking } = models;
 /**
@@ -54,10 +55,10 @@ export default class RequestController {
 
       const data = await Request.findAll({ where: { user_id: req.body.user_id } });
       if (data.length) return Response.Success(res, data, 200);
-      Response.CustomError(res, 404, 'error',
+      return Response.CustomError(res, 404, 'error',
         'No requests found', 'Consult the travel admin');
     } catch (err) {
-      Response.InternalServerError(res, err);
+      return Response.InternalServerError(res, err);
     }
   }
 
@@ -144,7 +145,7 @@ export default class RequestController {
 
       return Response.Success(res, newRequest.dataValues, 201);
     } catch (error) {
-      Response.CustomError(
+      return Response.CustomError(
         res,
         500,
         'error',
@@ -174,7 +175,7 @@ export default class RequestController {
     };
 
     // persist booking to database
-    Request.create(newRequest)
+    return Request.create(newRequest)
       .then((data) => Response.Success(res, data, 201))
       .catch((error) => Response.CustomError(res, 500, 'error',
         'Request failed. Please see information below.',
@@ -246,4 +247,33 @@ export default class RequestController {
         });
     }
   }
+
+    /**
+   * @method editRequest
+   *
+   * @param {object} req
+   * @param {object} res
+   *
+   * @returns {object} server response
+   */
+  static async editRequest(req, res) {
+    try {
+      const requestObject = RequestUtils.getValuesToUpdate(req.body);
+      const updatedRequest = await req.existingRequest.update(
+        requestObject
+      );
+
+      return Response.Success(res, updatedRequest, 200);
+    } catch (error) {
+      return Response.CustomError(
+        res,
+        500,
+        'error',
+        'Request failed. Please see information below.',
+        error.message
+      );
+    }
+  }
+
+
 }

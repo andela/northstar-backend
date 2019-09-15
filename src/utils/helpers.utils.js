@@ -1,6 +1,6 @@
 const invalidDateError = 'Invalid date. Please ensure the date in the format YYYY-MM-DD';
 
-export default {
+const helpers = {
   checkForEmptyFields: (field, value) => {
     if (!value) return [`${field} is required`];
     return [];
@@ -22,24 +22,24 @@ export default {
     return [];
   },
 
-  trimValues: (values) => {
-    const trimArrayValues = (arrayValues) => arrayValues.map((value) => value.trim());
+  trimArrayValues:  (arrayValues) => arrayValues.map((value) => value.trim()),
 
+  trimValues: (values) => {
     for (const field in values) {
       const value = values[field];
 
       if (typeof value === 'string') {
         if (value.includes('[')) {
-          values[field] = trimArrayValues(value.replace(/[\[\]"']+/g, '').split(','));
+          values[field] = helpers.trimArrayValues(value.replace(/[\[\]"'{}]+/g, '').split(','));
         } else if (field === 'destination') {
-          values.destination = trimArrayValues(values.destination.replace(/["']+/g, '').split(','));
+          values.destination = helpers.trimArrayValues(values.destination.replace(/["'{}]+/g, '').split(','));
         } else {
           values[field] = value.trim();
         }
       }
 
       if (Array.isArray(value)) {
-        values[field] = trimArrayValues(value);
+        values[field] = helpers.trimArrayValues(value);
       }
     }
 
@@ -61,3 +61,5 @@ export default {
     });
   }
 };
+
+export default helpers;

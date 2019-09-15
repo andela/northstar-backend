@@ -62,4 +62,35 @@ export default class RequestMiddleware {
     req.query = preparedQuery;
     next();
   }
-}
+
+  static async checkRequestStatus(req, res, next) {
+    const existingRequest = await Request.findByPk(req.params.request_id);
+
+    if (!existingRequest) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'Request not found'
+      });
+    }
+
+    const isOwner = (existingRequest.user_id === req.body.user_id);
+
+    if (!isOwner) {
+      return res.status(403).json({
+        status: 'error',
+        error: ' You cannot edit this request'
+      });
+    }
+
+    if (!(existingRequest.status === 'pending')) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'You cannot update a request that is not pending'
+      });
+    }
+
+    req.existingRequest = existingRequest;
+
+    return next();
+  }
+};
