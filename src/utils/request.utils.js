@@ -74,4 +74,28 @@ export default class RequestUtils {
     // Validate database ENUM fields have only values specified when they exist on query
     validateAndPopulateEnumFields(fields, preparedQuery, errors);
   }
+
+  /**
+   * Retrieves updatable request fields
+   * @param {Object} reqBody: http request body
+   * @return {Object} Request object to update
+   */
+  static getValuesToUpdate(reqBody) {
+    // a list of all the profile details a user is allowed to update
+    const permittedValues = [
+      'origin',
+      'destination',
+      'category',
+      'departure_date',
+      'return_date',
+      'reason'
+    ];
+    const valuesToUpdate = {};
+
+    permittedValues.forEach((key) => {
+      // remove fields that user did not specify
+      if (reqBody[key]) valuesToUpdate[key] = reqBody[key];
+    });
+    return valuesToUpdate;
+  }
 }

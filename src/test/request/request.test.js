@@ -3,6 +3,7 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
+import MockDate from 'mockdate';
 
 import app from '../../index';
 import models from '../../db/models';
@@ -235,6 +236,12 @@ const user = {
   password: 'qwertyuiop'
 };
 
+const user2 = {
+  email: 'h.milan@email.com',
+  password: 'milanogelato'
+};
+
+
 
 const newRequest = {
   category: 'one-way',
@@ -275,6 +282,34 @@ const newRequest4 = {
   booking_id: '2654'
 };
 
+const newRequest5 = {
+  category: 'round-trip',
+  origin: 'Lagos',
+  destination: ['Abuja','Onitsha'],
+  departure_date: '2019-09-29',
+  return_date:'2019-10-30',
+  reason: 'For the fun of it'
+};
+
+const newRequest6 = {
+  category: 'one-way',
+  origin: 'Lagos',
+  destination: ['Abuja'],
+  departure_date: '2019-09-29',
+  return_date:'2019-10-30',
+  reason: 'For the fun of it',
+  booking_id: '1'
+};
+
+const newRequest7 = {
+  category: 'one-way',
+  origin: 'Lagos',
+  destination: ['Abuja','Onitsha'],
+  departure_date: '2019-09-29',
+  reason: 'For the fun of it',
+  booking_id: '1'
+};
+
 
 describe('/GET REQUESTS', () => {
   it('should login and return the token', (done) => {
@@ -283,6 +318,17 @@ describe('/GET REQUESTS', () => {
       .send(user)
       .end((err, res) => {
         user.token = res.body.data.token;
+        res.should.have.status(200);
+        done();
+      });
+  });
+
+  it('should login and return the token', (done) => {
+    chai.request(app)
+      .post(loginEndpoint)
+      .send(user2)
+      .end((err, res) => {
+        user2.token = res.body.data.token;
         res.should.have.status(200);
         done();
       });
@@ -552,6 +598,234 @@ describe('/POST REQUESTS', () => {
 
     RequestController.createReturnTripRequest(req, res);
     (CustomErrorStub).should.have.callCount(1);
+    sinon.restore();
     done();
   });
+});
+
+describe('/PATCH REQUESTS',() => {
+  let oneWayRequestId;
+
+  before((done) => {
+    MockDate.set(new Date('2019-09-14'));
+
+    chai
+      .request(app)
+      .post('/api/v1/requests')
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send(newRequest7)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        res.body.should.have.property('status').eql('success');
+        res.body.should.have.property('data');
+        oneWayRequestId = res.body.data.id;
+
+        done();
+      });
+  });
+
+  after(() => {
+    MockDate.reset();
+  })
+
+ it('should return 200 with valid updated round-trip request data', (done) => {
+    chai.request(app)
+      .patch(`${requestEndpoint}/11`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send(newRequest5)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        res.body.should.have.property('status').eql('success');
+        res.body.data.should.have.property('id');
+        done();
+      });
+  });
+
+  it('should update a one-way trip with departure date', (done) => {
+    chai.request(app)
+        .patch(`${requestEndpoint}/${oneWayRequestId}`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ departure_date: '2019-09-30' })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.data.should.have.property('id');
+          done();
+        });
+  });
+
+
+  it('should not update a one-way trip with departure date of today', (done) => {
+    chai.request(app)
+        .patch(`${requestEndpoint}/${oneWayRequestId}`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ departure_date: '2019-09-14' })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('departure_date').eql('Departure date must be a date after today')
+          done();
+        });
+  });
+
+  it('should not update one-way trips with return_date in request body', (done) => {
+    chai.request(app)
+        .patch(`${requestEndpoint}/11`)
+        .set('Authorization', `Bearer ${user.token}`) 
+        .send(newRequest6)
+        .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.an('object');
+            res.body.should.have.property('status').eql('error');
+            res.body.error.should.have.property('return_date').eql('Return date is not required for one-way trips')
+            done();
+        });
+  });
+
+it('should not update one-way trips with more than one destinations', (done) => {
+  chai.request(app)
+      .patch(`${requestEndpoint}/11`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send(newRequest7)
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('destination').eql('One way trips can only have one destination');
+          done();
+      });
+});
+
+it('should not update a trip that sends in status', (done) => {
+  chai.request(app)
+      .patch(`${requestEndpoint}/11`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send({ ...newRequest5, status: 'approved' })
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('status').eql('Status is not required');
+          done();
+      });
+});
+
+  it('should not update a request with invalid return_date', (done) => {
+    chai.request(app)
+      .patch(`${requestEndpoint}/11`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send({ return_date: '09-28-2019' })
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('return_date').eql('Return date must be in the format YYYY-MM-DD' )
+          done();
+      });
+  });
+
+  it('should not update a round-trip request with return_date before today', (done) => {
+    chai.request(app)
+      .patch(`${requestEndpoint}/11`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send({ return_date: '2019-09-08' })
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('return_date').eql('Return date must be a date after today' )
+          done();
+      });
+  });
+
+
+  it('should not update a round-trip request with return_date before departure_date', (done) => {
+    chai.request(app)
+      .patch(`${requestEndpoint}/11`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send({ return_date: '2019-09-27', departure_date:  '2019-09-30' })
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('return_date').eql('Return date must be after departure date' )
+          done();
+      });
+  });
+
+  it('should not update a one-way request to a multi-city request if return_date is not provided', (done) => {
+    chai.request(app)
+      .patch(`${requestEndpoint}/${oneWayRequestId}`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send({ departure_date:  '2019-09-27', category: 'multi-city' })
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.error.should.have.property('return_date').eql('Return date is required for multi-city trips' )
+          done();
+      });
+  });
+
+it('should not update a request that does not exists', (done) => {
+  chai.request(app)
+      .patch(`${requestEndpoint}/300`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send(newRequest7)
+      .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql('Request not found' )
+          done();
+      });
+});
+
+it('should not update a request with wrong user id', (done) => {
+  chai.request(app)
+      .patch(`${requestEndpoint}/3`)
+      .set('Authorization', `Bearer ${user.token}`) 
+      .send({ ...newRequest7, destination: 'Uyo' })
+      .end((err, res) => {
+        console.log(res.body)
+          res.should.have.status(403);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql(' You cannot edit this request')
+          done();
+      });
+});
+
+it('should not update a request that is not pending', (done) => {
+  chai.request(app)
+      .patch(`${requestEndpoint}/1`)
+      .set('Authorization', `Bearer ${user2.token}`) 
+      .send(newRequest)
+      .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql('You cannot update a request that is not pending')
+          done();
+      });
+});
+
+it('should call Response.customError for server error on editRequest controller', (done) => {
+  const req = { body: {} };
+  const res = {
+    status() {},
+    send() {}
+  };
+  sinon.stub(Request, 'update').throws();
+  const CustomErrorStub = sinon.stub(Response, 'CustomError').returnsThis();
+
+  RequestController.editRequest(req, res);
+  (CustomErrorStub).should.have.callCount(1);
+  sinon.restore();
+  done();
+});
 });

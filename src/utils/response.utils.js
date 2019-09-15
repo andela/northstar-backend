@@ -100,4 +100,17 @@ export default class {
       error
     });
   }
+
+  /**
+   * Defines the specification for a validation error
+   * @param {object} res (ServerResponse)
+   * @param {string} message
+   * @returns {object} ServerResponse
+   */
+  static ValidationError(res, error) {
+    return res.status(400).json({
+      status: 'error',
+      error
+    });
+  }
 }
