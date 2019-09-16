@@ -6,7 +6,7 @@ module.exports = {
         category: 'one-way',
         origin: 'Paris',
         destination: ['lagos'],
-        departure_date: new Date(),
+        departure_date: '2019-05-10',
         reason: 'I am tired of this office',
         booking_id: 1,
         created_at: new Date(),

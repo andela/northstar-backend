@@ -430,6 +430,30 @@
         }
       }
     },
+    "facilities/:facility_id": {
+      "get":{
+        "description": "Gets one facility",
+        "summary": "Retrieves one facility",
+        "tags": ["Facilities"],
+        "produces": [ "application/json" ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "params",
+            "name": "facility_id",
+            "required": true,
+            "description": "Facility's unique identifier"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success"},
+          "401": { "description": "Authentication error"},
+          "404": { "description": "Not found"},
+          "422": { "description": "Validation error"},
+          "500": { "description": "Server error"}
+        }
+      }
+    },
     "/facilities/rooms": {
       "post": {
         "description": "Rooms Endpoint",
@@ -587,6 +611,20 @@
           }
         }
       }
+    },
+    "requests/history": {
+      "get": {
+         "tags": ["Requests"],
+         "summary": "Retrieves a user's trips and bookings history",
+         "security": [],
+         "produces": ["application/json"],
+         "responses": {
+           "200": { "description": "success"},
+           "401": { "description": "Unauthorized"},
+           "404": { "description": "Not found"},
+           "500": { "description": "Internal Server Error"}
+         }
+        }
     },
     "/requests/{request_id}": {
       "get": {
