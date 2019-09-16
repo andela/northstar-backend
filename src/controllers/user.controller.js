@@ -274,4 +274,36 @@ export default class UserController {
       })
       .catch((err) => Response.InternalServerError(res, err));
   }
+
+  /**
+   * Handles view user informations
+   * @param {*} req
+   * @param {*} res
+   * @returns {*} response
+   */
+  static viewUserInformation(req, res) {
+    const { id } = req.currentUser;
+    User.findByPk(id)
+      .then((data) => {
+        if (data) {
+          delete data.dataValues.password;
+          delete data.dataValues.id;
+          return res.status(200).json({
+            status: 'success',
+            data
+          });
+        }
+        return res.status(404).json({
+          status: 'error',
+          error: 'User not found'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          status: 'error',
+          message: err.message,
+          info: 'Internal Server Error',
+        });
+      });
+  }
 }
