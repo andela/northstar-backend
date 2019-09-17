@@ -397,7 +397,7 @@ describe('/GET /api/v1/requests?query=queryValue', () => {
       expect(res.body.status).to.equal('success');
       expect(res.body.data).to.be.an('array');
       // There are two requests overall satisfying this condition as at this time
-      expect(res.body.data).to.be.lengthOf(2);
+      expect(res.body.data).to.be.lengthOf(5);
       expect(res.body.data[0]).to.have.property('origin');
       res.body.data.forEach((el) => {
         expect(el.origin.toLowerCase()).to.equal(origin);
