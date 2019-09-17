@@ -3,12 +3,15 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import Sinonchai from 'sinon-chai';
 import bcrypt from 'bcrypt';
-
 import app from '../../index';
 import models from '../../db/models';
 import Response from '../../utils/response.utils';
 
 import RequestController from '../../controllers/request.controller';
+import RequestMiddleware from '../../middlewares/requests.middleware';
+import RequestUtility from '../../utils/request.utils';
+import JWTService from '../../services/jwt.service';
+import EmailService from '../../services/email.service';
 
 chai.use(Sinonchai);
 chai.use(chaiHttp);
@@ -554,4 +557,66 @@ describe('/POST REQUESTS', () => {
     (CustomErrorStub).should.have.callCount(1);
     done();
   });
+   
+  it('should not allow a user without manager to make a request', async () => {
+      const userDetails = { id: 8, role: 'manager' };          
+      const userToken = JWTService.generateToken(userDetails);
+
+      const res = await chai.request(app)
+          .post(requestEndpoint)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send();
+
+      expect(res.status).to.equal(401);
+      expect(res.body).to.have.keys('status', 'error');                        
+  });
+
+  it('fakes server error for checking for managerID', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() { },
+        send() { }
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      RequestMiddleware.checkManagerID();      
+      done();
+  });
+  it('fakes server error on request utility', (done) => {
+    const req = { body: {} };
+    const res = {
+      status() {},
+      send() {}
+    };
+
+    sinon.stub(res, 'status').returnsThis();
+    RequestUtility.getManagerId(req, res); 
+    (res.status).should.have.callCount(0);   
+    done();
+  });
+  it('fakes server error on request utility', (done) => {
+    const req = { body: {} };
+    const res = {
+      status() {},
+      send() {}
+    };
+
+    sinon.stub(res, 'status').returnsThis();
+    RequestUtility.getManagerDetails(req, res);      
+    done();
+  }); 
+  it('fakes server email service', (done) => {
+    const req = { body: {} };
+    const res = {
+      status() { },
+      send() { }
+    };
+
+    sinon.stub(res, 'status').returnsThis();
+
+    EmailService.sendEmail(req, res);
+    (res.status).should.have.callCount(0);
+    done();
+  }); 
 });

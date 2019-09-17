@@ -13,6 +13,7 @@ module.exports = {
       preferred_currency: 'NGN',
       location: 'Nigeria',
       role: 'manager',
+      manager_id: 1,
       created_at: new Date(),
       updated_at: new Date()
     },
@@ -27,6 +28,7 @@ module.exports = {
       preferred_currency: 'USD',
       location: 'USA',
       role: 'manager',
+      manager_id: 2,
       created_at: new Date(),
       updated_at: new Date()
     },
@@ -71,6 +73,7 @@ module.exports = {
       preferred_currency: 'GBP',
       location: 'Texas',
       role: 'manager',
+      manager_id: 1,
       created_at: new Date(),
       updated_at: new Date()
     },
@@ -85,6 +88,7 @@ module.exports = {
       preferred_currency: 'GBP',
       location: 'Texas',
       role: 'manager',
+      manager_id: 1,
       created_at: new Date(),
       updated_at: new Date()
     },

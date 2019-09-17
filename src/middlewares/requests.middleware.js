@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 import models from '../db/models';
 import RequestUtils from '../utils/request.utils';
 import Response from '../utils/response.utils';
@@ -29,6 +30,36 @@ export default class RequestMiddleware {
       });
     }
     return next();
+  }
+
+  /**
+   * Prepares search query parameters on the Request object of a
+   * GET /requests request
+   * @param {object} req (Request object)
+   * @param {object} res (ServerResponse object)
+   * @param {function} next
+   * @returns {string} values will be passed to the body object on successful completion
+   */
+  static async checkManagerID(req, res, next) {
+    try {     
+      const { manager_id, first_name, last_name } = await RequestUtils
+        .getManagerId(req.body.user_id);          
+      if (manager_id == null) { 
+        return Response.UnauthorizedError(res, 'You are not authorized to make a request, kindly update your profile and add your Manager'); 
+      }
+      const { email, first_name: manager_first_name, last_name: manager_last_name } = await RequestUtils
+        .getManagerDetails(manager_id);      
+      req.body.manager_id = manager_id; 
+      req.body.first_name = first_name;
+      req.body.last_name = last_name; 
+      req.body.manager_email = email; 
+      req.body.manager_first_name = manager_first_name; 
+      req.body.manager_last_name = manager_last_name; 
+             
+      next();
+    } catch (error) {
+      return Response.InternalServerError(res, 'Error occured while checking for manager');
+    }
   }
 
   /**

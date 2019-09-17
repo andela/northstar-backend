@@ -5,11 +5,11 @@ import logger from '../logs/winston';
 sgMail.setApiKey(process.env.SEND_GRID_API);
 
 const templates = {
-  travel_request_notification: 'd-56e432ed8cfd4093afbb695458ac2880',
-  signup_template: 'd-b344aeccd8fd4532a1f03658a92bda50',
-  request_rejected: 'd-a54b425dc20e42adbe6bd16bdb8dd3aa',
+  travel_request_notification: 'd-cc74a988ed8543638b08837316ff0048',
+  signup_template: 'd-015ec1b46e75468897414d8e04cb762a',
+  request_rejected: 'd-5578c7c2a58f43dba314ad5800cdb00d',
   passord_reset: 'd-0e43d73f3e3048bba2d124ff5f384107',
-  request_approved: 'd-8a49cb87af9b4549ab370fcc42e2874c'
+  request_approved: 'd-284de148088e4d86bf158a9abcf9d7cf'
 };
 
 /**

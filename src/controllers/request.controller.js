@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import models from '../db/models';
 import sender from '../services/email.service';
 import Response from '../utils/response.utils';
+import Notification from './notification.controller';
 
 const { Op } = Sequelize;
 
@@ -72,24 +73,33 @@ export default class RequestController {
     */
   static async createMultiCityRequest(req, res) {
     try {
-      const { id: user_id } = req.currentUser.dataValues;
+      const { user_id } = req.body;
       const {
-        category, origin, destination, departure_date, return_date, reason, room_id, facility_id
+        category, origin, destination, departure_date, return_date, reason, booking_id
       } = req.body;
-      const bookingData = {
-        departure_date, return_date, user_id, room_id, facility_id
-      };
-      const booking = await Booking.create(bookingData);
-      const { id: booking_id } = booking;
       const requestData = {
-        user_id, category, origin, destination: destination.split(', '), departure_date, return_date, reason, booking_id
+        user_id, category, origin, destination, departure_date, return_date, reason, booking_id
       };
-
-      requestData.destination = requestData.destination.map((el) => el.toLowerCase());
-      const request = await Request.create(requestData);
+      const request = await models.Request.create(requestData);
+      //  send notification
+      const notificationSubject = `New Travel Request by ${req.body.last_name} ${req.body.first_name}`;
+      const notificationBody = `${req.body.last_name} ${req.body.first_name} wants to make a multi-city trip`;
+      const notificationData = {
+        request_id: request.id,
+        subject: notificationSubject,
+        notification: notificationBody,
+        receiver_id: req.body.manager_id
+      };
+      const payload = {
+        manager_name: `${req.body.manager_last_name} ${req.body.manager_first_name}`,
+        requester_name: `${req.body.last_name} ${req.body.first_name}`,
+        manager_email: req.body.manager_email,
+        user_id: req.body.user_id
+      };
+      Notification.createNotification(notificationData, payload);
       return res.status(201).json({
         status: 'success',
-        data: { request, booking }
+        data: { request }
       });
     } catch (error) {
       return res.status(500)
@@ -144,7 +154,21 @@ export default class RequestController {
         booking_id,
         user_id
       });
-
+      const notificationSubject = `New Travel Request by ${req.body.last_name} ${req.body.first_name}`;
+      const notificationBody = `${req.body.last_name} ${req.body.first_name} wants to make a round trip`;
+      const notificationData = {
+        request_id: newRequest.id,
+        subject: notificationSubject,
+        notification: notificationBody,
+        receiver_id: req.body.manager_id
+      };
+      const payload = {
+        manager_name: `${req.body.manager_last_name} ${req.body.manager_first_name}`,
+        requester_name: `${req.body.last_name} ${req.body.first_name}`,
+        manager_email: req.body.manager_email,
+        user_id: req.body.user_id
+      };
+      Notification.createNotification(notificationData, payload);
       return Response.Success(res, newRequest.dataValues, 201);
     } catch (error) {
       Response.CustomError(
@@ -178,7 +202,24 @@ export default class RequestController {
 
     // persist booking to database
     Request.create(newRequest)
-      .then((data) => Response.Success(res, data, 201))
+      .then((data) => {
+        const notificationSubject = `New Travel Request by ${req.body.last_name} ${req.body.first_name}`;
+        const notificationBody = `${req.body.last_name} ${req.body.first_name} wants to make a ${data.category} trip`;
+        const notificationData = {
+          request_id: data.id,
+          subject: notificationSubject,
+          notification: notificationBody,
+          receiver_id: req.body.manager_id
+        };
+        const payload = {
+          manager_name: `${req.body.manager_last_name} ${req.body.manager_first_name}`,
+          requester_name: `${req.body.last_name} ${req.body.first_name}`,
+          manager_email: req.body.manager_email,
+          user_id: req.body.user_id
+        };
+        Notification.createNotification(notificationData, payload);
+        Response.Success(res, data, 201);
+      })
       .catch((error) => Response.CustomError(res, 500, 'error',
         'Request failed. Please see information below.',
         error.message));
