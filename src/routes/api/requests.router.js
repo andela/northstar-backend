@@ -16,13 +16,14 @@ router.patch('/requests/decline/:id',
   RequestMiddleware.validateRequests,
   RequestController.rejectRequest);
 
-router.post('/requests', Auth.verifyToken, Validator.Requests, RequestController.TripRequests);
-router.get('/requests/history', auth.verifyUserToken, RequestController.getTravelHistory);
-router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingleRequest);
 
-router.post('/request/multi-city', auth.verifyUserToken, RequestController.createMultiCityRequest);
+router.get('/requests/history', auth.verifyUserToken, RequestController.getTravelHistory);
+router.post('/requests', Auth.verifyToken, RequestMiddleware.checkManagerID, Validator.Requests, RequestController.TripRequests);
+router.get('/requests/:request_id', Auth.verifyToken, RequestController.getSingleRequest);
+router.post('/request/multi-city', Auth.verifyToken, RequestMiddleware.checkManagerID, RequestController.createMultiCityRequest);
 router.get('/requests', Auth.verifyToken, RequestMiddleware.prepareRequestQuery, RequestController.findAll);
 router.patch('/requests/approve/:id', auth.verifyUserToken, auth.verifyManager, validateRequests.validateRequestsID, RequestMiddleware.validateRequests, RequestController.approveRequest);
+router.get('/requests', Auth.verifyToken, RequestController.findAll);
 
 
 export default router;

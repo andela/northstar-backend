@@ -48,6 +48,10 @@
     {
       "name": "Comment",
       "description": "Endpoint for Comments"
+    },
+    {
+      "name": "Notifications",
+      "description": "Endpoint for Notifications"
     }
   ],
   "paths": {
@@ -805,7 +809,40 @@
           }
         }
       }
+    },
+    "/notifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Fetch notifications",
+        "description": "This endpoint fetches unread notifications that belong to a user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+           
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "403": {
+            "description": "Unauthorized"
+          },         
+          "500": {
+            "description": "Internal Server Error"
+        }
+      }
     }
+    }          
   },
   "requestBody": {
     "signup": {

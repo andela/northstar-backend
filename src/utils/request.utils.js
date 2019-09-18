@@ -74,4 +74,32 @@ export default class RequestUtils {
     // Validate database ENUM fields have only values specified when they exist on query
     validateAndPopulateEnumFields(fields, preparedQuery, errors);
   }
+
+  /**
+     * Checks for manager ID
+     * @param {integer} userId The user id of the person whose manager we are to check
+     * @returns {array} the result of the query operation
+     */
+  static async getManagerId(userId) {
+    try {
+      const result = await User.findOne({ where: { id: userId } });
+      return result;
+    } catch (error) {
+      return Response.InternalServerError(res, 'error occured while looking for the manager id');
+    }
+  }
+
+  /**
+     * Checks for manager ID
+     * @param {integer} managerId The manager ID
+     * @returns {array} the result of the query operation
+     */
+  static async getManagerDetails(managerId) {
+    try {
+      const result = await User.findOne({ where: { id: managerId } });
+      return result;
+    } catch (error) {
+      return Response.InternalServerError(res, 'error occured while getting managers information');
+    }
+  }
 }
